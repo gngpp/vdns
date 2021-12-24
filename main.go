@@ -3,12 +3,12 @@ package main
 import (
 	"container/list"
 	"fmt"
-	"vdns/lib/common"
+	"vdns/lib/standard"
 )
 
 func main() {
-	println(common.Record.OfType("A"))
-	isOK, recordType := common.Record.OfType("SB")
+	println(standard.Record.OfType("A"))
+	isOK, recordType := standard.Record.OfType("SB")
 	if isOK {
 		fmt.Println(recordType)
 	}
