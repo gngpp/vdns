@@ -20,13 +20,13 @@ const (
 
 //goland:noinspection ALL
 const (
-	INFO  = "info"
-	DEBUG = "debug"
-	OFF   = "off"
-	TRACE = "trace"
-	WARN  = "warn"
-	ERROR = "error"
-	FATAL = "fatal"
+	info  = "info"
+	debug = "debug"
+	off   = "off"
+	trace = "trace"
+	warn  = "warn"
+	error = "error"
+	fatal = "fatal"
 )
 
 type LevelEnum struct {
@@ -43,17 +43,17 @@ type VLog struct{}
 
 type LevelType string
 
-// Log utilities.
-var Log = VLog{}
+// LogFactory utilities.
+var LogFactory = VLog{}
 
 var Level = LevelEnum{
-	INFO:  INFO,
-	DEBUG: DEBUG,
-	OFF:   OFF,
-	TRACE: TRACE,
-	WARN:  WARN,
-	ERROR: ERROR,
-	FATAL: FATAL,
+	INFO:  info,
+	DEBUG: debug,
+	OFF:   off,
+	TRACE: trace,
+	WARN:  warn,
+	ERROR: error,
+	FATAL: fatal,
 }
 
 // all loggers.
@@ -96,19 +96,19 @@ func (*VLog) SetLevel(level LevelType) {
 func getLevel(level LevelType) int {
 
 	switch level {
-	case OFF:
+	case off:
 		return Off
-	case TRACE:
+	case trace:
 		return Trace
-	case DEBUG:
+	case debug:
 		return Debug
-	case INFO:
+	case info:
 		return Info
-	case WARN:
+	case warn:
 		return Warn
-	case ERROR:
+	case error:
 		return Error
-	case FATAL:
+	case fatal:
 		return Fatal
 	default:
 		return Info

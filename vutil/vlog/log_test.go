@@ -5,26 +5,26 @@ import (
 )
 
 func TestLog(t *testing.T) {
-	logger := Log.Default()
+	logger := LogFactory.Default()
 	logger.Infof("info")
 	logger.Infof("info value:%s", "test")
 
 }
 
 func TestSetLevel(t *testing.T) {
-	Log.SetLevel("trace")
+	LogFactory.SetLevel("trace")
 }
 
 func TestTrace(t *testing.T) {
-	logger := Log.Default()
-	Log.SetLevel("trace")
+	logger := LogFactory.Default()
+	LogFactory.SetLevel("trace")
 	logger.Trace("trace")
 	logger.SetLevel("off")
 	logger.Trace("trace")
 }
 
 func TestTracef(t *testing.T) {
-	logger := Log.Default()
+	logger := LogFactory.Default()
 	logger.SetLevel("trace")
 	logger.Tracef("tracef")
 	logger.SetLevel("off")
@@ -34,7 +34,7 @@ func TestTracef(t *testing.T) {
 }
 
 func TestDebug(t *testing.T) {
-	logger := Log.Default()
+	logger := LogFactory.Default()
 	logger.SetLevel("debug")
 	logger.Debug("debug")
 	logger.SetLevel("off")
@@ -42,7 +42,7 @@ func TestDebug(t *testing.T) {
 }
 
 func TestDebugf(t *testing.T) {
-	logger := Log.Default()
+	logger := LogFactory.Default()
 	logger.SetLevel("debug")
 	logger.Debugf("debugf")
 	logger.SetLevel("off")
@@ -50,7 +50,7 @@ func TestDebugf(t *testing.T) {
 }
 
 func TestInfo(t *testing.T) {
-	logger := Log.Default()
+	logger := LogFactory.Default()
 	logger.SetLevel("info")
 	logger.Info("info")
 	logger.SetLevel("off")
@@ -58,7 +58,7 @@ func TestInfo(t *testing.T) {
 }
 
 func TestInfof(t *testing.T) {
-	logger := Log.Default()
+	logger := LogFactory.Default()
 	logger.SetLevel("info")
 	logger.Infof("infof")
 	logger.SetLevel("off")
@@ -66,7 +66,7 @@ func TestInfof(t *testing.T) {
 }
 
 func TestWarn(t *testing.T) {
-	logger := Log.Default()
+	logger := LogFactory.Default()
 	logger.SetLevel("warn")
 	logger.Warn("warn")
 	logger.SetLevel("off")
@@ -74,7 +74,7 @@ func TestWarn(t *testing.T) {
 }
 
 func TestWarnf(t *testing.T) {
-	logger := Log.Default()
+	logger := LogFactory.Default()
 	logger.SetLevel("warn")
 	logger.Warnf("warnf")
 	logger.SetLevel("off")
@@ -82,7 +82,7 @@ func TestWarnf(t *testing.T) {
 }
 
 func TestError(t *testing.T) {
-	logger := Log.Default()
+	logger := LogFactory.Default()
 	logger.SetLevel("error")
 	logger.Error("error")
 	logger.SetLevel("off")
@@ -90,7 +90,7 @@ func TestError(t *testing.T) {
 }
 
 func TestErrorf(t *testing.T) {
-	logger := Log.Default()
+	logger := LogFactory.Default()
 	logger.SetLevel(Level.OFF)
 	logger.Errorf("errorf")
 	logger.SetLevel("off")
@@ -130,7 +130,7 @@ func TestGetLevel(t *testing.T) {
 }
 
 func TestLoggerSetLevel(t *testing.T) {
-	logger := Log.Default()
+	logger := LogFactory.Default()
 	logger.SetLevel("trace")
 
 	if logger.level != Trace {
@@ -141,7 +141,7 @@ func TestLoggerSetLevel(t *testing.T) {
 }
 
 func TestIsTraceEnabled(t *testing.T) {
-	logger := Log.Default()
+	logger := LogFactory.Default()
 	logger.SetLevel("trace")
 
 	if !logger.IsTraceEnabled() {
@@ -152,7 +152,7 @@ func TestIsTraceEnabled(t *testing.T) {
 }
 
 func TestIsDebugEnabled(t *testing.T) {
-	logger := Log.Default()
+	logger := LogFactory.Default()
 	logger.SetLevel("debug")
 
 	if !logger.IsDebugEnabled() {
@@ -163,7 +163,7 @@ func TestIsDebugEnabled(t *testing.T) {
 }
 
 func TestIsWarnEnabled(t *testing.T) {
-	logger := Log.Default()
+	logger := LogFactory.Default()
 	logger.SetLevel("warn")
 	if !logger.IsWarnEnabled() {
 		t.FailNow()
