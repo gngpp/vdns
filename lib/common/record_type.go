@@ -37,9 +37,9 @@ type RecordEnum struct {
 	HIDDEN_URL   RecordType
 }
 
-func (t RecordEnum) OfType(value string) bool {
-	_, isOk := recordMap[value]
-	return isOk
+func (t *RecordEnum) OfType(value string) (bool, RecordType) {
+	recordType, isOk := recordMap[value]
+	return isOk, recordType
 }
 
 func init() {

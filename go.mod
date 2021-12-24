@@ -8,7 +8,6 @@ require (
 	github.com/alibabacloud-go/tea v1.1.15
 	github.com/cloudflare/cloudflare-go v0.28.0
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.71
-	github.com/sirupsen/logrus v1.8.1
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.315
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.315
 )
@@ -25,7 +24,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/tjfoc/gmsm v1.3.2 // indirect
 	golang.org/x/net v0.0.0-20210510120150-4163338589ed // indirect
-	golang.org/x/sys v0.0.0-20210423082822-04245dca01da // indirect
 	golang.org/x/text v0.3.6 // indirect
 	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324 // indirect
 	gopkg.in/ini.v1 v1.56.0 // indirect
