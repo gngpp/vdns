@@ -1,8 +1,6 @@
 name: Sync to Gitee
-on:
-  push:
-  schedule:
-    - cron: '0 23 * * *'
+on: [push]
+
 
 jobs:
   sync:
@@ -36,4 +34,4 @@ jobs:
           account_type: user
           debug: true
           force_update: true
-          static_list: '${{ steps.info.outputs.result }}'
+          static_list: 'vdns'
