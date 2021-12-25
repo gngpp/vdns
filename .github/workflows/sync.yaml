@@ -33,3 +33,4 @@ jobs:
           account_type: user
           debug: true
           force_update: true
+          static_list: '${{ steps.info.outputs.result }}'
