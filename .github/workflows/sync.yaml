@@ -1,0 +1,20 @@
+name: Sync to Gitee
+on: [push]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync To Gitee
+        uses: Yikun/hub-mirror-action@v1.0
+        with:
+          src: github/zf1976
+          dst: gitee/zf1976
+          dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+          dst_token:  ${{ secrets.GITEE_TOKEN }}
+          account_type: user
+          clone_style: "ssh"
+          debug: true
+          force_update: true
+          static_list: "picture"
+          timeout: '600s'
