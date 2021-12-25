@@ -31,7 +31,6 @@ jobs:
           dst_token: ${{ secrets.GITEE_TOKEN }}
           cache_path: /github/workspace/hub-mirror-cache
           account_type: user
-          clone_style: "ssh"
           debug: true
           force_update: true
           static_list: '${{ steps.info.outputs.result }}'
