@@ -1,6 +1,9 @@
 package str
 
-import util "vdns/vutil"
+import (
+	"strings"
+	util "vdns/vutil"
+)
 
 //goland:noinspection ALL
 func IsEmpty(value string) bool {
@@ -19,4 +22,20 @@ func StringValue(a *string) string {
 	}
 	util.Escape("sd")
 	return *a
+}
+
+func Concat(strs ...string) string {
+	builder := strings.Builder{}
+	for _, str := range strs {
+		builder.WriteString(str)
+	}
+	return builder.String()
+}
+
+func ToBytes(str string) []byte {
+	return []byte(str)
+}
+
+func ToString(bytes []byte) string {
+	return string(bytes)
 }
