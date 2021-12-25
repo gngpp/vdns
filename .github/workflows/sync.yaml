@@ -16,5 +16,5 @@ jobs:
           clone_style: "ssh"
           debug: true
           force_update: true
-          static_list: "picture"
+          static_list: "vdns"
           timeout: '600s'
