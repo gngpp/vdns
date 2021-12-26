@@ -12,6 +12,24 @@ import (
 	"strings"
 )
 
+// IsDir Determine whether it is a directory
+func IsDir(path string) bool {
+	open, err := os.Open(path)
+	if err != nil || os.IsNotExist(err) {
+		return false
+	}
+	stat, err := open.Stat()
+	if err != nil {
+		return false
+	}
+	return stat.IsDir()
+}
+
+// IsFile Determine whether it is a file
+func IsFile(path string) bool {
+	return !IsDir(path)
+}
+
 // CurrentDir get the current file dir of the caller
 func CurrentDir() string {
 	_, file, _, _ := runtime.Caller(1)
@@ -98,6 +116,7 @@ func DelFile(absPath string) error {
 	return os.RemoveAll(absPath)
 }
 
+//goland:noinspection ALL
 func GetPathDirs(absPath string) ([]string, error) {
 	dirs := make([]string, 0)
 	if Exist(absPath) {
@@ -114,11 +133,13 @@ func GetPathDirs(absPath string) ([]string, error) {
 	return dirs, nil
 }
 
+//goland:noinspection ALL
 func GetCurrentDirectory() string {
 	dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
 	return strings.Replace(dir, "\\", "/", -1)
 }
 
+//goland:noinspection ALL
 func FormatFileSize(fileSize int64) (size string) {
 	if fileSize < 1024 {
 		return fmt.Sprintf("%.2f B", float64(fileSize)/float64(1))

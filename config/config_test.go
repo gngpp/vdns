@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"testing"
 	"vdns/vutil/file"
 )
@@ -13,6 +14,9 @@ func TestName(t *testing.T) {
 }
 
 func Test(t *testing.T) {
-	println("")
-	println(file.CurrentDir())
+	pathDefault, err := GetLogPath()
+	if err != nil {
+		fmt.Println(err)
+	}
+	println(file.IsFile(pathDefault))
 }

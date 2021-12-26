@@ -69,7 +69,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	if !file.Exist(workingPath) {
+	if !file.IsDir(workingPath) {
 		if err := file.MakeDir(workingPath); err != nil {
 			panic(err)
 		}
@@ -82,7 +82,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	if !file.Exist(logPath) {
+	if !file.IsDir(logPath) {
 		if err := file.MakeDir(logPath); err != nil {
 			panic(err)
 		}
@@ -95,7 +95,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	if !file.Exist(configPath) {
+	if !file.IsFile(configPath) {
 		if err := file.Create(configPath); err != nil {
 			panic(err)
 		}
