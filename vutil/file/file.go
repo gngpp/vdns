@@ -10,14 +10,25 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"vdns/lib/vlog"
 )
+
+var log = vlog.LogFactory.Default()
 
 // IsDir Determine whether it is a directory
 func IsDir(path string) bool {
 	open, err := os.Open(path)
+	defer func(open *os.File) {
+		err := open.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}(open)
+
 	if err != nil || os.IsNotExist(err) {
 		return false
 	}
+
 	stat, err := open.Stat()
 	if err != nil {
 		return false
