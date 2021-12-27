@@ -1,10 +1,8 @@
 package config
 
 import (
-	"fmt"
 	"os"
 	"vdns/lib/homedir"
-	"vdns/vutil/file"
 	"vdns/vutil/str"
 )
 
@@ -62,45 +60,4 @@ func getConfigPathDefault() (string, error) {
 		return "", err
 	}
 	return str.Concat(dir, string(os.PathSeparator), VDNS_CONFIG_NAME), nil
-}
-
-func init() {
-	workingPath, err := GetWorkingPath()
-	if err != nil {
-		panic(err)
-	}
-	if !file.IsDir(workingPath) {
-		if err := file.MakeDir(workingPath); err != nil {
-			panic(err)
-		}
-		fmt.Printf("[Init] working directory: %s\n", workingPath)
-	} else {
-		fmt.Printf("[Exist] logs directory: %s exist\n", workingPath)
-	}
-
-	logPath, err := GetLogPath()
-	if err != nil {
-		panic(err)
-	}
-	if !file.IsDir(logPath) {
-		if err := file.MakeDir(logPath); err != nil {
-			panic(err)
-		}
-		fmt.Printf("[Init] logs directory: %s\n", logPath)
-	} else {
-		fmt.Printf("[Exist] logs directory: %s\n", logPath)
-	}
-
-	configPath, err := GetConfigPath()
-	if err != nil {
-		panic(err)
-	}
-	if !file.IsFile(configPath) {
-		if err := file.Create(configPath); err != nil {
-			panic(err)
-		}
-		fmt.Printf("[Init] config file: %s\n", configPath)
-	} else {
-		fmt.Printf("[Exist] config file: %s\n", configPath)
-	}
 }

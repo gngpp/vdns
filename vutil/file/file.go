@@ -13,7 +13,7 @@ import (
 	"vdns/lib/vlog"
 )
 
-var log = vlog.LogFactory.Default()
+var log = vlog.Default()
 
 // IsDir Determine whether it is a directory
 func IsDir(path string) bool {
