@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"sync"
 )
 
 // Logging level.
@@ -39,12 +40,7 @@ type LevelEnum struct {
 	FATAL LevelType
 }
 
-type VLog struct{}
-
 type LevelType string
-
-// LogFactory utilities.
-var LogFactory = VLog{}
 
 var Level = LevelEnum{
 	INFO:  info,
@@ -56,21 +52,26 @@ var Level = LevelEnum{
 	FATAL: fatal,
 }
 
-// all loggers.
-var loggers []*Logger
+type Color string
 
-// the global default logging level, it will be used for creating logger.
-var logLevel = Debug
+//goland:noinspection ALL
+const (
+	DEBUG_COLOR Color = "\033[0;36m"
+	INFO_COLOR  Color = "\033[0;32m"
+	WARN_COLOR  Color = "\033[0;33m"
+	ERROR_COLOR Color = "\033[0;31m"
+	TRACE_COLOR Color = "\033[0;34m"
+	FATAL_COLOR Color = "\033[0;35m"
+)
 
-// Logger represents a simple logger with level.
-// The underlying logger is the standard Go logging "log".
-type Logger struct {
-	level  int
-	logger *log.Logger
-}
+var syncOutput = false
 
-// NewLogger creates a logger.
-func (*VLog) NewLogger(out io.Writer) *Logger {
+var mu sync.Mutex
+
+var writer *io.Writer
+
+// New creates a logger.
+func New(out io.Writer) *Logger {
 	ret := &Logger{level: logLevel, logger: log.New(out, "", log.Ldate|log.Ltime|log.Lshortfile)}
 
 	loggers = append(loggers, ret)
@@ -79,17 +80,56 @@ func (*VLog) NewLogger(out io.Writer) *Logger {
 }
 
 // Default create default logger
-func (v *VLog) Default() *Logger {
-	return v.NewLogger(os.Stdout)
+func Default() *Logger {
+	if writer != nil {
+		return New(*writer)
+	}
+	return New(os.Stdout)
 }
 
-// SetLevel sets the logging level of all loggers.
-func (*VLog) SetLevel(level LevelType) {
+// SetLevel sets the logging level of all loggers. (global)
+func SetLevel(level LevelType) {
+	mu.Lock()
+
+	defer mu.Unlock()
 	logLevel = getLevel(level)
 
 	for _, l := range loggers {
 		l.SetLevel(level)
 	}
+}
+
+// SetOutput sets the output destination for the standard logger. (global)
+func SetOutput(w io.Writer) {
+	mu.Lock()
+	defer mu.Unlock()
+	writer = &w
+	if syncOutput {
+		log.SetOutput(w)
+	}
+	for _, logger := range loggers {
+		logger.SetOutput(w)
+	}
+}
+
+// SetSyncOutput synchronize output settings to the default log library
+func SetSyncOutput(b bool) {
+	mu.Lock()
+	defer mu.Unlock()
+	syncOutput = b
+}
+
+// all loggers.
+var loggers []*Logger
+
+// the global default logging level, it will be used for creating logger.
+var logLevel = Info
+
+// Logger represents a simple logger with level.
+// The underlying logger is the standard Go logging "log".
+type Logger struct {
+	level  int
+	logger *log.Logger
 }
 
 // getLevel gets logging level int value corresponding to the specified level.
@@ -113,6 +153,11 @@ func getLevel(level LevelType) int {
 	default:
 		return Info
 	}
+}
+
+// SetOutput sets the output destination for the standard logger.
+func (l *Logger) SetOutput(w io.Writer) {
+	l.logger.SetOutput(w)
 }
 
 // SetLevel sets the logging level of a logger.
@@ -141,8 +186,12 @@ func (l *Logger) Trace(v ...interface{}) {
 		return
 	}
 
-	l.logger.SetPrefix("TRACE ")
-	l.logger.Output(2, fmt.Sprintln(v...))
+	l.logger.SetPrefix(string(TRACE_COLOR) + "[TRACE] ")
+	err := l.logger.Output(2, fmt.Sprintln(v...))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
 // Tracef prints trace level message with format.
@@ -150,8 +199,12 @@ func (l *Logger) Tracef(format string, v ...interface{}) {
 	if Trace < l.level {
 		return
 	}
-	l.logger.SetPrefix("TRACE ")
-	l.logger.Output(2, fmt.Sprintf(format, v...))
+	l.logger.SetPrefix(string(TRACE_COLOR) + "[TRACE] ")
+	err := l.logger.Output(2, fmt.Sprintf(format, v...))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
 // Debug prints debug level message.
@@ -160,8 +213,12 @@ func (l *Logger) Debug(v ...interface{}) {
 		return
 	}
 
-	l.logger.SetPrefix("DEBUG ")
-	l.logger.Output(2, fmt.Sprintln(v...))
+	l.logger.SetPrefix(string(DEBUG_COLOR) + "[DEBUG] ")
+	err := l.logger.Output(2, fmt.Sprintln(v...))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
 // Debugf prints debug level message with format.
@@ -170,8 +227,12 @@ func (l *Logger) Debugf(format string, v ...interface{}) {
 		return
 	}
 
-	l.logger.SetPrefix("DEBUG ")
-	l.logger.Output(2, fmt.Sprintf(format, v...))
+	l.logger.SetPrefix(string(DEBUG_COLOR) + "[DEBUG] ")
+	err := l.logger.Output(2, fmt.Sprintf(format, v...))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
 // Info prints info level message.
@@ -180,8 +241,12 @@ func (l *Logger) Info(v ...interface{}) {
 		return
 	}
 
-	l.logger.SetPrefix("INFO ")
-	l.logger.Output(2, fmt.Sprintln(v...))
+	l.logger.SetPrefix(string(INFO_COLOR) + "[INFO] ")
+	err := l.logger.Output(2, fmt.Sprintln(v...))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
 // Infof prints info level message with format.
@@ -190,8 +255,12 @@ func (l *Logger) Infof(format string, v ...interface{}) {
 		return
 	}
 
-	l.logger.SetPrefix("INFO ")
-	l.logger.Output(2, fmt.Sprintf(format, v...))
+	l.logger.SetPrefix(string(INFO_COLOR) + "[INFO] ")
+	err := l.logger.Output(2, fmt.Sprintf(format, v...))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
 // Warn prints warning level message.
@@ -200,8 +269,12 @@ func (l *Logger) Warn(v ...interface{}) {
 		return
 	}
 
-	l.logger.SetPrefix("WARN ")
-	l.logger.Output(2, fmt.Sprintln(v...))
+	l.logger.SetPrefix(string(WARN_COLOR) + "[WARN] ")
+	err := l.logger.Output(2, fmt.Sprintln(v...))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
 // Warnf prints warning level message with format.
@@ -210,8 +283,12 @@ func (l *Logger) Warnf(format string, v ...interface{}) {
 		return
 	}
 
-	l.logger.SetPrefix("WARN ")
-	l.logger.Output(2, fmt.Sprintf(format, v...))
+	l.logger.SetPrefix(string(WARN_COLOR) + "[WARN] ")
+	err := l.logger.Output(2, fmt.Sprintf(format, v...))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
 // Error prints error level message.
@@ -220,8 +297,12 @@ func (l *Logger) Error(v ...interface{}) {
 		return
 	}
 
-	l.logger.SetPrefix("ERROR ")
-	l.logger.Output(2, fmt.Sprintln(v...))
+	l.logger.SetPrefix(string(ERROR_COLOR) + "[ERROR] ")
+	err := l.logger.Output(2, fmt.Sprintln(v...))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
 // Errorf prints error level message with format.
@@ -230,8 +311,12 @@ func (l *Logger) Errorf(format string, v ...interface{}) {
 		return
 	}
 
-	l.logger.SetPrefix("ERROR ")
-	l.logger.Output(2, fmt.Sprintf(format, v...))
+	l.logger.SetPrefix(string(ERROR_COLOR) + "[ERROR] ")
+	err := l.logger.Output(2, fmt.Sprintf(format, v...))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
 // Fatal prints fatal level message and exit process with code 1.
@@ -240,8 +325,12 @@ func (l *Logger) Fatal(v ...interface{}) {
 		return
 	}
 
-	l.logger.SetPrefix("FATAL ")
-	l.logger.Output(2, fmt.Sprintln(v...))
+	l.logger.SetPrefix(string(FATAL_COLOR) + "[FATAL] ")
+	err := l.logger.Output(2, fmt.Sprintln(v...))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	os.Exit(1)
 }
 
@@ -251,7 +340,11 @@ func (l *Logger) Fatalf(format string, v ...interface{}) {
 		return
 	}
 
-	l.logger.SetPrefix("FATAL ")
-	l.logger.Output(2, fmt.Sprintf(format, v...))
+	l.logger.SetPrefix(string(FATAL_COLOR) + "[FATAL] ")
+	err := l.logger.Output(2, fmt.Sprintf(format, v...))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	os.Exit(1)
 }
