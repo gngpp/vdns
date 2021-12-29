@@ -2,12 +2,15 @@ package str
 
 import (
 	"strings"
-	util "vdns/vutil"
 )
 
 //goland:noinspection ALL
 func IsEmpty(value string) bool {
 	return value == ""
+}
+
+func NotEmpty(value string) bool {
+	return !IsEmpty(value)
 }
 
 //goland:noinspection ALL
@@ -20,7 +23,6 @@ func StringValue(a *string) string {
 	if a == nil {
 		return ""
 	}
-	util.Escape("sd")
 	return *a
 }
 

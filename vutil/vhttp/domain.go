@@ -15,7 +15,7 @@ var DomainRegexp = regexp.MustCompile(`^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|
 // www.baidu.com -> 顶级域名：baidu.com  记录：www
 // a.b.baidu.com -> 顶级域名：baidu.com   记录：a.b
 func ExtractDomain(domain string) ([]string, error) {
-	if str.IsEmpty(domain) || IsDomain(domain) {
+	if str.IsEmpty(domain) || !IsDomain(domain) {
 		return nil, errors.New("the domain name does not meet the specification")
 	}
 	split := strings.Split(domain, ".")
