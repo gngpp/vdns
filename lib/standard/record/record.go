@@ -2,6 +2,11 @@ package record
 
 type Type string
 
+func (_this Type) String() string {
+	//goland:noinspection GoRedundantConversion
+	return string(_this)
+}
+
 //goland:noinspection ALL
 const (
 	a            Type = "A"            // 将域名指向一个IPV4地址
