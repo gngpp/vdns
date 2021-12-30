@@ -7,7 +7,7 @@ import (
 	"vdns/vutil/str"
 )
 
-// AliyunSDKError struct is used save error code and message
+// AliyunSDKError struct is used save error code and msg
 type AliyunSDKError struct {
 	Code    *string
 	Message *string
@@ -42,8 +42,8 @@ func NewAliyunSDKError(obj map[string]interface{}) *AliyunSDKError {
 		err.Code = str.String(val)
 	}
 
-	if obj["message"] != nil {
-		err.Message = str.String(obj["message"].(string))
+	if obj["msg"] != nil {
+		err.Message = str.String(obj["msg"].(string))
 	}
 	if data := obj["data"]; data != nil {
 		byt, _ := json.Marshal(data)
