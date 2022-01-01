@@ -22,6 +22,10 @@ func Convert(in interface{}, out interface{}) error {
 	return err
 }
 
+func ByteArrayConver(bytes []byte, out interface{}) error {
+	return json.Unmarshal(bytes, out)
+}
+
 // Recover is use convert map[string]interface object to struct
 func Recover(in interface{}) error {
 	if in == nil {

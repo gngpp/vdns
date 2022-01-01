@@ -29,11 +29,11 @@ func (_this *Record) String() string {
 	return vjson.PrettifyString(_this)
 }
 
-type StatusResponse struct {
+type DomainStatusResponse struct {
 	RequestId *string `json:"request_id,omitempty"`
 	RecordId  *string `json:"record_id,omitempty"`
 }
 
-func (_this *StatusResponse) String() string {
+func (_this *DomainStatusResponse) String() string {
 	return vjson.PrettifyString(_this)
 }

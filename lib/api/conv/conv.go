@@ -7,8 +7,8 @@ import (
 )
 
 //goland:noinspection GoRedundantConversion
-func AiiyunBodyToResponse(body *aliyun_model.AliyunDescribeDomainRecordsResponseBody) *models.ApiDomainRecordResponse {
-	response := &models.ApiDomainRecordResponse{}
+func AiiyunBodyToResponse(body *aliyun_model.DescribeDomainRecordsResponse) *models.DomainRecordResponse {
+	response := &models.DomainRecordResponse{}
 	response.TotalCount = body.TotalCount
 	response.PageSize = body.PageSize
 	response.PageNumber = body.PageNumber

@@ -18,11 +18,13 @@ import (
 	"vdns/lib/standard/msg"
 	"vdns/lib/standard/record"
 	time2 "vdns/lib/standard/time"
+	"vdns/vlog"
 	"vdns/vutil/str"
 	"vdns/vutil/vhttp"
+	"vdns/vutil/vjson"
 )
 
-func NewAliyunDnsProvider(credential auth.Credential) DnsProvider {
+func NewAliyunDnsProvider(credential auth.Credential) DNSRecordProvider {
 	return &AliyunDnsProvider{
 		Action: &Action{
 			describe: "DescribeDomainRecords",
@@ -43,51 +45,127 @@ type AliyunDnsProvider struct {
 	credntial auth.Credential
 }
 
-func (_this *AliyunDnsProvider) DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.ApiDomainRecordResponse, error) {
-	paramater, err := _this.getDescribeParamater(request, &_this.describe)
+func (_this *AliyunDnsProvider) DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordResponse, error) {
+	paramater, err := _this.loadDescribeParamater(request, &_this.describe)
 	if err != nil {
 		return nil, err
 	}
 	requestUrl := _this.generateRequestUrl(paramater)
-	return _this.doRequest(requestUrl)
+	return _this.doDescribeRequest(requestUrl)
 }
 
-func (_this *AliyunDnsProvider) CreateDnsRecord(request *models.CreateDomainRecordRequest) (*models.ApiDomainRecordResponse, error) {
-	paramater, err := _this.getCreateParamater(request, &_this.create)
+func (_this *AliyunDnsProvider) CreateRecord(request *models.CreateDomainRecordRequest) (*models.DomainStatusResponse, error) {
+	paramater, err := _this.loadCreateParamater(request, &_this.create)
 	if err != nil {
 		return nil, err
 	}
 	requestUrl := _this.generateRequestUrl(paramater)
-	return _this.doRequest(requestUrl)
+	return _this.doCreateRequest(requestUrl)
 }
 
-func (_this *AliyunDnsProvider) UpdateDnsRecord(request *models.UpdateDomainRecordRequest) (*models.ApiDomainRecordResponse, error) {
-	panic("implement me")
+func (_this *AliyunDnsProvider) UpdateRecord(request *models.UpdateDomainRecordRequest) (*models.DomainStatusResponse, error) {
+	paramater, err := _this.loadUpdateParamater(request, &_this.update)
+	if err != nil {
+		return nil, err
+	}
+	requestUrl := _this.generateRequestUrl(paramater)
+	return _this.doCreateRequest(requestUrl)
 }
 
-func (_this *AliyunDnsProvider) DeleteDnsRecord(request *models.DeleteDomainRecordRequest) (*models.ApiDomainRecordResponse, error) {
-	panic("implement me")
+func (_this *AliyunDnsProvider) DeleteRecord(request *models.DeleteDomainRecordRequest) (*models.DomainStatusResponse, error) {
+	paramater, err := _this.loadDeleteParamater(request, &_this.delete)
+	if err != nil {
+		return nil, err
+	}
+	requestUrl := _this.generateRequestUrl(paramater)
+	return _this.doCreateRequest(requestUrl)
 }
 
 func (_this *AliyunDnsProvider) Support(recordType record.Type) bool {
 	return record.Support(recordType)
 }
 
-func (_this *AliyunDnsProvider) doRequest(url string) (*models.ApiDomainRecordResponse, error) {
-	resp, _ := http.Get(url)
+func (_this *AliyunDnsProvider) doDescribeRequest(url string) (*models.DomainRecordResponse, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return &models.DomainRecordResponse{}, err
+	}
 	if resp.StatusCode == http.StatusOK {
 		bytes, _ := ioutil.ReadAll(resp.Body)
-		var reponse = &aliyun_model.AliyunDescribeDomainRecordsResponseBody{}
+		var reponse = &aliyun_model.DescribeDomainRecordsResponse{}
 		err := json.Unmarshal(bytes, reponse)
 		if err != nil {
-			return new(models.ApiDomainRecordResponse), err
+			return new(models.DomainRecordResponse), err
 		}
 		return conv.AiiyunBodyToResponse(reponse), nil
 	} else {
-		err := errs.NewAliyunSDKError(nil)
+		sdkError := errs.NewAliyunSDKError(nil)
 		bytes, _ := ioutil.ReadAll(resp.Body)
-		json.Unmarshal(bytes, &err)
-		return nil, err
+		vjson.ByteArrayConver(bytes, sdkError)
+		return nil, sdkError
+	}
+}
+
+func (_this *AliyunDnsProvider) doCreateRequest(url string) (*models.DomainStatusResponse, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return &models.DomainStatusResponse{}, err
+	}
+	if resp.StatusCode == http.StatusOK {
+		bytes, _ := ioutil.ReadAll(resp.Body)
+		response := &models.DomainStatusResponse{}
+		err := vjson.ByteArrayConver(bytes, response)
+		if err != nil {
+			vlog.Default().Fatal(err)
+		}
+		return response, nil
+	} else {
+		sdkError := errs.NewAliyunSDKError(nil)
+		bytes, _ := ioutil.ReadAll(resp.Body)
+		vjson.ByteArrayConver(bytes, sdkError)
+		return nil, sdkError
+	}
+}
+
+func (_this *AliyunDnsProvider) doUpdateRequest(url string) (*models.DomainStatusResponse, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return &models.DomainStatusResponse{}, err
+	}
+	if resp.StatusCode == http.StatusOK {
+		bytes, _ := ioutil.ReadAll(resp.Body)
+		response := &models.DomainStatusResponse{}
+		err := vjson.ByteArrayConver(bytes, response)
+		if err != nil {
+			vlog.Default().Fatal(err)
+		}
+		return response, nil
+	} else {
+		sdkError := errs.NewAliyunSDKError(nil)
+		bytes, _ := ioutil.ReadAll(resp.Body)
+		vjson.ByteArrayConver(bytes, sdkError)
+		return nil, sdkError
+	}
+}
+
+func (_this *AliyunDnsProvider) doDeleteRequest(url string) (*models.DomainStatusResponse, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return &models.DomainStatusResponse{}, err
+	}
+	if resp.StatusCode == http.StatusOK {
+		bytes, _ := ioutil.ReadAll(resp.Body)
+		response := &models.DomainStatusResponse{}
+		err := vjson.ByteArrayConver(bytes, response)
+		if err != nil {
+			vlog.Default().Fatal(err)
+		}
+		return response, nil
+	} else {
+		sdkError := errs.NewAliyunSDKError(nil)
+		bytes, _ := ioutil.ReadAll(resp.Body)
+		vjson.ByteArrayConver(bytes, sdkError)
+		return nil, sdkError
 	}
 }
 
@@ -102,7 +180,7 @@ func (_this *AliyunDnsProvider) SetSignature(signature string, queries *url.Valu
 	queries.Set("Signature", base64.StdEncoding.EncodeToString(str.ToBytes(signature)))
 }
 
-func (_this *AliyunDnsProvider) getDescribeParamater(request *models.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
+func (_this *AliyunDnsProvider) loadDescribeParamater(request *models.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewApiError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
@@ -141,7 +219,7 @@ func (_this *AliyunDnsProvider) getDescribeParamater(request *models.DescribeDom
 	return paramter, nil
 }
 
-func (_this *AliyunDnsProvider) getCreateParamater(request *models.CreateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *AliyunDnsProvider) loadCreateParamater(request *models.CreateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewApiError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -166,11 +244,11 @@ func (_this *AliyunDnsProvider) getCreateParamater(request *models.CreateDomainR
 	return paramter, nil
 }
 
-func (_this *AliyunDnsProvider) getUpdateParamater(request *models.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *AliyunDnsProvider) loadUpdateParamater(request *models.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewApiError(msg.CREATE_REQUEST_NOT_NIL)
 	}
-	if request.ID != nil {
+	if request.ID == nil {
 		return nil, errs.NewApiError(msg.RECORD_ID_NOT_SUPPORT)
 	}
 	if !record.Support(request.RecordType) {
@@ -195,12 +273,12 @@ func (_this *AliyunDnsProvider) getUpdateParamater(request *models.UpdateDomainR
 	return paramter, nil
 }
 
-func (_this *AliyunDnsProvider) getDeleteParamater(request *models.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *AliyunDnsProvider) loadDeleteParamater(request *models.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewApiError(msg.CREATE_REQUEST_NOT_NIL)
 	}
 	paramter := _this.getCommonParamter(action)
-	if request.ID != nil {
+	if request.ID == nil {
 		return nil, errs.NewApiError(msg.RECORD_ID_NOT_SUPPORT)
 	}
 	paramter.Set("RecordId", *request.ID)
