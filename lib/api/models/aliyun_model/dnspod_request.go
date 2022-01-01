@@ -1,4 +1,4 @@
-package models
+package aliyun_model
 
 type BaseRequest struct {
 	httpMethod string

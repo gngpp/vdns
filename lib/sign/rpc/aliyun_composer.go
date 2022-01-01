@@ -3,17 +3,25 @@ package rpc
 import (
 	"crypto/hmac"
 	"crypto/sha1"
+	"hash"
 	"net/url"
 	"strings"
-	"vdns/lib/vlog"
+	"vdns/vlog"
 	"vdns/vutil/str"
 	"vdns/vutil/vhttp"
 )
 
 var log = vlog.Default()
 
+func NewAliyunRpcSignatureCompose(separator string) RpcSignatureComposer {
+	return &AliyunRpcSignatureCompose{
+		Separator: str.String(separator),
+	}
+}
+
 type AliyunRpcSignatureCompose struct {
-	Separator string
+	Separator *string
+	sha1      hash.Hash
 }
 
 func (_this *AliyunRpcSignatureCompose) ComposeStringToSign(method vhttp.HttpMethod, queries *url.Values) string {
@@ -26,16 +34,15 @@ func (_this *AliyunRpcSignatureCompose) ComposeStringToSign(method vhttp.HttpMet
 	two := strings.ReplaceAll(one, "*", "%2A")
 	canonicalizedString := strings.ReplaceAll(two, "%7E", "~")
 	return str.Concat(string(method),
-		_this.Separator,
+		str.StringValue(_this.Separator),
 		url.QueryEscape("/"),
-		_this.Separator,
+		str.StringValue(_this.Separator),
 		url.QueryEscape(canonicalizedString))
 }
 
-func (_this *AliyunRpcSignatureCompose) GeneratedSignature(secret string, method vhttp.HttpMethod, queries *url.Values) string {
-	secret = str.Concat(secret, "&")
+func (_this *AliyunRpcSignatureCompose) GeneratedSignature(secret string, stringToSign string) string {
+	secret = str.Concat(secret, str.StringValue(_this.Separator))
 	// compose sign string
-	stringToSign := _this.ComposeStringToSign(method, queries)
 	hash := hmac.New(sha1.New, str.ToBytes(secret))
 	hash.Write(str.ToBytes(stringToSign))
 	// encode

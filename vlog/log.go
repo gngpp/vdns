@@ -180,7 +180,7 @@ func (l *Logger) IsWarnEnabled() bool {
 	return l.level <= Warn
 }
 
-// Trace prints trace level message.
+// Trace prints trace level msg.
 func (l *Logger) Trace(v ...interface{}) {
 	if Trace < l.level {
 		return
@@ -194,7 +194,7 @@ func (l *Logger) Trace(v ...interface{}) {
 	}
 }
 
-// Tracef prints trace level message with format.
+// Tracef prints trace level msg with format.
 func (l *Logger) Tracef(format string, v ...interface{}) {
 	if Trace < l.level {
 		return
@@ -207,7 +207,7 @@ func (l *Logger) Tracef(format string, v ...interface{}) {
 	}
 }
 
-// Debug prints debug level message.
+// Debug prints debug level msg.
 func (l *Logger) Debug(v ...interface{}) {
 	if Debug < l.level {
 		return
@@ -221,7 +221,7 @@ func (l *Logger) Debug(v ...interface{}) {
 	}
 }
 
-// Debugf prints debug level message with format.
+// Debugf prints debug level msg with format.
 func (l *Logger) Debugf(format string, v ...interface{}) {
 	if Debug < l.level {
 		return
@@ -235,7 +235,7 @@ func (l *Logger) Debugf(format string, v ...interface{}) {
 	}
 }
 
-// Info prints info level message.
+// Info prints info level msg.
 func (l *Logger) Info(v ...interface{}) {
 	if Info < l.level {
 		return
@@ -249,7 +249,7 @@ func (l *Logger) Info(v ...interface{}) {
 	}
 }
 
-// Infof prints info level message with format.
+// Infof prints info level msg with format.
 func (l *Logger) Infof(format string, v ...interface{}) {
 	if Info < l.level {
 		return
@@ -263,7 +263,7 @@ func (l *Logger) Infof(format string, v ...interface{}) {
 	}
 }
 
-// Warn prints warning level message.
+// Warn prints warning level msg.
 func (l *Logger) Warn(v ...interface{}) {
 	if Warn < l.level {
 		return
@@ -277,7 +277,7 @@ func (l *Logger) Warn(v ...interface{}) {
 	}
 }
 
-// Warnf prints warning level message with format.
+// Warnf prints warning level msg with format.
 func (l *Logger) Warnf(format string, v ...interface{}) {
 	if Warn < l.level {
 		return
@@ -291,7 +291,7 @@ func (l *Logger) Warnf(format string, v ...interface{}) {
 	}
 }
 
-// Error prints error level message.
+// Error prints error level msg.
 func (l *Logger) Error(v ...interface{}) {
 	if Error < l.level {
 		return
@@ -305,7 +305,7 @@ func (l *Logger) Error(v ...interface{}) {
 	}
 }
 
-// Errorf prints error level message with format.
+// Errorf prints error level msg with format.
 func (l *Logger) Errorf(format string, v ...interface{}) {
 	if Error < l.level {
 		return
@@ -319,7 +319,7 @@ func (l *Logger) Errorf(format string, v ...interface{}) {
 	}
 }
 
-// Fatal prints fatal level message and exit process with code 1.
+// Fatal prints fatal level msg and exit process with code 1.
 func (l *Logger) Fatal(v ...interface{}) {
 	if Fatal < l.level {
 		return
@@ -334,7 +334,7 @@ func (l *Logger) Fatal(v ...interface{}) {
 	os.Exit(1)
 }
 
-// Fatalf prints fatal level message with format and exit process with code 1.
+// Fatalf prints fatal level msg with format and exit process with code 1.
 func (l *Logger) Fatalf(format string, v ...interface{}) {
 	if Fatal < l.level {
 		return

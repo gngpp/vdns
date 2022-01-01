@@ -9,11 +9,13 @@ import (
 
 // AliyunSDKError struct is used save error code and msg
 type AliyunSDKError struct {
-	Code    *string
-	Message *string
-	Data    *string
-	Stack   *string
-	errMsg  *string
+	RequestId *string `json:"request_id,omitempty"`
+	Recommend *string `json:"recommend,omitempty"`
+	Code      *string `json:"code,omitempty"`
+	Message   *string `json:"message,omitempty"`
+	Data      *string `json:"data,omitempty"`
+	Stack     *string `json:"stack,omitempty"`
+	errMsg    *string `json:"err_msg,omitempty"`
 }
 
 func (_this *AliyunSDKError) Error() string {

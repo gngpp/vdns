@@ -4,6 +4,16 @@ import (
 	"strings"
 )
 
+// Contains determines whether the str is in the strs.
+func Contains(str string, strs []string) bool {
+	for _, v := range strs {
+		if v == str {
+			return true
+		}
+	}
+	return false
+}
+
 //goland:noinspection ALL
 func IsEmpty(value string) bool {
 	return value == ""

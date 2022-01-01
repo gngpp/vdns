@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"vdns/lib/errs"
+	"vdns/lib/api/errs"
 	"vdns/vutil/str"
 )
 

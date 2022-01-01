@@ -14,7 +14,7 @@ type RpcSignatureComposer interface {
 	ComposeStringToSign(method vhttp.HttpMethod, queries *url.Values) string
 
 	// GeneratedSignature 生成签名
-	GeneratedSignature(secret string, method vhttp.HttpMethod, queries *url.Values) string
+	GeneratedSignature(secret string, stringToSign string) string
 
 	// SignatureMethod 签名方法
 	SignatureMethod() string
