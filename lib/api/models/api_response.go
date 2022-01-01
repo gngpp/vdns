@@ -5,14 +5,14 @@ import (
 	"vdns/vutil/vjson"
 )
 
-type ApiDomainRecordResponse struct {
+type DomainRecordResponse struct {
 	TotalCount *int64    `json:"total_count,omitempty"`
 	PageSize   *int64    `json:"page_size,omitempty"`
 	PageNumber *int64    `json:"page_number,omitempty"`
 	Records    []*Record `json:"records,omitempty"`
 }
 
-func (_this *ApiDomainRecordResponse) String() string {
+func (_this *DomainRecordResponse) String() string {
 	return vjson.PrettifyString(_this)
 }
 
@@ -26,5 +26,14 @@ type Record struct {
 }
 
 func (_this *Record) String() string {
+	return vjson.PrettifyString(_this)
+}
+
+type StatusResponse struct {
+	RequestId *string `json:"request_id,omitempty"`
+	RecordId  *string `json:"record_id,omitempty"`
+}
+
+func (_this *StatusResponse) String() string {
 	return vjson.PrettifyString(_this)
 }
