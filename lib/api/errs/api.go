@@ -19,5 +19,5 @@ func NewApiErrorFromError(e error) *ApiError {
 }
 
 func (_this *ApiError) Error() string {
-	return fmt.Sprintf("ApiError: %s", strs.StringValue(_this.message))
+	return fmt.Sprintf("[ApiError]:\n	%s", strs.StringValue(_this.message))
 }

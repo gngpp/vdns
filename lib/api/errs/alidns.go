@@ -17,7 +17,7 @@ type AlidnsSDKError struct {
 
 func (_this *AlidnsSDKError) Error() string {
 	if _this.errMsg == nil {
-		str := fmt.Sprintf("AlidnsSDKError:\n   Code: %s\n   Message: %s\n",
+		str := fmt.Sprintf("[AlidnsSDKError]:\n	Code: %s\n	Message: %s\n",
 			strs.StringValue(_this.Code),
 			strs.StringValue(_this.Message),
 		)

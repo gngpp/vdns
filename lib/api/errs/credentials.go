@@ -10,7 +10,7 @@ type CredntialsError struct {
 }
 
 func (_this *CredntialsError) Error() string {
-	return fmt.Sprintf("CredntialsError: %s", strs.StringValue(_this.Message))
+	return fmt.Sprintf("[CredntialsError]:\n	Message: %s", strs.StringValue(_this.Message))
 }
 
 func NewCredentialsError(message string) error {
