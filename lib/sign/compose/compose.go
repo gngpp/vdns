@@ -1,4 +1,4 @@
-package rpc
+package compose
 
 import (
 	"net/url"
@@ -7,8 +7,7 @@ import (
 
 const SEPARATOR = "&"
 
-//goland:noinspection ALL
-type RpcSignatureComposer interface {
+type SignatureComposer interface {
 
 	// ComposeStringToSign 组合签名必要参数
 	ComposeStringToSign(method vhttp.HttpMethod, queries *url.Values) string

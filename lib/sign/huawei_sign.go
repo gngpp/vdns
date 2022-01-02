@@ -34,7 +34,7 @@ func hmacsha256(key []byte, data string) ([]byte, error) {
 	return h.Sum(nil), nil
 }
 
-// CanonicalRequest Build a CanonicalRequest from a regular request string
+// CanonicalRequest Build a CanonicalRequest from a regular rpc string
 //
 // CanonicalRequest =
 //  HTTPRequestMethod + '\n' +
@@ -65,7 +65,7 @@ func CanonicalRequest(r *http.Request, signedHeaders []string) (string, error) {
 		CanonicalHeaders(r, signedHeaders), strings.Join(signedHeaders, ";"), hexEncode), err
 }
 
-// CanonicalURI returns request uri
+// CanonicalURI returns rpc uri
 func CanonicalURI(r *http.Request) string {
 	pattens := strings.Split(r.URL.Path, "/")
 	var uri []string
@@ -140,7 +140,7 @@ func RequestPayload(r *http.Request) ([]byte, error) {
 	return b, err
 }
 
-// StringToSign Create a "String to Sign".
+// StringToSign create a "String to Sign".
 func StringToSign(canonicalRequest string, t time.Time) (string, error) {
 	hash := sha256.New()
 	_, err := hash.Write([]byte(canonicalRequest))
@@ -151,7 +151,7 @@ func StringToSign(canonicalRequest string, t time.Time) (string, error) {
 		Algorithm, t.UTC().Format(BasicDateFormat), hash.Sum(nil)), nil
 }
 
-// SignStringToSign Create the HWS Signature.
+// SignStringToSign create the HWS Signature.
 func SignStringToSign(stringToSign string, signingKey []byte) (string, error) {
 	hm, err := hmacsha256(signingKey, stringToSign)
 	return fmt.Sprintf("%x", hm), err

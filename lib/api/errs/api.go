@@ -1,6 +1,9 @@
 package errs
 
-import "vdns/vutil/str"
+import (
+	"fmt"
+	"vdns/vutil/strs"
+)
 
 type ApiError struct {
 	message *string
@@ -16,5 +19,5 @@ func NewApiErrorFromError(e error) *ApiError {
 }
 
 func (_this *ApiError) Error() string {
-	return str.StringValue(_this.message)
+	return fmt.Sprintf("ApiError: %s", strs.StringValue(_this.message))
 }

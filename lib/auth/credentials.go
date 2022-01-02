@@ -2,7 +2,7 @@ package auth
 
 import (
 	"vdns/lib/api/errs"
-	"vdns/vutil/str"
+	"vdns/vutil/strs"
 )
 
 type Credential interface {
@@ -13,10 +13,10 @@ type Credential interface {
 
 //goland:noinspection ALL
 func NewBasicCredential(secretId, secretKey string) (Credential, error) {
-	if str.IsEmpty(secretId) {
+	if strs.IsEmpty(secretId) {
 		return nil, errs.NewCredentialsError("Access key ID cannot be empty")
 	}
-	if str.IsEmpty(secretKey) {
+	if strs.IsEmpty(secretKey) {
 		return nil, errs.NewCredentialsError("Access key secret cannot be empty")
 	}
 	return &BasisCredential{
@@ -27,7 +27,7 @@ func NewBasicCredential(secretId, secretKey string) (Credential, error) {
 
 //goland:noinspection ALL
 func NewTokenCredential(token string) (Credential, error) {
-	if str.IsEmpty(token) {
+	if strs.IsEmpty(token) {
 		return nil, errs.NewCredentialsError("Token secret cannot be empty")
 	}
 	tokenCredntial := &TokenCredential{

@@ -1,4 +1,4 @@
-package aliyun_model
+package alidns_model
 
 import (
 	"vdns/vutil/vjson"

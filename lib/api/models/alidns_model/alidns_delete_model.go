@@ -1,12 +1,12 @@
-package aliyun_model
+package alidns_model
 
 import "vdns/vutil/vjson"
 
-type CreateDomainRecordResponseBody struct {
+type DeleteDomainRecordResponse struct {
 	RequestId *string `json:"RequestId,omitempty" xml:"RequestId,omitempty"`
 	RecordId  *string `json:"RecordId,omitempty" xml:"RecordId,omitempty"`
 }
 
-func (s *CreateDomainRecordResponseBody) String() string {
+func (s *DeleteDomainRecordResponse) String() string {
 	return vjson.PrettifyString(s)
 }

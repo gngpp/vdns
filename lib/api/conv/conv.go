@@ -1,32 +1,16 @@
 package conv
 
 import (
+	"net/http"
 	"vdns/lib/api/models"
-	"vdns/lib/api/models/aliyun_model"
-	"vdns/lib/standard/record"
 )
 
-//goland:noinspection GoRedundantConversion
-func AiiyunBodyToResponse(body *aliyun_model.DescribeDomainRecordsResponse) *models.DomainRecordResponse {
-	response := &models.DomainRecordResponse{}
-	response.TotalCount = body.TotalCount
-	response.PageSize = body.PageSize
-	response.PageNumber = body.PageNumber
-	aliyunRecords := body.DomainRecords.Record
-	if aliyunRecords != nil {
-		records := make([]*models.Record, len(aliyunRecords))
-		for i, aliyunRecord := range aliyunRecords {
-			record := &models.Record{
-				ID:         aliyunRecord.RecordId,
-				RecordType: record.Type(*aliyunRecord.Type),
-				Domain:     aliyunRecord.DomainName,
-				RR:         aliyunRecord.RR,
-				Value:      aliyunRecord.Value,
-				TTL:        aliyunRecord.TTL,
-			}
-			records[i] = record
-		}
-		response.Records = records
-	}
-	return response
+type DomainRecordResponseConverter interface {
+	DescribeResponseConvert(resp *http.Response) (*models.DomainRecordsResponse, error)
+
+	CreateResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error)
+
+	UpdateResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error)
+
+	DeleteResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error)
 }
