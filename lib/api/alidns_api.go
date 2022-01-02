@@ -103,22 +103,18 @@ func (_this *AlidnsProvider) loadDescribeParamater(request *models.DescribeDomai
 	domain := extractDomain[0]
 	rr := extractDomain[1]
 	paramter := _this.getCommonParamter(action)
+	paramter.Set("DomainName", domain)
+	paramter.Set("TypeKeyWord", request.RecordType.String())
 	if request.PageSize != nil {
 		paramter.Set("PageSize", strconv.FormatInt(*request.PageSize, 10))
 	}
 	if request.PageNumber != nil {
 		paramter.Set("PageNumber", strconv.FormatInt(*request.PageNumber, 10))
 	}
-	if record.Support(request.RecordType) {
-		paramter.Set("TypeKeyWord", request.RecordType.String())
-	} else {
-		return nil, errs.NewApiError(msg.RECORD_TYPE_NOT_SUPPORT)
-	}
 	// Record value keyword (fuzzy match before and after) pattern search, not case-sensitive.
 	if request.ValueKeyWord != nil {
 		paramter.Set("ValueKeyWord", *request.ValueKeyWord)
 	}
-	paramter.Set("DomainName", domain)
 	// The keywords recorded by the host, (fuzzy matching before and after) pattern search, are not case-sensitive.
 	condition := true
 	if request.RRKeyWord != nil {
