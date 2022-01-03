@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/base64"
 	"net/url"
 	"strconv"
 	"time"
@@ -89,7 +88,7 @@ func (_this *AlidnsProvider) generateRequestUrl(paramater *url.Values) string {
 }
 
 func (_this *AlidnsProvider) SetSignature(signature string, queries *url.Values) {
-	queries.Set("Signature", base64.StdEncoding.EncodeToString(strs.ToBytes(signature)))
+	queries.Set("Signature", signature)
 }
 
 func (_this *AlidnsProvider) loadDescribeParamater(request *models.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {

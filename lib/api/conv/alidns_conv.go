@@ -15,6 +15,7 @@ type AlidnsDomainRecordResponseConvert struct{}
 
 //goland:noinspection GoRedundantConversion
 func (_this *AlidnsDomainRecordResponseConvert) DescribeResponseConvert(resp *http.Response) (*models.DomainRecordsResponse, error) {
+	defer resp.Body.Close()
 	if resp.StatusCode == http.StatusOK {
 		bytes, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
@@ -52,6 +53,7 @@ func (_this *AlidnsDomainRecordResponseConvert) DescribeResponseConvert(resp *ht
 }
 
 func (_this *AlidnsDomainRecordResponseConvert) CreateResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+	defer resp.Body.Close()
 	if resp.StatusCode == http.StatusOK {
 		bytes, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
@@ -73,6 +75,7 @@ func (_this *AlidnsDomainRecordResponseConvert) CreateResponseConvert(resp *http
 }
 
 func (_this *AlidnsDomainRecordResponseConvert) UpdateResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+	defer resp.Body.Close()
 	if resp.StatusCode == http.StatusOK {
 		bytes, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
@@ -94,6 +97,7 @@ func (_this *AlidnsDomainRecordResponseConvert) UpdateResponseConvert(resp *http
 }
 
 func (_this *AlidnsDomainRecordResponseConvert) DeleteResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+	defer resp.Body.Close()
 	if resp.StatusCode == http.StatusOK {
 		bytes, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
