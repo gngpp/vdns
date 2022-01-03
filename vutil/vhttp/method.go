@@ -3,6 +3,10 @@ package vhttp
 //goland:noinspection ALL
 type HttpMethod string
 
+func (receiver HttpMethod) String() string {
+	return string(receiver)
+}
+
 const (
 	HttpMethodGet     HttpMethod = "GET"
 	HttpMethodPut     HttpMethod = "PUT"

@@ -2,8 +2,11 @@ package compose
 
 import (
 	"net/url"
+	"vdns/vlog"
 	"vdns/vutil/vhttp"
 )
+
+var log = vlog.Default()
 
 const SEPARATOR = "&"
 
@@ -15,12 +18,12 @@ type SignatureComposer interface {
 	// GeneratedSignature 生成签名
 	GeneratedSignature(secret string, stringToSign string) string
 
+	// CanonicalizeRequestUrl 生成规范请求URL
+	CanonicalizeRequestUrl(urlPattern string, queries *url.Values) string
+
 	// SignatureMethod 签名方法
 	SignatureMethod() string
 
 	// SignerVersion 签名版本
 	SignerVersion() string
-
-	// CanonicalizeRequestUrl 生成规范请求URL
-	CanonicalizeRequestUrl(urlPattern string, queries *url.Values) string
 }
