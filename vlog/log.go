@@ -8,26 +8,14 @@ import (
 	"sync"
 )
 
-// Logging level.
 const (
-	Off = iota
-	Trace
-	Debug
-	Info
-	Warn
-	Error
-	Fatal
-)
-
-//goland:noinspection ALL
-const (
-	info  = "info"
-	debug = "debug"
-	off   = "off"
-	trace = "trace"
-	warn  = "warn"
-	error = "error"
-	fatal = "fatal"
+	off = iota
+	trace
+	debug
+	info
+	warn
+	err
+	fatal
 )
 
 type LevelEnum struct {
@@ -43,13 +31,13 @@ type LevelEnum struct {
 type LevelType string
 
 var Level = LevelEnum{
-	INFO:  info,
-	DEBUG: debug,
-	OFF:   off,
-	TRACE: trace,
-	WARN:  warn,
-	ERROR: error,
-	FATAL: fatal,
+	INFO:  "info",
+	DEBUG: "debug",
+	OFF:   "off",
+	TRACE: "trace",
+	WARN:  "warn",
+	ERROR: "error",
+	FATAL: "fatal",
 }
 
 type Color string
@@ -123,7 +111,7 @@ func SetSyncOutput(b bool) {
 var loggers []*Logger
 
 // the global default logging level, it will be used for creating logger.
-var logLevel = Info
+var logLevel = info
 
 // Logger represents a simple logger with level.
 // The underlying logger is the standard Go logging "log".
@@ -136,22 +124,22 @@ type Logger struct {
 func getLevel(level LevelType) int {
 
 	switch level {
-	case off:
-		return Off
-	case trace:
-		return Trace
-	case debug:
-		return Debug
-	case info:
-		return Info
-	case warn:
-		return Warn
-	case error:
-		return Error
-	case fatal:
-		return Fatal
+	case Level.OFF:
+		return off
+	case Level.TRACE:
+		return trace
+	case Level.DEBUG:
+		return debug
+	case Level.INFO:
+		return info
+	case Level.WARN:
+		return warn
+	case Level.ERROR:
+		return err
+	case Level.FATAL:
+		return fatal
 	default:
-		return Info
+		return info
 	}
 }
 
@@ -167,22 +155,22 @@ func (l *Logger) SetLevel(level LevelType) {
 
 // IsTraceEnabled determines whether the trace level is enabled.
 func (l *Logger) IsTraceEnabled() bool {
-	return l.level <= Trace
+	return l.level <= trace
 }
 
 // IsDebugEnabled determines whether the debug level is enabled.
 func (l *Logger) IsDebugEnabled() bool {
-	return l.level <= Debug
+	return l.level <= debug
 }
 
 // IsWarnEnabled determines whether the debug level is enabled.
 func (l *Logger) IsWarnEnabled() bool {
-	return l.level <= Warn
+	return l.level <= warn
 }
 
 // Trace prints trace level msg.
 func (l *Logger) Trace(v ...interface{}) {
-	if Trace < l.level {
+	if trace < l.level {
 		return
 	}
 
@@ -196,7 +184,7 @@ func (l *Logger) Trace(v ...interface{}) {
 
 // Tracef prints trace level msg with format.
 func (l *Logger) Tracef(format string, v ...interface{}) {
-	if Trace < l.level {
+	if trace < l.level {
 		return
 	}
 	l.logger.SetPrefix(string(TRACE_COLOR) + "[TRACE] ")
@@ -207,9 +195,9 @@ func (l *Logger) Tracef(format string, v ...interface{}) {
 	}
 }
 
-// Debug prints debug level msg.
+// Debug debug prints debug level msg.
 func (l *Logger) Debug(v ...interface{}) {
-	if Debug < l.level {
+	if debug < l.level {
 		return
 	}
 
@@ -223,7 +211,7 @@ func (l *Logger) Debug(v ...interface{}) {
 
 // Debugf prints debug level msg with format.
 func (l *Logger) Debugf(format string, v ...interface{}) {
-	if Debug < l.level {
+	if debug < l.level {
 		return
 	}
 
@@ -237,7 +225,7 @@ func (l *Logger) Debugf(format string, v ...interface{}) {
 
 // Info prints info level msg.
 func (l *Logger) Info(v ...interface{}) {
-	if Info < l.level {
+	if info < l.level {
 		return
 	}
 
@@ -251,7 +239,7 @@ func (l *Logger) Info(v ...interface{}) {
 
 // Infof prints info level msg with format.
 func (l *Logger) Infof(format string, v ...interface{}) {
-	if Info < l.level {
+	if info < l.level {
 		return
 	}
 
@@ -265,7 +253,7 @@ func (l *Logger) Infof(format string, v ...interface{}) {
 
 // Warn prints warning level msg.
 func (l *Logger) Warn(v ...interface{}) {
-	if Warn < l.level {
+	if warn < l.level {
 		return
 	}
 
@@ -279,7 +267,7 @@ func (l *Logger) Warn(v ...interface{}) {
 
 // Warnf prints warning level msg with format.
 func (l *Logger) Warnf(format string, v ...interface{}) {
-	if Warn < l.level {
+	if warn < l.level {
 		return
 	}
 
@@ -291,9 +279,9 @@ func (l *Logger) Warnf(format string, v ...interface{}) {
 	}
 }
 
-// Error prints error level msg.
+// Error err prints err level msg.
 func (l *Logger) Error(v ...interface{}) {
-	if Error < l.level {
+	if err < l.level {
 		return
 	}
 
@@ -305,9 +293,9 @@ func (l *Logger) Error(v ...interface{}) {
 	}
 }
 
-// Errorf prints error level msg with format.
+// Errorf prints err level msg with format.
 func (l *Logger) Errorf(format string, v ...interface{}) {
-	if Error < l.level {
+	if err < l.level {
 		return
 	}
 
@@ -321,7 +309,7 @@ func (l *Logger) Errorf(format string, v ...interface{}) {
 
 // Fatal prints fatal level msg and exit process with code 1.
 func (l *Logger) Fatal(v ...interface{}) {
-	if Fatal < l.level {
+	if fatal < l.level {
 		return
 	}
 
@@ -336,7 +324,7 @@ func (l *Logger) Fatal(v ...interface{}) {
 
 // Fatalf prints fatal level msg with format and exit process with code 1.
 func (l *Logger) Fatalf(format string, v ...interface{}) {
-	if Fatal < l.level {
+	if fatal < l.level {
 		return
 	}
 
