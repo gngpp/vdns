@@ -1,5 +1,7 @@
 package record
 
+import "vdns/vutil/strs"
+
 type Type string
 
 func (_this Type) String() string {
@@ -55,7 +57,8 @@ func OfType(t Type) (Type, bool) {
 
 func Support(t Type) bool {
 	_, isOk := OfType(t)
-	return isOk
+	// allow to be empty
+	return isOk || strs.IsEmpty(t.String())
 }
 
 func init() {

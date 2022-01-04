@@ -16,7 +16,7 @@ type SignatureComposer interface {
 	GeneratedSignature(secret string, stringToSign string) string
 
 	// CanonicalizeRequestUrl 生成规范请求URL
-	CanonicalizeRequestUrl(urlPattern string, queries *url.Values) string
+	CanonicalizeRequestUrl(urlPattern, signature string, queries *url.Values) string
 
 	// SignatureMethod 签名方法
 	SignatureMethod() string

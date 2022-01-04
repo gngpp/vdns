@@ -3,10 +3,10 @@ package compose
 import (
 	"bytes"
 	"crypto/hmac"
-	"crypto/sha256"
 	"encoding/base64"
 	"net/url"
 	"sort"
+	"vdns/lib/sign/alg"
 	"vdns/vlog"
 	"vdns/vutil/strs"
 	"vdns/vutil/vhttp"
@@ -15,7 +15,7 @@ import (
 func NewDnspodSignatureCompose(separator string) SignatureComposer {
 	return &DnspodSignatureCompose{
 		Separator:       strs.String(separator),
-		signatureMethod: strs.String("HmacSHA256"),
+		signatureMethod: strs.String(alg.HMAC_SHA256),
 	}
 }
 
@@ -49,7 +49,7 @@ func (_this *DnspodSignatureCompose) ComposeStringToSign(method vhttp.HttpMethod
 }
 
 func (_this *DnspodSignatureCompose) GeneratedSignature(secret string, stringToSign string) string {
-	hash := hmac.New(sha256.New, strs.ToBytes(secret))
+	hash := hmac.New(alg.SignMethodMap[alg.HMAC_SHA256], strs.ToBytes(secret))
 	_, err := hash.Write(strs.ToBytes(stringToSign))
 	if err != nil {
 		vlog.Debugf("[DnspodSignatureCompose] hash encrypt error: %s", err)
@@ -61,10 +61,11 @@ func (_this *DnspodSignatureCompose) GeneratedSignature(secret string, stringToS
 	return signature
 }
 
-func (_this *DnspodSignatureCompose) CanonicalizeRequestUrl(urlPattern string, queries *url.Values) string {
-	url := strs.Concat(urlPattern, "?", queries.Encode())
-	vlog.Debugf("[DnspodSignatureCompose] request url: %s", url)
-	return url
+func (_this *DnspodSignatureCompose) CanonicalizeRequestUrl(urlPattern, signature string, queries *url.Values) string {
+	queries.Set("Signature", signature)
+	requestUrl := strs.Concat(urlPattern, "?", queries.Encode())
+	vlog.Debugf("[DnspodSignatureCompose] request url: %s", requestUrl)
+	return requestUrl
 }
 
 func (_this *DnspodSignatureCompose) SignatureMethod() string {

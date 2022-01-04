@@ -8,11 +8,14 @@ import (
 )
 
 var SignMethodMap = map[string]func() hash.Hash{
-	"HMAC-SHA1":   sha1.New,
-	"HMAC-SHA256": sha256.New,
-	"HMAC-MD5":    md5.New,
+	HMAC_SHA1:   sha1.New,
+	HMAC_SHA256: sha256.New,
+	HMAC_MD5:    md5.New,
 }
 
-var HmacSha1 = sha1.New()
-var HmacSha256 = sha256.New()
-var HmacMD5 = md5.New()
+//goland:noinspection GoUnusedConst,GoSnakeCaseUsage
+const (
+	HMAC_SHA1   = "HMAC-SHA1"
+	HMAC_SHA256 = "HmacSHA256"
+	HMAC_MD5    = "HMAC-MD5"
+)

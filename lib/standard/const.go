@@ -1,5 +1,7 @@
 package standard
 
+const PanAnalysisRRKeyWord = "@"
+
 //goland:noinspection ALL
 const (
 	ALIYUN_DNS_API     = "https://alidns.aliyuncs.com/"
@@ -14,4 +16,10 @@ const (
 	DNSPOD_ENDPOINT_DOMAIN     = "dnspod.tencentcloudapi.com"
 	HUAWEI_ENDPOINT_DOMAIN     = "dns.myhuaweicloud.com"
 	CLOUDFLARE_ENDPOINT_DOMAIN = "api.cloudflare.com"
+)
+
+//goland:noinspection ALL
+const (
+	ALIDNS_API_VERSION = "2015-01-09"
+	DNSPOD_API_VERSION = "2021-03-23"
 )

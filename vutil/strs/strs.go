@@ -14,7 +14,6 @@ func Contains(str string, strs []string) bool {
 	return false
 }
 
-//goland:noinspection ALL
 func IsEmpty(value string) bool {
 	return value == ""
 }
@@ -23,12 +22,10 @@ func NotEmpty(value string) bool {
 	return !IsEmpty(value)
 }
 
-//goland:noinspection ALL
 func String(a string) *string {
 	return &a
 }
 
-//goland:noinspection ALL
 func StringValue(a *string) string {
 	if a == nil {
 		return ""

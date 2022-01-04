@@ -34,15 +34,17 @@ func (_this *AlidnsDomainRecordResponseConvert) DescribeResponseConvert(resp *ht
 		if aliyunRecords != nil {
 			records := make([]*models.Record, len(aliyunRecords))
 			for i, aliyunRecord := range aliyunRecords {
-				record := &models.Record{
-					ID:         aliyunRecord.RecordId,
-					RecordType: record.Type(*aliyunRecord.Type),
-					Domain:     aliyunRecord.DomainName,
-					RR:         aliyunRecord.RR,
-					Value:      aliyunRecord.Value,
-					TTL:        aliyunRecord.TTL,
+				if aliyunRecord != nil {
+					target := &models.Record{
+						ID:         aliyunRecord.RecordId,
+						RecordType: record.Type(*aliyunRecord.Type),
+						Domain:     aliyunRecord.DomainName,
+						RR:         aliyunRecord.RR,
+						Value:      aliyunRecord.Value,
+						TTL:        aliyunRecord.TTL,
+					}
+					records[i] = target
 				}
-				records[i] = record
 			}
 			resp.Records = records
 		}
