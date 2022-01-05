@@ -14,7 +14,7 @@ import (
 )
 
 func NewAlidnsProvider(credential auth.Credential) DNSRecordProvider {
-	signatureComposer := compose.NewAlidnsSignatureCompose(compose.SEPARATOR)
+	signatureComposer := compose.NewAlidnsSignatureCompose()
 	return &AlidnsProvider{
 		Action: &Action{
 			describe: strs.String("DescribeDomainRecords"),
@@ -24,18 +24,18 @@ func NewAlidnsProvider(credential auth.Credential) DNSRecordProvider {
 		},
 		signatureComposer: signatureComposer,
 		rpc:               rpc.NewAlidnsRpc(),
-		api:               strs.String(standard.ALIYUN_DNS_API),
-		credntial:         credential,
+		api:               standard.ALIYUN_DNS_API.String(),
+		credential:        credential,
 		parameterProvider: parameter.NewAlidnsParameterProvider(credential, signatureComposer),
 	}
 }
 
 type AlidnsProvider struct {
 	*Action
-	api               *string
+	api               *standard.Standard
 	signatureComposer compose.SignatureComposer
 	parameterProvider parameter.ParamaterProvider
-	credntial         auth.Credential
+	credential        auth.Credential
 	rpc               rpc.Rpc
 }
 
@@ -81,6 +81,6 @@ func (_this *AlidnsProvider) Support(recordType record.Type) bool {
 
 func (_this *AlidnsProvider) generateRequestUrl(paramater *url.Values) string {
 	stringToSign := _this.signatureComposer.ComposeStringToSign(vhttp.HttpMethodGet, paramater)
-	signature := _this.signatureComposer.GeneratedSignature(_this.credntial.GetSecretKey(), stringToSign)
-	return _this.signatureComposer.CanonicalizeRequestUrl(strs.StringValue(_this.api), signature, paramater)
+	signature := _this.signatureComposer.GeneratedSignature(_this.credential.GetSecretKey(), stringToSign)
+	return _this.signatureComposer.CanonicalizeRequestUrl(_this.api.StringValue(), signature, paramater)
 }

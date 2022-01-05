@@ -140,7 +140,7 @@ func RequestPayload(r *http.Request) ([]byte, error) {
 	return b, err
 }
 
-// StringToSign create a "String to Sign".
+// StringToSign create a "StringValue to Sign".
 func StringToSign(canonicalRequest string, t time.Time) (string, error) {
 	hash := sha256.New()
 	_, err := hash.Write([]byte(canonicalRequest))

@@ -9,6 +9,9 @@ func (_this Type) String() string {
 	return string(_this)
 }
 
+//goland:noinspection GoSnakeCaseUsage
+const PAN_ANALYSIS_RR_KEY_WORD Type = "@"
+
 // reference https://help.aliyun.com/document_detail/29805.html?spm=a2c4g.11186623.0.0.30e73067AXxwak
 // 类型名称		类型取值
 // A记录			A

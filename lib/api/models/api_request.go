@@ -58,9 +58,9 @@ func NewDescribeDomainRecordsRequest() *DescribeDomainRecordsRequest {
 }
 
 type CreateDomainRecordRequest struct {
-	Domain     *string     `json:"domain,omitempty"`
-	Value      *string     `json:"value,omitempty"`
-	RecordType record.Type `json:"record_type,omitempty"`
+	Domain     *string      `json:"domain,omitempty"`
+	Value      *string      `json:"value,omitempty"`
+	RecordType *record.Type `json:"record_type,omitempty"`
 }
 
 func (_this *CreateDomainRecordRequest) SetDomain(domain string) *CreateDomainRecordRequest {
@@ -74,7 +74,7 @@ func (_this *CreateDomainRecordRequest) SetValue(value string) *CreateDomainReco
 }
 
 func (_this *CreateDomainRecordRequest) SetRecordType(recordType record.Type) *CreateDomainRecordRequest {
-	_this.RecordType = recordType
+	_this.RecordType = &recordType
 	return _this
 }
 

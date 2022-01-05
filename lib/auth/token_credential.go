@@ -4,14 +4,20 @@ type TokenCredential struct {
 	token string
 }
 
-func (t *TokenCredential) GetSecretId() string {
+func (_this *TokenCredential) GetSecretId() string {
 	panic("unrealized")
 }
 
-func (t *TokenCredential) GetToken() string {
-	return t.token
+func (_this *TokenCredential) GetToken() string {
+	return _this.token
 }
 
-func (t *TokenCredential) GetSecretKey() string {
+func (_this *TokenCredential) GetSecretKey() string {
 	panic("unrealized")
+}
+
+func NewTokenCredential(token string) Credential {
+	return &TokenCredential{
+		token: token,
+	}
 }

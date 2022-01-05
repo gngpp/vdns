@@ -5,14 +5,21 @@ type BasisCredential struct {
 	secretKey string
 }
 
-func (b *BasisCredential) GetSecretId() string {
-	return b.secretId
+func (_this BasisCredential) GetSecretId() string {
+	return _this.secretId
 }
 
-func (b *BasisCredential) GetToken() string {
+func (_this BasisCredential) GetToken() string {
 	panic("unrealized")
 }
 
-func (b *BasisCredential) GetSecretKey() string {
-	return b.secretKey
+func (_this BasisCredential) GetSecretKey() string {
+	return _this.secretKey
+}
+
+func NewBasicCredential(secretId, secretKey string) Credential {
+	return &BasisCredential{
+		secretId:  secretId,
+		secretKey: secretKey,
+	}
 }

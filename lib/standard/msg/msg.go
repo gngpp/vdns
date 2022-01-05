@@ -1,5 +1,6 @@
 package msg
 
+// api message
 //goland:noinspection ALL
 const (
 	RECORD_TYPE_NOT_SUPPORT  = "Record type is not supported."
@@ -10,4 +11,11 @@ const (
 	CREATE_REQUEST_NOT_NIL   = "CreateDomainRecordRequest cannot been nil."
 	UPDATE_REQUEST_NOT_NIL   = "UpdateDomainRecordRequest cannot been nil."
 	DELETE_REQUEST_NOT_NIL   = "DeleteDomainRecordRequest cannot been nil."
+)
+
+// panic message
+
+const (
+	SYSTEM_CREDENTIAL_NOT_NIL         = "credential can not been nil."
+	SYSTEM_SIGNATURE_COMPOSER_NOT_NIL = "signature composer cannot been nil."
 )

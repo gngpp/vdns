@@ -12,9 +12,9 @@ import (
 	"vdns/vutil/vhttp"
 )
 
-func NewDnspodSignatureCompose(separator string) SignatureComposer {
+func NewDnspodSignatureCompose() SignatureComposer {
 	return &DnspodSignatureCompose{
-		Separator:       strs.String(separator),
+		Separator:       strs.String(SEPARATOR),
 		signatureMethod: strs.String(alg.HMAC_SHA256),
 	}
 }

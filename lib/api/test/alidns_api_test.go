@@ -1,47 +1,42 @@
-package api
+package test
 
 import (
 	"fmt"
 	"testing"
+	"vdns/lib/api"
 	"vdns/lib/api/models"
 	"vdns/lib/auth"
 	"vdns/lib/standard/record"
+	"vdns/vlog"
 )
 
 func Test_AliyunDnsProvider_DescribeDnsRecord(t *testing.T) {
-	credential, err := auth.NewBasicCredential("LTAI5tDsfyHKxratweTjho87", "DtmJl1m0RnZcemU6GtdoWbBTM0Izg5")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	aliyunDnsProvider := NewAlidnsProvider(credential)
-	domain := "innas.cn"
+	vlog.SetLevel(vlog.Level.DEBUG)
+	credential := auth.NewBasicCredential("LTAI5tSB1faJDcbNo3yXHCec", "24GruqqDNKYICbDMIZfNS9IstVw4IQ")
+
+	aliyunDnsProvider := api.NewAlidnsProvider(credential)
 	if aliyunDnsProvider.Support(record.A) {
 		request := models.NewDescribeDomainRecordsRequest().
-			SetDomain(domain).
-			SetRecordType(record.A).
+			SetDomain("innas.cn").
 			SetPageSize(10).
 			SetPageNumber(1)
 		resp, err := aliyunDnsProvider.DescribeRecords(request)
 		if err != nil {
-			fmt.Println(err)
+			vlog.Error(err)
 		}
-		fmt.Println(resp.String())
+		vlog.Info(resp.String())
 	}
 }
 
 func TestAliyunDnsProvider_CreateDnsRecord(t *testing.T) {
-	credential, err := auth.NewBasicCredential("asda", "DtmJl1m0RnZcemU6GtdoWbBTM0Izg5")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	aliyunDnsProvider := NewAlidnsProvider(credential)
+	credential := auth.NewBasicCredential("LTAI5tSB1faJDcbNo3yXHCec", "24GruqqDNKYICbDMIZfNS9IstVw4IQ")
+
+	aliyunDnsProvider := api.NewAlidnsProvider(credential)
 	domain := "hanbi.innas.cn"
 	if aliyunDnsProvider.Support(record.A) {
 		request := models.NewCreateDomainRecordRequest().
 			SetDomain(domain).
-			SetValue("192.168.2.4").
+			SetValue("192.168.2.7").
 			SetRecordType(record.A)
 		result, err := aliyunDnsProvider.CreateRecord(request)
 		if err != nil {
@@ -52,12 +47,9 @@ func TestAliyunDnsProvider_CreateDnsRecord(t *testing.T) {
 }
 
 func TestAliyunDnsProvider_UpdateDnsRecord(t *testing.T) {
-	credential, err := auth.NewBasicCredential("LTAI5tDsfyHKxratweTjho87", "DtmJl1m0RnZcemU6GtdoWbBTM0Izg5")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	aliyunDnsProvider := NewAlidnsProvider(credential)
+	credential := auth.NewBasicCredential("LTAI5tSB1faJDcbNo3yXHCec", "24GruqqDNKYICbDMIZfNS9IstVw4IQ")
+
+	aliyunDnsProvider := api.NewAlidnsProvider(credential)
 	domain := "ssss.innas.cn"
 	if aliyunDnsProvider.Support(record.A) {
 		request := models.NewUpdateDomainRecordRequest().
@@ -74,15 +66,12 @@ func TestAliyunDnsProvider_UpdateDnsRecord(t *testing.T) {
 }
 
 func TestAliyunDnsProvider_DeleteDnsRecord(t *testing.T) {
-	credential, err := auth.NewBasicCredential("LTAI5tDsfyHKxratweTjho87", "DtmJl1m0RnZcemU6GtdoWbBTM0Izg5")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	aliyunDnsProvider := NewAlidnsProvider(credential)
+	credential := auth.NewBasicCredential("LTAI5tSB1faJDcbNo3yXHCec", "24GruqqDNKYICbDMIZfNS9IstVw4IQ")
+
+	aliyunDnsProvider := api.NewAlidnsProvider(credential)
 	if aliyunDnsProvider.Support(record.A) {
 		request := models.NewDeleteDomainRecordRequest().
-			SetID("738619282108471296")
+			SetID("738755789635027968")
 		result, err := aliyunDnsProvider.DeleteRecord(request)
 		if err != nil {
 			fmt.Println(err.Error())

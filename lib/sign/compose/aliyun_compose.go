@@ -11,9 +11,9 @@ import (
 	"vdns/vutil/vhttp"
 )
 
-func NewAlidnsSignatureCompose(separator string) SignatureComposer {
+func NewAlidnsSignatureCompose() SignatureComposer {
 	return &AlidnsSignatureCompose{
-		Separator:        strs.String(separator),
+		Separator:        strs.String(SEPARATOR),
 		signatureMethod:  strs.String(alg.HMAC_SHA1),
 		signatureVersion: strs.String("1.0"),
 	}
