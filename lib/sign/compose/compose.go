@@ -2,8 +2,11 @@ package compose
 
 import (
 	"net/url"
+	log "vdns/vlog"
 	"vdns/vutil/vhttp"
 )
+
+var vlog = log.Default()
 
 const SEPARATOR = "&"
 

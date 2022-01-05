@@ -6,7 +6,6 @@ import (
 	"net/url"
 	"strings"
 	"vdns/lib/sign/alg"
-	"vdns/vlog"
 	"vdns/vutil/strs"
 	"vdns/vutil/vhttp"
 )
