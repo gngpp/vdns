@@ -60,7 +60,11 @@ var writer *io.Writer
 
 // New creates a logger.
 func New(out io.Writer) *Logger {
-	ret := &Logger{level: logLevel, logger: log.New(out, "", log.Ldate|log.Ltime|log.Lshortfile)}
+	return NewFlag(out, log.LstdFlags|log.Lshortfile)
+}
+
+func NewFlag(out io.Writer, flag int) *Logger {
+	ret := &Logger{level: logLevel, logger: log.New(out, "", flag)}
 
 	loggers = append(loggers, ret)
 
