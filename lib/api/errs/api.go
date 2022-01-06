@@ -5,19 +5,19 @@ import (
 	"vdns/vutil/strs"
 )
 
-type ApiError struct {
+type VdnsError struct {
 	message *string
 }
 
-func NewApiError(message string) *ApiError {
-	return &ApiError{message: &message}
+func NewVdnsError(message string) *VdnsError {
+	return &VdnsError{message: &message}
 }
 
-func NewApiErrorFromError(e error) *ApiError {
+func NewApiErrorFromError(e error) *VdnsError {
 	err := e.Error()
-	return &ApiError{message: &err}
+	return &VdnsError{message: &err}
 }
 
-func (_this *ApiError) Error() string {
-	return fmt.Sprintf("[ApiError]:\n	%s", strs.StringValue(_this.message))
+func (_this *VdnsError) Error() string {
+	return fmt.Sprintf("[VdnsError]:\n%s", strs.StringValue(_this.message))
 }
