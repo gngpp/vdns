@@ -1,23 +1,25 @@
 package auth
 
+import "vdns/vutil/strs"
+
 type TokenCredential struct {
-	token string
+	token *string
 }
 
 func (_this *TokenCredential) GetSecretId() string {
-	panic("unrealized")
+	return ""
 }
 
 func (_this *TokenCredential) GetToken() string {
-	return _this.token
+	return strs.StringValue(_this.token)
 }
 
 func (_this *TokenCredential) GetSecretKey() string {
-	panic("unrealized")
+	return ""
 }
 
 func NewTokenCredential(token string) Credential {
 	return &TokenCredential{
-		token: token,
+		token: &token,
 	}
 }
