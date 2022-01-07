@@ -13,6 +13,9 @@ type DescribeRecordListResponse struct {
 
 		// 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
 		RequestId *string `json:"RequestId,omitempty" name:"RequestId"`
+
+		// 返回错误信息
+		Error *Error `json:"Error" name:"Error"`
 	} `json:"Response"`
 }
 
@@ -23,13 +26,13 @@ func (s *DescribeRecordListResponse) String() string {
 type RecordCountInfo struct {
 
 	// 子域名数量
-	SubdomainCount *uint64 `json:"SubdomainCount,omitempty" name:"SubdomainCount"`
+	SubdomainCount *int64 `json:"SubdomainCount,omitempty" name:"SubdomainCount"`
 
 	// 列表返回的记录数
-	ListCount *uint64 `json:"ListCount,omitempty" name:"ListCount"`
+	ListCount *int64 `json:"ListCount,omitempty" name:"ListCount"`
 
 	// 总的记录数
-	TotalCount *uint64 `json:"TotalCount,omitempty" name:"TotalCount"`
+	TotalCount *int64 `json:"TotalCount,omitempty" name:"TotalCount"`
 }
 
 func (s *RecordCountInfo) String() string {
@@ -39,7 +42,7 @@ func (s *RecordCountInfo) String() string {
 type RecordListItem struct {
 
 	// 记录Id
-	RecordId *uint64 `json:"RecordId,omitempty" name:"RecordId"`
+	RecordId *int64 `json:"RecordId,omitempty" name:"RecordId"`
 
 	// 记录值
 	Value *string `json:"Value,omitempty" name:"Value"`
@@ -73,13 +76,22 @@ type RecordListItem struct {
 	Remark *string `json:"Remark,omitempty" name:"Remark"`
 
 	// 记录缓存时间
-	TTL *uint64 `json:"TTL,omitempty" name:"TTL"`
+	TTL *int64 `json:"TTL,omitempty" name:"TTL"`
 
 	// MX值，只有MX记录有
 	// 注意：此字段可能返回 null，表示取不到有效值。
-	MX *uint64 `json:"MX,omitempty" name:"MX"`
+	MX *int64 `json:"MX,omitempty" name:"MX"`
 }
 
 func (s *RecordListItem) String() string {
+	return vjson.PrettifyString(s)
+}
+
+type Error struct {
+	Code    *string `json:"Code,omitempty"`
+	Message *string `json:"Message,omitempty"`
+}
+
+func (s *Error) String() string {
 	return vjson.PrettifyString(s)
 }
