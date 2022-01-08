@@ -32,7 +32,7 @@ func NewAlidnsParameterProvider(credential auth.Credential, signatureComposer co
 
 func (_this *AlidnsParameterProvier) LoadDescribeParamater(request *models.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
 	if request == nil {
-		return nil, errs.NewApiError(msg.DESCRIBE_REQUEST_NOT_NIL)
+		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
 
 	// assert domain
@@ -47,7 +47,7 @@ func (_this *AlidnsParameterProvier) LoadDescribeParamater(request *models.Descr
 
 	// assert record type
 	if !record.Support(request.RecordType) {
-		return nil, errs.NewApiError(msg.RECORD_TYPE_NOT_SUPPORT)
+		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
 	paramter.Set(ALIDNS_PARAMETER_TYPE_KEY_WORD, request.RecordType.String())
 
@@ -78,17 +78,17 @@ func (_this *AlidnsParameterProvier) LoadDescribeParamater(request *models.Descr
 
 func (_this *AlidnsParameterProvier) LoadCreateParamater(request *models.CreateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
-		return nil, errs.NewApiError(msg.CREATE_REQUEST_NOT_NIL)
+		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
 
 	// assert record type
 	if request.RecordType != nil && !record.Support(*request.RecordType) {
-		return nil, errs.NewApiError(msg.RECORD_TYPE_NOT_SUPPORT)
+		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
 
 	// assert value
 	if request.Value == nil {
-		return nil, errs.NewApiError(msg.RECORD_VALUE_NOT_SUPPORT)
+		return nil, errs.NewVdnsError(msg.RECORD_VALUE_NOT_SUPPORT)
 	}
 
 	// assert domain
@@ -115,22 +115,22 @@ func (_this *AlidnsParameterProvier) LoadCreateParamater(request *models.CreateD
 
 func (_this *AlidnsParameterProvier) LoadUpdateParamater(request *models.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
-		return nil, errs.NewApiError(msg.CREATE_REQUEST_NOT_NIL)
+		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
 
 	// assert record id
 	if request.ID == nil {
-		return nil, errs.NewApiError(msg.RECORD_ID_NOT_SUPPORT)
+		return nil, errs.NewVdnsError(msg.RECORD_ID_NOT_SUPPORT)
 	}
 
 	// assert record type
 	if !record.Support(request.RecordType) {
-		return nil, errs.NewApiError(msg.RECORD_TYPE_NOT_SUPPORT)
+		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
 
 	// assert value
 	if request.Value == nil {
-		return nil, errs.NewApiError(msg.RECORD_VALUE_NOT_SUPPORT)
+		return nil, errs.NewVdnsError(msg.RECORD_VALUE_NOT_SUPPORT)
 	}
 
 	// assert domain
@@ -159,12 +159,12 @@ func (_this *AlidnsParameterProvier) LoadUpdateParamater(request *models.UpdateD
 
 func (_this *AlidnsParameterProvier) LoadDeleteParamater(request *models.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
-		return nil, errs.NewApiError(msg.CREATE_REQUEST_NOT_NIL)
+		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
 
 	// assert record id
 	if request.ID == nil {
-		return nil, errs.NewApiError(msg.RECORD_ID_NOT_SUPPORT)
+		return nil, errs.NewVdnsError(msg.RECORD_ID_NOT_SUPPORT)
 	}
 
 	paramter := _this.loadCommonParamter(action)

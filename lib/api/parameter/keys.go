@@ -45,4 +45,7 @@ const (
 	DNSPOD_PARAMETER_VERSION         = "Version"
 	DNSPOD_PARAMETER_SIGNATUREMETHOD = "SignatureMethod"
 	DNSPOD_PARAMETER_DEFAULT         = "默认"
+
+	// context key
+	DNSPOC_PARAMETER_CONTEXT_DESCRIBE_KEY = "ctx_describe_key"
 )

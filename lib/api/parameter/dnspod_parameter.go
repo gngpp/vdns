@@ -32,7 +32,7 @@ func NewDnspodParameterProvider(credential auth.Credential, signatureComposer co
 
 func (_this *DnspodParameterProvider) LoadDescribeParamater(request *models.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
 	if request == nil {
-		return nil, errs.NewApiError(msg.DESCRIBE_REQUEST_NOT_NIL)
+		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
 	// assert domain
 	extractDomain, err := vhttp.ExtractDomain(strs.StringValue(request.Domain))
@@ -46,7 +46,7 @@ func (_this *DnspodParameterProvider) LoadDescribeParamater(request *models.Desc
 
 	// assert record type
 	if !record.Support(request.RecordType) {
-		return nil, errs.NewApiError(msg.RECORD_TYPE_NOT_SUPPORT)
+		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
 	paramter.Set(DNSPOD_PARAMETER_RECORD_TYPE, request.RecordType.String())
 
@@ -76,17 +76,17 @@ func (_this *DnspodParameterProvider) LoadDescribeParamater(request *models.Desc
 
 func (_this *DnspodParameterProvider) LoadCreateParamater(request *models.CreateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
-		return nil, errs.NewApiError(msg.DESCRIBE_REQUEST_NOT_NIL)
+		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
 
 	// assert record type assert
 	if request.RecordType != nil && !record.Support(*request.RecordType) {
-		return nil, errs.NewApiError(msg.RECORD_TYPE_NOT_SUPPORT)
+		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
 
 	// assert value
 	if request.Value == nil {
-		return nil, errs.NewApiError(msg.RECORD_VALUE_NOT_SUPPORT)
+		return nil, errs.NewVdnsError(msg.RECORD_VALUE_NOT_SUPPORT)
 	}
 
 	// assert domain
@@ -111,22 +111,22 @@ func (_this *DnspodParameterProvider) LoadCreateParamater(request *models.Create
 
 func (_this *DnspodParameterProvider) LoadUpdateParamater(request *models.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
-		return nil, errs.NewApiError(msg.DESCRIBE_REQUEST_NOT_NIL)
+		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
 
 	// assert record id
 	if request.ID == nil {
-		return nil, errs.NewApiError(msg.RECORD_ID_NOT_SUPPORT)
+		return nil, errs.NewVdnsError(msg.RECORD_ID_NOT_SUPPORT)
 	}
 
 	// assert record type assert
 	if !record.Support(request.RecordType) {
-		return nil, errs.NewApiError(msg.RECORD_TYPE_NOT_SUPPORT)
+		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
 
 	// assert value
 	if request.Value == nil {
-		return nil, errs.NewApiError(msg.RECORD_VALUE_NOT_SUPPORT)
+		return nil, errs.NewVdnsError(msg.RECORD_VALUE_NOT_SUPPORT)
 	}
 
 	// assert domain
@@ -154,12 +154,12 @@ func (_this *DnspodParameterProvider) LoadUpdateParamater(request *models.Update
 
 func (_this *DnspodParameterProvider) LoadDeleteParamater(request *models.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
-		return nil, errs.NewApiError(msg.DESCRIBE_REQUEST_NOT_NIL)
+		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
 
 	// assert record id
 	if request.ID == nil {
-		return nil, errs.NewApiError(msg.RECORD_ID_NOT_SUPPORT)
+		return nil, errs.NewVdnsError(msg.RECORD_ID_NOT_SUPPORT)
 	}
 
 	// assert domain
