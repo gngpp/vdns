@@ -36,14 +36,12 @@ func (_this *AlidnsParameterProvier) LoadDescribeParamater(request *models.Descr
 	}
 
 	// assert domain
-	extractDomain, err := vhttp.ExtractDomain(strs.StringValue(request.Domain))
+	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
 		return nil, errs.NewApiErrorFromError(err)
 	}
-	domain := extractDomain[0]
-	rr := extractDomain[1]
 	paramter := _this.loadCommonParamter(action)
-	paramter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain)
+	paramter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain.Domain)
 
 	// assert record type
 	if !record.Support(request.RecordType) {
@@ -69,8 +67,8 @@ func (_this *AlidnsParameterProvier) LoadDescribeParamater(request *models.Descr
 	// the keywords recorded by the host, (fuzzy matching before and after) pattern search, are not case-sensitive.
 	if request.RRKeyWord != nil {
 		paramter.Set(ALIDNS_PARAMETER_RR_KEY_WORD, *request.RRKeyWord)
-	} else if strs.NotEmpty(rr) {
-		paramter.Set(ALIDNS_PARAMETER_RR_KEY_WORD, rr)
+	} else if strs.NotEmpty(domain.SubDomain) {
+		paramter.Set(ALIDNS_PARAMETER_RR_KEY_WORD, domain.SubDomain)
 	}
 
 	return paramter, nil
@@ -92,22 +90,20 @@ func (_this *AlidnsParameterProvier) LoadCreateParamater(request *models.CreateD
 	}
 
 	// assert domain
-	extractDomain, err := vhttp.ExtractDomain(strs.StringValue(request.Domain))
+	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
 		return nil, errs.NewApiErrorFromError(err)
 	}
-	domain := extractDomain[0]
-	rr := extractDomain[1]
 	paramter := _this.loadCommonParamter(action)
-	paramter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain)
+	paramter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain.Domain)
 	paramter.Set(ALIDNS_PARAMETER_TYPE, request.RecordType.String())
 	paramter.Set(ALIDNS_PARAMETER_VALUE, *request.Value)
 
 	// assert rr
-	if strs.IsEmpty(rr) {
+	if strs.IsEmpty(domain.SubDomain) {
 		paramter.Set(ALIDNS_PARAMETER_RR, record.PAN_ANALYSIS_RR_KEY_WORD.String())
 	} else {
-		paramter.Set(ALIDNS_PARAMETER_RR, rr)
+		paramter.Set(ALIDNS_PARAMETER_RR, domain.SubDomain)
 	}
 
 	return paramter, nil
@@ -134,24 +130,22 @@ func (_this *AlidnsParameterProvier) LoadUpdateParamater(request *models.UpdateD
 	}
 
 	// assert domain
-	extractDomain, err := vhttp.ExtractDomain(strs.StringValue(request.Domain))
+	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
 		return nil, err
 	}
-	domain := extractDomain[0]
-	rr := extractDomain[1]
 
 	paramter := _this.loadCommonParamter(action)
 	paramter.Set(ALIDNS_PARAMETER_RECORD_ID, *request.ID)
-	paramter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain)
+	paramter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain.Domain)
 	paramter.Set(ALIDNS_PARAMETER_TYPE, request.RecordType.String())
 	paramter.Set(ALIDNS_PARAMETER_VALUE, *request.Value)
 
 	// assert rr
-	if strs.IsEmpty(rr) {
+	if strs.IsEmpty(domain.SubDomain) {
 		paramter.Set(ALIDNS_PARAMETER_RR, record.PAN_ANALYSIS_RR_KEY_WORD.String())
 	} else {
-		paramter.Set(ALIDNS_PARAMETER_RR, rr)
+		paramter.Set(ALIDNS_PARAMETER_RR, domain.SubDomain)
 	}
 
 	return paramter, nil

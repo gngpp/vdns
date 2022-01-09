@@ -31,6 +31,7 @@ const (
 const (
 	DNSPOD_PARAMETER_DOMAIN          = "Domain"
 	DNSPOD_PARAMETER_RECORD_TYPE     = "RecordType"
+	DNSPOD_PARAMETER_VALUE           = "Value"
 	DNSPOD_PARAMETER_LIMIT           = "Limit"
 	DNSPOD_PARAMETER_OFFSET          = "Offset"
 	DNSPOD_PARAMETER_KEY_WORD        = "Keyword"

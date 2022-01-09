@@ -5,14 +5,7 @@ import (
 	"vdns/lib/standard/record"
 )
 
-type Action struct {
-	create   *string
-	update   *string
-	describe *string
-	delete   *string
-}
-
-type DNSRecordProvider interface {
+type VdnsRecordProvider interface {
 	// DescribeRecords 具体参数作用请看实现注释
 	DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error)
 

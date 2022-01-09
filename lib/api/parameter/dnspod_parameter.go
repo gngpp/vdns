@@ -12,6 +12,7 @@ import (
 	"vdns/lib/standard"
 	"vdns/lib/standard/msg"
 	"vdns/lib/standard/record"
+	"vdns/vutil/convert"
 	"vdns/vutil/strs"
 	"vdns/vutil/vhttp"
 )
@@ -35,14 +36,12 @@ func (_this *DnspodParameterProvider) LoadDescribeParamater(request *models.Desc
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
 	// assert domain
-	extractDomain, err := vhttp.ExtractDomain(strs.StringValue(request.Domain))
+	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
 		return nil, errs.NewApiErrorFromError(err)
 	}
-	domain := extractDomain[0]
-	rr := extractDomain[1]
 	paramter := _this.loadCommonParamter(action)
-	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain)
+	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.Domain)
 
 	// assert record type
 	if !record.Support(request.RecordType) {
@@ -52,12 +51,12 @@ func (_this *DnspodParameterProvider) LoadDescribeParamater(request *models.Desc
 
 	// assert page size
 	if request.PageSize != nil {
-		paramter.Set(DNSPOD_PARAMETER_LIMIT, strconv.FormatInt(*request.PageSize, 10))
+		paramter.Set(DNSPOD_PARAMETER_LIMIT, convert.AsStringValue(request.PageSize))
 	}
 
 	// assert offset start from 0
 	if request.PageNumber != nil {
-		paramter.Set(DNSPOD_PARAMETER_OFFSET, strconv.FormatInt(*request.PageNumber-1, 10))
+		paramter.Set(DNSPOD_PARAMETER_OFFSET, convert.AsStringValue(*request.PageNumber-1))
 	}
 
 	// search and parse records by keyword, currently supports searching for host headers and record values
@@ -68,8 +67,8 @@ func (_this *DnspodParameterProvider) LoadDescribeParamater(request *models.Desc
 	// assert rr key word
 	if request.RRKeyWord != nil {
 		paramter.Set(DNSPOD_PARAMETER_SUBDOMAIN_1, *request.RRKeyWord)
-	} else if strs.NotEmpty(rr) {
-		paramter.Set(DNSPOD_PARAMETER_SUBDOMAIN_1, rr)
+	} else if strs.NotEmpty(domain.SubDomain) {
+		paramter.Set(DNSPOD_PARAMETER_SUBDOMAIN_1, domain.SubDomain)
 	}
 	return paramter, nil
 }
@@ -90,21 +89,21 @@ func (_this *DnspodParameterProvider) LoadCreateParamater(request *models.Create
 	}
 
 	// assert domain
-	extractDomain, err := vhttp.ExtractDomain(strs.StringValue(request.Domain))
+	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
 		return nil, errs.NewApiErrorFromError(err)
 	}
-	domain := extractDomain[0]
-	rr := extractDomain[1]
 	paramter := _this.loadCommonParamter(action)
-	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain)
+	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.Domain)
 	paramter.Set(DNSPOD_PARAMETER_RECORD_TYPE, request.RecordType.String())
+	paramter.Set(DNSPOD_PARAMETER_VALUE, strs.StringValue(request.Value))
 	paramter.Set(DNSPOD_PARAMETER_RECORD_LINE, DNSPOD_PARAMETER_DEFAULT)
+
 	// assert rr
-	if strs.IsEmpty(rr) {
+	if strs.IsEmpty(domain.SubDomain) {
 		paramter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, record.PAN_ANALYSIS_RR_KEY_WORD.String())
 	} else {
-		paramter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, rr)
+		paramter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, domain.SubDomain)
 	}
 	return paramter, nil
 }
@@ -130,23 +129,22 @@ func (_this *DnspodParameterProvider) LoadUpdateParamater(request *models.Update
 	}
 
 	// assert domain
-	extractDomain, err := vhttp.ExtractDomain(strs.StringValue(request.Domain))
+	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
 		return nil, errs.NewApiErrorFromError(err)
 	}
-	domain := extractDomain[0]
-	rr := extractDomain[1]
 	paramter := _this.loadCommonParamter(action)
 	paramter.Set(DNSPOD_PARAMETER_RECORD_ID, *request.ID)
-	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain)
+	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.Domain)
 	paramter.Set(DNSPOD_PARAMETER_RECORD_TYPE, request.RecordType.String())
+	paramter.Set(DNSPOD_PARAMETER_VALUE, strs.StringValue(request.Value))
 	paramter.Set(DNSPOD_PARAMETER_RECORD_LINE, DNSPOD_PARAMETER_DEFAULT)
 
 	// assert rr
-	if strs.IsEmpty(rr) {
+	if strs.IsEmpty(domain.SubDomain) {
 		paramter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, record.PAN_ANALYSIS_RR_KEY_WORD.String())
 	} else {
-		paramter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, rr)
+		paramter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, domain.SubDomain)
 	}
 
 	return paramter, nil
@@ -163,13 +161,13 @@ func (_this *DnspodParameterProvider) LoadDeleteParamater(request *models.Delete
 	}
 
 	// assert domain
-	extractDomain, err := vhttp.ExtractDomain(strs.StringValue(request.Domain))
+	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
 		return nil, errs.NewApiErrorFromError(err)
 	}
 	paramter := _this.loadCommonParamter(action)
 	paramter.Set(DNSPOD_PARAMETER_RECORD_ID, *request.ID)
-	paramter.Set(DNSPOD_PARAMETER_DOMAIN, extractDomain[0])
+	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.Domain)
 	return paramter, nil
 }
 

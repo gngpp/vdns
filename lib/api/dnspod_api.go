@@ -1,30 +1,23 @@
 package api
 
 import (
-	"vdns/lib/api/errs"
+	"context"
+	"net/url"
+	"vdns/lib/api/action"
 	"vdns/lib/api/models"
 	"vdns/lib/api/parameter"
 	"vdns/lib/api/rpc"
 	"vdns/lib/auth"
 	"vdns/lib/sign/compose"
 	"vdns/lib/standard"
-	"vdns/lib/standard/msg"
 	"vdns/lib/standard/record"
-	"vdns/vutil/strs"
+	"vdns/vutil/vhttp"
 )
 
-func NewDnspodProvider(credential auth.Credential) DNSRecordProvider {
-	if credential != nil {
-		panic(errs.NewApiError(msg.SYSTEM_CREDENTIAL_NOT_NIL))
-	}
+func NewDnspodProvider(credential auth.Credential) VdnsRecordProvider {
 	signatureComposer := compose.NewDnspodSignatureCompose()
 	return &DnspodProvider{
-		Action: &Action{
-			describe: strs.String("DescribeRecordList"),
-			create:   strs.String("CreateRecord"),
-			update:   strs.String("DeleteRecord"),
-			delete:   strs.String("ModifyRecord"),
-		},
+		RequestAction:     action.NewDnspodAction(),
 		signatureComposer: signatureComposer,
 		rpc:               rpc.NewDnspodRpc(),
 		api:               standard.DNSPOD_DNS_API.String(),
@@ -34,35 +27,57 @@ func NewDnspodProvider(credential auth.Credential) DNSRecordProvider {
 }
 
 type DnspodProvider struct {
-	*Action
+	*action.RequestAction
 	api               *standard.Standard
 	signatureComposer compose.SignatureComposer
 	parameterProvider parameter.ParamaterProvider
 	credential        auth.Credential
-	rpc               rpc.Rpc
+	rpc               rpc.VdnsRpc
 }
 
-func (d DnspodProvider) DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error) {
-	//TODO implement me
-	panic("implement me")
+func (_this *DnspodProvider) DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error) {
+	describeParamater, err := _this.parameterProvider.LoadDescribeParamater(request, _this.Describe)
+	if err != nil {
+		return nil, err
+	}
+	requestUrl := _this.generateRequestUrl(describeParamater)
+	ctx := context.WithValue(context.Background(), parameter.DNSPOC_PARAMETER_CONTEXT_DESCRIBE_KEY, request)
+	return _this.rpc.DoDescribeCtxRequest(ctx, requestUrl)
 }
 
-func (d DnspodProvider) CreateRecord(request *models.CreateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
-	//TODO implement me
-	panic("implement me")
+func (_this *DnspodProvider) CreateRecord(request *models.CreateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+	paramater, err := _this.parameterProvider.LoadCreateParamater(request, _this.Create)
+	if err != nil {
+		return nil, err
+	}
+	requestUrl := _this.generateRequestUrl(paramater)
+	return _this.rpc.DoCreateRequest(requestUrl)
 }
 
-func (d DnspodProvider) UpdateRecord(request *models.UpdateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
-	//TODO implement me
-	panic("implement me")
+func (_this *DnspodProvider) UpdateRecord(request *models.UpdateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+	paramater, err := _this.parameterProvider.LoadUpdateParamater(request, _this.Update)
+	if err != nil {
+		return nil, err
+	}
+	requestUrl := _this.generateRequestUrl(paramater)
+	return _this.rpc.DoUpdateRequest(requestUrl)
 }
 
-func (d DnspodProvider) DeleteRecord(request *models.DeleteDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
-	//TODO implement me
-	panic("implement me")
+func (_this *DnspodProvider) DeleteRecord(request *models.DeleteDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+	paramater, err := _this.parameterProvider.LoadDeleteParamater(request, _this.Delete)
+	if err != nil {
+		return nil, err
+	}
+	requestUrl := _this.generateRequestUrl(paramater)
+	return _this.rpc.DoDeleteRequest(requestUrl)
 }
 
-func (d DnspodProvider) Support(recordType record.Type) bool {
-	//TODO implement me
-	panic("implement me")
+func (_this *DnspodProvider) Support(recordType record.Type) bool {
+	return record.Support(recordType)
+}
+
+func (_this *DnspodProvider) generateRequestUrl(paramater *url.Values) string {
+	stringToSign := _this.signatureComposer.ComposeStringToSign(vhttp.HttpMethodGet, paramater)
+	signature := _this.signatureComposer.GeneratedSignature(_this.credential.GetSecretKey(), stringToSign)
+	return _this.signatureComposer.CanonicalizeRequestUrl(_this.api.StringValue(), signature, paramater)
 }

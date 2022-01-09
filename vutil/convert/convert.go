@@ -21,7 +21,7 @@ func cloneBytes(b []byte) []byte {
 	}
 }
 
-func AsString(src interface{}) string {
+func AsStringValue(src interface{}) string {
 	switch v := src.(type) {
 	case string:
 		return v
@@ -48,6 +48,11 @@ func AsString(src interface{}) string {
 		}
 	}
 	return fmt.Sprintf("%v", src)
+}
+
+func AsString(src interface{}) *string {
+	value := AsStringValue(src)
+	return &value
 }
 
 // EncodeByte 编码二进制
