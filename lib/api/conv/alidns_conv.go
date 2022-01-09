@@ -27,16 +27,16 @@ func (_this *AlidnsResponseConvert) DescribeResponseCtxConvert(_ context.Context
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
-		body := &alidns_model.DescribeDomainRecordsResponse{}
-		err = vjson.ByteArrayConver(bytes, body)
+		sourceResponse := &alidns_model.DescribeDomainRecordsResponse{}
+		err = vjson.ByteArrayConver(bytes, sourceResponse)
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
 		response := &models.DomainRecordsResponse{}
-		response.TotalCount = body.TotalCount
-		response.PageSize = body.PageSize
-		response.PageNumber = body.PageNumber
-		aliyunRecords := body.DomainRecords.Record
+		response.TotalCount = sourceResponse.TotalCount
+		response.PageSize = sourceResponse.PageSize
+		response.PageNumber = sourceResponse.PageNumber
+		aliyunRecords := sourceResponse.DomainRecords.Record
 		if aliyunRecords != nil || len(aliyunRecords) > 0 {
 			records := make([]*models.Record, len(aliyunRecords))
 			for i, aliyunRecord := range aliyunRecords {
@@ -67,20 +67,21 @@ func (_this *AlidnsResponseConvert) CreateResponseCtxConvert(_ context.Context, 
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
-	defer resp.Body.Close()
+	body := resp.Body
+	defer body.Close()
 	if resp.StatusCode == http.StatusOK {
-		bytes, err := ioutil.ReadAll(resp.Body)
+		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
-		sourceBody := &alidns_model.CreateDomainRecordResponseBody{}
-		err = vjson.ByteArrayConver(bytes, sourceBody)
+		sourceResponse := &alidns_model.CreateDomainRecordResponse{}
+		err = vjson.ByteArrayConver(bytes, sourceResponse)
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
 		response := &models.DomainRecordStatusResponse{
-			RecordId:  sourceBody.RecordId,
-			RequestId: sourceBody.RequestId,
+			RecordId:  sourceResponse.RecordId,
+			RequestId: sourceResponse.RequestId,
 		}
 		return response, nil
 	} else {
@@ -92,20 +93,21 @@ func (_this *AlidnsResponseConvert) UpdateResponseCtxConvert(_ context.Context, 
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
-	defer resp.Body.Close()
+	body := resp.Body
+	defer body.Close()
 	if resp.StatusCode == http.StatusOK {
-		bytes, err := ioutil.ReadAll(resp.Body)
+		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
-		sourceBody := &alidns_model.UpdateDomainRecordResponse{}
-		err = vjson.ByteArrayConver(bytes, sourceBody)
+		sourceResponse := &alidns_model.UpdateDomainRecordResponse{}
+		err = vjson.ByteArrayConver(bytes, sourceResponse)
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
 		response := &models.DomainRecordStatusResponse{
-			RecordId:  sourceBody.RecordId,
-			RequestId: sourceBody.RequestId,
+			RecordId:  sourceResponse.RecordId,
+			RequestId: sourceResponse.RequestId,
 		}
 		return response, nil
 	} else {
@@ -117,9 +119,10 @@ func (_this *AlidnsResponseConvert) DeleteResponseCtxConvert(_ context.Context, 
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
-	defer resp.Body.Close()
+	body := resp.Body
+	defer body.Close()
 	if resp.StatusCode == http.StatusOK {
-		bytes, err := ioutil.ReadAll(resp.Body)
+		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
