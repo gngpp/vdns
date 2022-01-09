@@ -41,7 +41,7 @@ func (_this *DnspodParameterProvider) LoadDescribeParamater(request *models.Desc
 		return nil, errs.NewApiErrorFromError(err)
 	}
 	paramter := _this.loadCommonParamter(action)
-	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.Domain)
+	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
 
 	// assert record type
 	if !record.Support(request.RecordType) {
@@ -94,7 +94,7 @@ func (_this *DnspodParameterProvider) LoadCreateParamater(request *models.Create
 		return nil, errs.NewApiErrorFromError(err)
 	}
 	paramter := _this.loadCommonParamter(action)
-	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.Domain)
+	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
 	paramter.Set(DNSPOD_PARAMETER_RECORD_TYPE, request.RecordType.String())
 	paramter.Set(DNSPOD_PARAMETER_VALUE, strs.StringValue(request.Value))
 	paramter.Set(DNSPOD_PARAMETER_RECORD_LINE, DNSPOD_PARAMETER_DEFAULT)
@@ -135,7 +135,7 @@ func (_this *DnspodParameterProvider) LoadUpdateParamater(request *models.Update
 	}
 	paramter := _this.loadCommonParamter(action)
 	paramter.Set(DNSPOD_PARAMETER_RECORD_ID, *request.ID)
-	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.Domain)
+	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
 	paramter.Set(DNSPOD_PARAMETER_RECORD_TYPE, request.RecordType.String())
 	paramter.Set(DNSPOD_PARAMETER_VALUE, strs.StringValue(request.Value))
 	paramter.Set(DNSPOD_PARAMETER_RECORD_LINE, DNSPOD_PARAMETER_DEFAULT)
@@ -167,7 +167,7 @@ func (_this *DnspodParameterProvider) LoadDeleteParamater(request *models.Delete
 	}
 	paramter := _this.loadCommonParamter(action)
 	paramter.Set(DNSPOD_PARAMETER_RECORD_ID, *request.ID)
-	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.Domain)
+	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
 	return paramter, nil
 }
 

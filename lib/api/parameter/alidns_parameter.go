@@ -41,7 +41,7 @@ func (_this *AlidnsParameterProvier) LoadDescribeParamater(request *models.Descr
 		return nil, errs.NewApiErrorFromError(err)
 	}
 	paramter := _this.loadCommonParamter(action)
-	paramter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain.Domain)
+	paramter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain.DomainName)
 
 	// assert record type
 	if !record.Support(request.RecordType) {
@@ -95,7 +95,7 @@ func (_this *AlidnsParameterProvier) LoadCreateParamater(request *models.CreateD
 		return nil, errs.NewApiErrorFromError(err)
 	}
 	paramter := _this.loadCommonParamter(action)
-	paramter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain.Domain)
+	paramter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain.DomainName)
 	paramter.Set(ALIDNS_PARAMETER_TYPE, request.RecordType.String())
 	paramter.Set(ALIDNS_PARAMETER_VALUE, *request.Value)
 
@@ -137,7 +137,7 @@ func (_this *AlidnsParameterProvier) LoadUpdateParamater(request *models.UpdateD
 
 	paramter := _this.loadCommonParamter(action)
 	paramter.Set(ALIDNS_PARAMETER_RECORD_ID, *request.ID)
-	paramter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain.Domain)
+	paramter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain.DomainName)
 	paramter.Set(ALIDNS_PARAMETER_TYPE, request.RecordType.String())
 	paramter.Set(ALIDNS_PARAMETER_VALUE, *request.Value)
 
