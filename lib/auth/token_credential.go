@@ -1,6 +1,6 @@
 package auth
 
-import "vdns/vutil/strs"
+import "vdns/util/strs"
 
 type TokenCredential struct {
 	token *string

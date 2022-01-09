@@ -2,7 +2,7 @@ package models
 
 import (
 	"vdns/lib/standard/record"
-	"vdns/vutil/vjson"
+	"vdns/util/vjson"
 )
 
 type DomainRecordsResponse struct {

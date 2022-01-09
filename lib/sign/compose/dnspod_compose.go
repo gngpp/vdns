@@ -7,8 +7,8 @@ import (
 	"net/url"
 	"sort"
 	"vdns/lib/sign/alg"
-	"vdns/vutil/strs"
-	"vdns/vutil/vhttp"
+	"vdns/util/strs"
+	"vdns/util/vhttp"
 )
 
 func NewDnspodSignatureCompose() SignatureComposer {

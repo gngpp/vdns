@@ -1,6 +1,6 @@
 package record
 
-import "vdns/vutil/strs"
+import "vdns/util/strs"
 
 type Type string
 

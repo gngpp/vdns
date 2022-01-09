@@ -9,9 +9,9 @@ import (
 	"vdns/lib/api/models/dnspod_model"
 	"vdns/lib/api/parameter"
 	"vdns/lib/standard/record"
-	"vdns/vutil/convert"
-	"vdns/vutil/strs"
-	"vdns/vutil/vjson"
+	"vdns/util/convert"
+	"vdns/util/strs"
+	"vdns/util/vjson"
 )
 
 type DnspodResponseConvert struct {

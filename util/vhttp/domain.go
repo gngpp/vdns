@@ -3,7 +3,7 @@ package vhttp
 import (
 	"errors"
 	"strings"
-	"vdns/vutil/strs"
+	"vdns/util/strs"
 )
 
 var rareDomainSuffix = []string{"com.cn", "org.cn", "net.cn", "ac.cn", "eu.org"}

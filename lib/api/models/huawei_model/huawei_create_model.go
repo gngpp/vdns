@@ -1,7 +1,7 @@
 package huawei_model
 
 import (
-	"vdns/vutil/vjson"
+	"vdns/util/vjson"
 )
 
 // CreateRecordSetResponse Response Object

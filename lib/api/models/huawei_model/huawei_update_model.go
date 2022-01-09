@@ -1,6 +1,6 @@
 package huawei_model
 
-import "vdns/vutil/vjson"
+import "vdns/util/vjson"
 
 // UpdateRecordSetResponse Response Object
 type UpdateRecordSetResponse struct {

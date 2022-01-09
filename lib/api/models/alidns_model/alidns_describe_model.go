@@ -1,7 +1,7 @@
 package alidns_model
 
 import (
-	"vdns/vutil/vjson"
+	"vdns/util/vjson"
 )
 
 // DescribeDomainRecordsResponse aliyun response model

@@ -1,6 +1,6 @@
 package huawei_model
 
-import "vdns/vutil/vjson"
+import "vdns/util/vjson"
 
 // DeleteRecordSetResponse Response Object
 type DeleteRecordSetResponse struct {

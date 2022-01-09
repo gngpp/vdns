@@ -10,7 +10,7 @@ import (
 	"sort"
 	"strings"
 	"time"
-	"vdns/vutil"
+	"vdns/util"
 )
 
 // based on https://github.com/datastream/aws/blob/master/signv4.go
@@ -70,7 +70,7 @@ func CanonicalURI(r *http.Request) string {
 	pattens := strings.Split(r.URL.Path, "/")
 	var uri []string
 	for _, v := range pattens {
-		uri = append(uri, vutil.Escape(v))
+		uri = append(uri, util.Escape(v))
 	}
 	urlpath := strings.Join(uri, "/")
 	if len(urlpath) == 0 || urlpath[len(urlpath)-1] != '/' {
@@ -88,10 +88,10 @@ func CanonicalQueryString(r *http.Request) string {
 	sort.Strings(keys)
 	var a []string
 	for _, key := range keys {
-		k := vutil.Escape(key)
+		k := util.Escape(key)
 		sort.Strings(query[key])
 		for _, v := range query[key] {
-			kv := fmt.Sprintf("%s=%s", k, vutil.Escape(v))
+			kv := fmt.Sprintf("%s=%s", k, util.Escape(v))
 			a = append(a, kv)
 		}
 	}

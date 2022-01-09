@@ -1,6 +1,6 @@
 package alidns_model
 
-import "vdns/vutil/vjson"
+import "vdns/util/vjson"
 
 type UpdateDomainRecordResponse struct {
 	RequestId *string `json:"RequestId,omitempty" xml:"RequestId,omitempty"`

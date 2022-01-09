@@ -12,9 +12,9 @@ import (
 	"vdns/lib/standard"
 	"vdns/lib/standard/msg"
 	"vdns/lib/standard/record"
-	"vdns/vutil/convert"
-	"vdns/vutil/strs"
-	"vdns/vutil/vhttp"
+	"vdns/util/convert"
+	"vdns/util/strs"
+	"vdns/util/vhttp"
 )
 
 type DnspodParameterProvider struct {

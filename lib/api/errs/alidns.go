@@ -2,7 +2,7 @@ package errs
 
 import (
 	"fmt"
-	"vdns/vutil/strs"
+	"vdns/util/strs"
 )
 
 // AlidnsSDKError struct is used save error code and msg

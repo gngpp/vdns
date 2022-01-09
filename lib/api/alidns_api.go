@@ -10,7 +10,7 @@ import (
 	"vdns/lib/sign/compose"
 	"vdns/lib/standard"
 	"vdns/lib/standard/record"
-	"vdns/vutil/vhttp"
+	"vdns/util/vhttp"
 )
 
 func NewAlidnsProvider(credential auth.Credential) VdnsRecordProvider {

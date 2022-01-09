@@ -12,8 +12,8 @@ import (
 	"vdns/lib/standard/msg"
 	"vdns/lib/standard/record"
 	time2 "vdns/lib/standard/time"
-	"vdns/vutil/strs"
-	"vdns/vutil/vhttp"
+	"vdns/util/strs"
+	"vdns/util/vhttp"
 )
 
 type AlidnsParameterProvier struct {

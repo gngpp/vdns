@@ -2,7 +2,7 @@ package errs
 
 import (
 	"fmt"
-	"vdns/vutil/strs"
+	"vdns/util/strs"
 )
 
 type VdnsError struct {

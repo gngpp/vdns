@@ -1,6 +1,6 @@
 package action
 
-import "vdns/vutil/strs"
+import "vdns/util/strs"
 
 type RequestAction struct {
 	Describe *string

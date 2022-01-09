@@ -9,7 +9,7 @@ import (
 	"vdns/lib/api/models"
 	"vdns/lib/api/models/alidns_model"
 	"vdns/lib/standard/record"
-	"vdns/vutil/vjson"
+	"vdns/util/vjson"
 )
 
 type AlidnsResponseConvert struct {

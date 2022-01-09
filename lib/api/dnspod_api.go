@@ -11,7 +11,7 @@ import (
 	"vdns/lib/sign/compose"
 	"vdns/lib/standard"
 	"vdns/lib/standard/record"
-	"vdns/vutil/vhttp"
+	"vdns/util/vhttp"
 )
 
 func NewDnspodProvider(credential auth.Credential) VdnsRecordProvider {

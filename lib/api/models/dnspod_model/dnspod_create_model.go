@@ -1,6 +1,6 @@
 package dnspod_model
 
-import "vdns/vutil/vjson"
+import "vdns/util/vjson"
 
 type CreateRecordResponse struct {
 	Response *struct {
