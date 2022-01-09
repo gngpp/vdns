@@ -14,8 +14,9 @@ type DescribeDomainRecordsRequest struct {
 	RecordType   record.Type `json:"record_type,omitempty"`
 	RRKeyWord    *string     `json:"rr_key_word,omitempty"`
 	ValueKeyWord *string     `json:"value_key_word,omitempty"`
-	PageNumber   *int64      `json:"page_number,omitempty"`
-	PageSize     *int64      `json:"page_size,omitempty"`
+	//dnspod 并没有页数说法，使用偏移量替代，偏移量从0开始，最大偏移量就是所有域名记录数-1，并且每个偏移量返回记录数不一
+	PageNumber *int64 `json:"page_number,omitempty"`
+	PageSize   *int64 `json:"page_size,omitempty"`
 }
 
 func (_this *DescribeDomainRecordsRequest) SetDomain(domain string) *DescribeDomainRecordsRequest {
@@ -49,12 +50,7 @@ func (_this *DescribeDomainRecordsRequest) SetPageSize(PageSize int64) *Describe
 }
 
 func NewDescribeDomainRecordsRequest() *DescribeDomainRecordsRequest {
-	defaultPageSize := int64(10)
-	defaultPageNumber := int64(1)
-	return &DescribeDomainRecordsRequest{
-		PageSize:   &defaultPageSize,
-		PageNumber: &defaultPageNumber,
-	}
+	return &DescribeDomainRecordsRequest{}
 }
 
 type CreateDomainRecordRequest struct {

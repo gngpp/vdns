@@ -86,12 +86,3 @@ type RecordListItem struct {
 func (s *RecordListItem) String() string {
 	return vjson.PrettifyString(s)
 }
-
-type Error struct {
-	Code    *string `json:"Code,omitempty"`
-	Message *string `json:"Message,omitempty"`
-}
-
-func (s *Error) String() string {
-	return vjson.PrettifyString(s)
-}

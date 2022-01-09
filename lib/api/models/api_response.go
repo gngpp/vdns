@@ -9,6 +9,7 @@ type DomainRecordsResponse struct {
 	TotalCount *int64    `json:"total_count,omitempty"`
 	PageSize   *int64    `json:"page_size,omitempty"`
 	PageNumber *int64    `json:"page_number,omitempty"`
+	ListCount  *int64    `json:"list_count,omitempty"`
 	Records    []*Record `json:"records,omitempty"`
 }
 
@@ -22,6 +23,7 @@ type Record struct {
 	RR         *string     `json:"rr,omitempty"`
 	Domain     *string     `json:"domain,omitempty"`
 	Value      *string     `json:"value,omitempty"`
+	Status     *string     `json:"status,omitempty"`
 	TTL        *int64      `json:"ttl,omitempty"`
 }
 
