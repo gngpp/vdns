@@ -13,8 +13,7 @@ const (
 	DELETE_REQUEST_NOT_NIL   = "DeleteDomainRecordRequest cannot been nil."
 )
 
-// panic message
-
+//goland:noinspection ALL
 const (
 	SYSTEM_CREDENTIAL_NOT_NIL         = "credential can not been nil."
 	SYSTEM_SIGNATURE_COMPOSER_NOT_NIL = "signature composer cannot been nil."

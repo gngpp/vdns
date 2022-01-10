@@ -1,8 +1,8 @@
 package parameter
 
 import (
+	"github.com/zf1976/vdns/lib/api/models"
 	"net/url"
-	"vdns/lib/api/models"
 )
 
 type ParamaterProvider interface {

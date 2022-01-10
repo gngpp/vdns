@@ -1,6 +1,8 @@
 package auth
 
-import "vdns/util/strs"
+import (
+	"github.com/zf1976/vdns/lib/util/strs"
+)
 
 type BasisCredential struct {
 	secretId  *string

@@ -2,8 +2,8 @@ package conv
 
 import (
 	"context"
+	"github.com/zf1976/vdns/lib/api/models"
 	"net/http"
-	"vdns/lib/api/models"
 )
 
 type VdnsResponseConverter interface {

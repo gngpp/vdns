@@ -1,7 +1,7 @@
 package record
 
 import (
-	"vdns/lib/util/strs"
+	"github.com/zf1976/vdns/lib/util/strs"
 )
 
 type Type string

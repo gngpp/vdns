@@ -8,6 +8,7 @@ import (
 	"os"
 )
 
+//goland:noinspection GoNameStartsWithPackageName
 type ZipFile struct {
 	Name string `json:"name"`
 	Path string `json:"path"`

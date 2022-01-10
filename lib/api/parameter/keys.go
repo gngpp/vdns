@@ -29,7 +29,7 @@ const (
 // dnspod parameter
 //goland:noinspection ALL
 const (
-	DNSPOD_PARAMETER_DOMAIN          = "DomainName"
+	DNSPOD_PARAMETER_DOMAIN          = "Domain"
 	DNSPOD_PARAMETER_RECORD_TYPE     = "RecordType"
 	DNSPOD_PARAMETER_VALUE           = "Value"
 	DNSPOD_PARAMETER_LIMIT           = "Limit"

@@ -3,6 +3,7 @@ package file
 import (
 	"errors"
 	"fmt"
+	"github.com/zf1976/vdns/lib/vlog"
 	"io/fs"
 	"io/ioutil"
 	"os"
@@ -10,7 +11,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-	"vdns/lib/vlog"
 )
 
 var log = vlog.Default()

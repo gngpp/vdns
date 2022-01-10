@@ -1,6 +1,6 @@
 package models
 
-import "vdns/lib/standard/record"
+import "github.com/zf1976/vdns/lib/standard/record"
 
 // on aliyun document https://help.aliyun.com/document_detail/29776.html
 
