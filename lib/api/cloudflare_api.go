@@ -8,7 +8,7 @@ import (
 	"github.com/zf1976/vdns/lib/auth"
 	"github.com/zf1976/vdns/lib/standard"
 	"github.com/zf1976/vdns/lib/standard/record"
-	vhttp2 "github.com/zf1976/vdns/lib/util/vhttp"
+	"github.com/zf1976/vdns/lib/util/vhttp"
 	"github.com/zf1976/vdns/lib/util/vjson"
 	"io/ioutil"
 	"log"
@@ -53,7 +53,7 @@ func (_this *CloudflareProvider) Support(recordType record.Type) error {
 }
 
 // 获得域名记录列表
-func (_this *CloudflareProvider) getZones(domain *vhttp2.Domain) (err error) {
+func (_this *CloudflareProvider) getZones(domain *vhttp.Domain) (err error) {
 	err = _this.request(
 		"GET",
 		fmt.Sprintf(_this.api.StringValue()+"?name=%s&status=%s&per_page=%s", domain.DomainName, "active", "50"),
@@ -82,9 +82,9 @@ func (_this *CloudflareProvider) request(method string, url string, data interfa
 	req.Header.Set("Authorization", "Bearer "+_this.credential.GetToken())
 	req.Header.Set("Content-Type", "application/json")
 
-	client := vhttp2.CreateClient()
+	client := vhttp.CreateClient()
 	resp, err := client.Do(req)
-	if vhttp2.IsOK(resp) {
+	if vhttp.IsOK(resp) {
 		body := resp.Body
 		defer body.Close()
 		all, err := ioutil.ReadAll(body)
