@@ -1,11 +1,11 @@
 package api
 
 import (
-	"vdns/lib/api/models"
-	"vdns/lib/standard/record"
+	"github.com/zf1976/vdns/lib/api/models"
+	"github.com/zf1976/vdns/lib/standard/record"
 )
 
-type VdnsRecordProvider interface {
+type VdnsProvider interface {
 	// DescribeRecords 具体参数作用请看实现注释
 	DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error)
 
@@ -19,5 +19,5 @@ type VdnsRecordProvider interface {
 	DeleteRecord(request *models.DeleteDomainRecordRequest) (*models.DomainRecordStatusResponse, error)
 
 	// Support 某些使用zone区域划分域名记录的DNS服务商，需强迫使用support
-	Support(recordType record.Type) bool
+	Support(recordType record.Type) error
 }

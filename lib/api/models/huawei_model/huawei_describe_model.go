@@ -1,7 +1,7 @@
 package huawei_model
 
 import (
-	"vdns/util/vjson"
+	"github.com/zf1976/vdns/lib/util/vjson"
 )
 
 // ListRecordSetsResponse Response Object

@@ -1,6 +1,8 @@
 package dnspod_model
 
-import "vdns/util/vjson"
+import (
+	"github.com/zf1976/vdns/lib/util/vjson"
+)
 
 type DeleteRecordResponse struct {
 	Response *struct {

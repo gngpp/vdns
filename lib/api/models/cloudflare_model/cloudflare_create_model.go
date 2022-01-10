@@ -9,5 +9,6 @@ type DNSRecordResponse struct {
 // Response is a template.  There will also be a result struct.  There will be a
 // unique response type for each response, which will include this type.
 type Response struct {
-	Success bool `json:"success"`
+	Success  bool `json:"success"`
+	Messages []string
 }

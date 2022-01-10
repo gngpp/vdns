@@ -1,20 +1,20 @@
 package parameter
 
 import (
+	"github.com/zf1976/vdns/lib/api/errs"
+	"github.com/zf1976/vdns/lib/api/models"
+	"github.com/zf1976/vdns/lib/auth"
+	"github.com/zf1976/vdns/lib/sign/compose"
+	"github.com/zf1976/vdns/lib/standard"
+	"github.com/zf1976/vdns/lib/standard/msg"
+	"github.com/zf1976/vdns/lib/standard/record"
+	"github.com/zf1976/vdns/lib/util/convert"
+	"github.com/zf1976/vdns/lib/util/strs"
+	"github.com/zf1976/vdns/lib/util/vhttp"
 	"math/rand"
 	"net/url"
 	"strconv"
 	"time"
-	"vdns/lib/api/errs"
-	"vdns/lib/api/models"
-	"vdns/lib/auth"
-	"vdns/lib/sign/compose"
-	"vdns/lib/standard"
-	"vdns/lib/standard/msg"
-	"vdns/lib/standard/record"
-	"vdns/util/convert"
-	"vdns/util/strs"
-	"vdns/util/vhttp"
 )
 
 type DnspodParameterProvider struct {

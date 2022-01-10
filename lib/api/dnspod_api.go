@@ -2,19 +2,21 @@ package api
 
 import (
 	"context"
+	"github.com/zf1976/vdns/lib/api/action"
+	"github.com/zf1976/vdns/lib/api/errs"
+	"github.com/zf1976/vdns/lib/api/models"
+	"github.com/zf1976/vdns/lib/api/parameter"
+	"github.com/zf1976/vdns/lib/api/rpc"
+	"github.com/zf1976/vdns/lib/auth"
+	"github.com/zf1976/vdns/lib/sign/compose"
+	"github.com/zf1976/vdns/lib/standard"
+	"github.com/zf1976/vdns/lib/standard/msg"
+	"github.com/zf1976/vdns/lib/standard/record"
+	"github.com/zf1976/vdns/lib/util/vhttp"
 	"net/url"
-	"vdns/lib/api/action"
-	"vdns/lib/api/models"
-	"vdns/lib/api/parameter"
-	"vdns/lib/api/rpc"
-	"vdns/lib/auth"
-	"vdns/lib/sign/compose"
-	"vdns/lib/standard"
-	"vdns/lib/standard/record"
-	"vdns/util/vhttp"
 )
 
-func NewDnspodProvider(credential auth.Credential) VdnsRecordProvider {
+func NewDnspodProvider(credential auth.Credential) VdnsProvider {
 	signatureComposer := compose.NewDnspodSignatureCompose()
 	return &DnspodProvider{
 		RequestAction:     action.NewDnspodAction(),
@@ -33,6 +35,26 @@ type DnspodProvider struct {
 	parameterProvider parameter.ParamaterProvider
 	credential        auth.Credential
 	rpc               rpc.VdnsRpc
+}
+
+func (_this *DnspodProvider) SetApi(api *standard.Standard) {
+	_this.api = api
+}
+
+func (_this *DnspodProvider) SetSignatureComposer(signatureComposer compose.SignatureComposer) {
+	_this.signatureComposer = signatureComposer
+}
+
+func (_this *DnspodProvider) SetParameterProvider(parameterProvider parameter.ParamaterProvider) {
+	_this.parameterProvider = parameterProvider
+}
+
+func (_this *DnspodProvider) SetCredential(credential auth.Credential) {
+	_this.credential = credential
+}
+
+func (_this *DnspodProvider) SetRpc(rpc rpc.VdnsRpc) {
+	_this.rpc = rpc
 }
 
 func (_this *DnspodProvider) DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error) {
@@ -72,8 +94,12 @@ func (_this *DnspodProvider) DeleteRecord(request *models.DeleteDomainRecordRequ
 	return _this.rpc.DoDeleteRequest(requestUrl)
 }
 
-func (_this *DnspodProvider) Support(recordType record.Type) bool {
-	return record.Support(recordType)
+func (_this *DnspodProvider) Support(recordType record.Type) error {
+	support := record.Support(recordType)
+	if support {
+		return nil
+	}
+	return errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 }
 
 func (_this *DnspodProvider) generateRequestUrl(paramater *url.Values) string {

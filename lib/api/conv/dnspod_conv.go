@@ -2,16 +2,16 @@ package conv
 
 import (
 	"context"
+	"github.com/zf1976/vdns/lib/api/errs"
+	"github.com/zf1976/vdns/lib/api/models"
+	"github.com/zf1976/vdns/lib/api/models/dnspod_model"
+	"github.com/zf1976/vdns/lib/api/parameter"
+	"github.com/zf1976/vdns/lib/standard/record"
+	"github.com/zf1976/vdns/lib/util/convert"
+	"github.com/zf1976/vdns/lib/util/strs"
+	"github.com/zf1976/vdns/lib/util/vjson"
 	"io/ioutil"
 	"net/http"
-	"vdns/lib/api/errs"
-	"vdns/lib/api/models"
-	"vdns/lib/api/models/dnspod_model"
-	"vdns/lib/api/parameter"
-	"vdns/lib/standard/record"
-	"vdns/util/convert"
-	"vdns/util/strs"
-	"vdns/util/vjson"
 )
 
 type DnspodResponseConvert struct {
