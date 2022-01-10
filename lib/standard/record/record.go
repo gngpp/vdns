@@ -1,6 +1,8 @@
 package record
 
-import "vdns/util/strs"
+import (
+	"vdns/lib/util/strs"
+)
 
 type Type string
 

@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-	"vdns/vlog"
+	"vdns/lib/vlog"
 )
 
 var log = vlog.Default()

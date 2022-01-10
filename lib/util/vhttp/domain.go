@@ -3,14 +3,14 @@ package vhttp
 import (
 	"errors"
 	"strings"
-	"vdns/util/strs"
+	"vdns/lib/util/strs"
 )
 
 var rareDomainSuffix = []string{"com.cn", "org.cn", "net.cn", "ac.cn", "eu.org"}
 
 type Domain struct {
-	Domain    string
-	SubDomain string
+	DomainName string
+	SubDomain  string
 }
 
 // CheckExtractDomain
@@ -26,16 +26,16 @@ func CheckExtractDomain(domain string) (*Domain, error) {
 	}
 
 	targetDomain := new(Domain)
-	targetDomain.Domain = strs.Concat(split[length-2], ".", split[length-1])
+	targetDomain.DomainName = strs.Concat(split[length-2], ".", split[length-1])
 	// add special suffix domain name processing
 	for _, staticMainDomain := range rareDomainSuffix {
-		if staticMainDomain == targetDomain.Domain {
-			targetDomain.Domain = strs.Concat(split[length-3], ".", targetDomain.Domain)
+		if staticMainDomain == targetDomain.DomainName {
+			targetDomain.DomainName = strs.Concat(split[length-3], ".", targetDomain.DomainName)
 			break
 		}
 	}
 
-	index := strings.LastIndex(domain, targetDomain.Domain)
+	index := strings.LastIndex(domain, targetDomain.DomainName)
 	if index > 0 {
 		targetDomain.SubDomain = domain[:index-1]
 	}

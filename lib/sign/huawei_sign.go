@@ -10,7 +10,7 @@ import (
 	"sort"
 	"strings"
 	"time"
-	"vdns/util"
+	"vdns/lib/util"
 )
 
 // based on https://github.com/datastream/aws/blob/master/signv4.go

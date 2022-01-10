@@ -34,3 +34,17 @@ func Post(url string, data interface{}, contentType string) (response *http.Resp
 	}
 	return response, nil
 }
+
+func IsOK(resp *http.Response) bool {
+	switch resp.StatusCode {
+	case http.StatusOK:
+	case http.StatusCreated:
+	case http.StatusAccepted:
+	case http.StatusAlreadyReported:
+	case http.StatusNoContent:
+		return true
+	default:
+		return false
+	}
+	return false
+}

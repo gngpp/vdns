@@ -2,8 +2,8 @@ package compose
 
 import (
 	"net/url"
-	"vdns/util/vhttp"
-	log "vdns/vlog"
+	"vdns/lib/util/vhttp"
+	log "vdns/lib/vlog"
 )
 
 var vlog = log.Default()

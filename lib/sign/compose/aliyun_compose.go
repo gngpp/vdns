@@ -6,8 +6,8 @@ import (
 	"net/url"
 	"strings"
 	"vdns/lib/sign/alg"
-	"vdns/util/strs"
-	"vdns/util/vhttp"
+	"vdns/lib/util/strs"
+	"vdns/lib/util/vhttp"
 )
 
 func NewAlidnsSignatureCompose() SignatureComposer {
