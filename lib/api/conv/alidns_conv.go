@@ -2,14 +2,14 @@ package conv
 
 import (
 	"context"
-	"github.com/zf1976/vdns/lib/api/errs"
-	"github.com/zf1976/vdns/lib/api/models"
-	"github.com/zf1976/vdns/lib/api/models/alidns_model"
-	"github.com/zf1976/vdns/lib/standard/record"
-	"github.com/zf1976/vdns/lib/util/vjson"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"vdns/lib/api/errs"
+	"vdns/lib/api/models"
+	"vdns/lib/api/models/alidns_model"
+	"vdns/lib/standard/record"
+	"vdns/lib/util/vjson"
 )
 
 type AlidnsResponseConvert struct {

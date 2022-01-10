@@ -1,13 +1,13 @@
 package config
 
 import (
-	"github.com/zf1976/vdns/lib/homedir"
-	"github.com/zf1976/vdns/lib/util/file"
-	"github.com/zf1976/vdns/lib/util/strs"
-	"github.com/zf1976/vdns/lib/vlog"
-	"github.com/zf1976/vdns/lib/vlog/timewriter"
 	"io"
 	"os"
+	"vdns/lib/homedir"
+	"vdns/lib/util/file"
+	"vdns/lib/util/strs"
+	"vdns/lib/vlog"
+	"vdns/lib/vlog/timewriter"
 )
 
 var VConfig Config
@@ -92,8 +92,6 @@ func InitWorking() {
 
 }
 
-var log = vlog.Default()
-
 func init() {
 	InitWorking()
 	timeWriter := &timewriter.TimeWriter{
@@ -112,9 +110,9 @@ func init() {
 		if err := file.MakeDir(workingPath); err != nil {
 			panic(err)
 		}
-		log.Infof("[Init] working directory: %s\n", workingPath)
+		vlog.Infof("[Init] working directory: %s\n", workingPath)
 	} else {
-		log.Infof("[Exist] working directory: %s exist\n", workingPath)
+		vlog.Infof("[Exist] working directory: %s exist\n", workingPath)
 	}
 
 	logPath, err := GetLogPath()
@@ -125,9 +123,9 @@ func init() {
 		if err := file.MakeDir(logPath); err != nil {
 			panic(err)
 		}
-		log.Infof("[Init] logs directory: %s\n", logPath)
+		vlog.Infof("[Init] logs directory: %s\n", logPath)
 	} else {
-		log.Infof("[Exist] logs directory: %s\n", logPath)
+		vlog.Infof("[Exist] logs directory: %s\n", logPath)
 	}
 
 	configPath, err := GetConfigPath()
@@ -138,8 +136,8 @@ func init() {
 		if err := file.Create(configPath); err != nil {
 			panic(err)
 		}
-		log.Infof("[Init] config file: %s\n", configPath)
+		vlog.Infof("[Init] config file: %s\n", configPath)
 	} else {
-		log.Infof("[Exist] config file: %s\n", configPath)
+		vlog.Infof("[Exist] config file: %s\n", configPath)
 	}
 }

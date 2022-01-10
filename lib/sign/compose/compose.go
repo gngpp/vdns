@@ -1,12 +1,9 @@
 package compose
 
 import (
-	"github.com/zf1976/vdns/lib/util/vhttp"
-	log "github.com/zf1976/vdns/lib/vlog"
 	"net/url"
+	"vdns/lib/util/vhttp"
 )
-
-var vlog = log.Default()
 
 const SEPARATOR = "&"
 

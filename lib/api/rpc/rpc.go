@@ -2,7 +2,7 @@ package rpc
 
 import (
 	"context"
-	"github.com/zf1976/vdns/lib/api/models"
+	"vdns/lib/api/models"
 )
 
 type VdnsRpc interface {
