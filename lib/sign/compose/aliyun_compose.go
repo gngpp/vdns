@@ -3,11 +3,12 @@ package compose
 import (
 	"crypto/hmac"
 	"encoding/base64"
-	"github.com/zf1976/vdns/lib/sign/alg"
-	"github.com/zf1976/vdns/lib/util/strs"
-	"github.com/zf1976/vdns/lib/util/vhttp"
 	"net/url"
 	"strings"
+	"vdns/lib/sign/alg"
+	"vdns/lib/util/strs"
+	"vdns/lib/util/vhttp"
+	"vdns/lib/vlog"
 )
 
 func NewAlidnsSignatureCompose() SignatureComposer {

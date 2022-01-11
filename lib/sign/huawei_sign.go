@@ -5,12 +5,12 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"fmt"
-	"github.com/zf1976/vdns/lib/util"
 	"io/ioutil"
 	"net/http"
 	"sort"
 	"strings"
 	"time"
+	"vdns/lib/util"
 )
 
 // based on https://github.com/datastream/aws/blob/master/signv4.go

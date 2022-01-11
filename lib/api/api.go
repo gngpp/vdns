@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/zf1976/vdns/lib/api/models"
-	"github.com/zf1976/vdns/lib/standard/record"
+	"vdns/lib/api/models"
+	"vdns/lib/standard/record"
 )
 
 type VdnsProvider interface {

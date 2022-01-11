@@ -1,7 +1,7 @@
 package alidns_model
 
 import (
-	"github.com/zf1976/vdns/lib/util/vjson"
+	"vdns/lib/util/vjson"
 )
 
 type DeleteDomainRecordResponse struct {

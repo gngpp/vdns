@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"crypto/hmac"
 	"encoding/base64"
-	"github.com/zf1976/vdns/lib/sign/alg"
-	"github.com/zf1976/vdns/lib/util/strs"
-	"github.com/zf1976/vdns/lib/util/vhttp"
 	"net/url"
 	"sort"
+	"vdns/lib/sign/alg"
+	"vdns/lib/util/strs"
+	"vdns/lib/util/vhttp"
+	"vdns/lib/vlog"
 )
 
 func NewDnspodSignatureCompose() SignatureComposer {

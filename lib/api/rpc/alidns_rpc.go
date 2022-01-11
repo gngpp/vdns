@@ -2,10 +2,10 @@ package rpc
 
 import (
 	"context"
-	"github.com/zf1976/vdns/lib/api/conv"
-	"github.com/zf1976/vdns/lib/api/errs"
-	"github.com/zf1976/vdns/lib/api/models"
 	"net/http"
+	"vdns/lib/api/conv"
+	"vdns/lib/api/errs"
+	"vdns/lib/api/models"
 )
 
 func NewAlidnsRpc() VdnsRpc {

@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"github.com/zf1976/vdns/lib/util/strs"
+	"vdns/lib/util/strs"
 )
 
 type BasisCredential struct {

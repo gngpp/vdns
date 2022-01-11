@@ -4,15 +4,15 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/zf1976/vdns/lib/api/models"
-	"github.com/zf1976/vdns/lib/auth"
-	"github.com/zf1976/vdns/lib/standard"
-	"github.com/zf1976/vdns/lib/standard/record"
-	"github.com/zf1976/vdns/lib/util/vhttp"
-	"github.com/zf1976/vdns/lib/util/vjson"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"vdns/lib/api/models"
+	"vdns/lib/auth"
+	"vdns/lib/standard"
+	"vdns/lib/standard/record"
+	"vdns/lib/util/vhttp"
+	"vdns/lib/util/vjson"
 )
 
 func NewCloudflareProvider(credential auth.Credential) VdnsProvider {
