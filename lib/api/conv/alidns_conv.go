@@ -27,12 +27,12 @@ func (_this *AlidnsResponseConvert) DescribeResponseCtxConvert(_ context.Context
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
-		sourceResponse := &alidns_model.DescribeDomainRecordsResponse{}
+		sourceResponse := new(alidns_model.DescribeDomainRecordsResponse)
 		err = vjson.ByteArrayConver(bytes, sourceResponse)
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
-		response := &models.DomainRecordsResponse{}
+		response := new(models.DomainRecordsResponse)
 		response.TotalCount = sourceResponse.TotalCount
 		response.PageSize = sourceResponse.PageSize
 		response.PageNumber = sourceResponse.PageNumber
@@ -74,7 +74,7 @@ func (_this *AlidnsResponseConvert) CreateResponseCtxConvert(_ context.Context, 
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
-		sourceResponse := &alidns_model.CreateDomainRecordResponse{}
+		sourceResponse := new(alidns_model.CreateDomainRecordResponse)
 		err = vjson.ByteArrayConver(bytes, sourceResponse)
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
@@ -100,7 +100,7 @@ func (_this *AlidnsResponseConvert) UpdateResponseCtxConvert(_ context.Context, 
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
-		sourceResponse := &alidns_model.UpdateDomainRecordResponse{}
+		sourceResponse := new(alidns_model.UpdateDomainRecordResponse)
 		err = vjson.ByteArrayConver(bytes, sourceResponse)
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
@@ -126,7 +126,7 @@ func (_this *AlidnsResponseConvert) DeleteResponseCtxConvert(_ context.Context, 
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
-		sourceBody := &alidns_model.DeleteDomainRecordResponse{}
+		sourceBody := new(alidns_model.DeleteDomainRecordResponse)
 		err = vjson.ByteArrayConver(bytes, sourceBody)
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
@@ -163,7 +163,7 @@ func (_this *AlidnsResponseConvert) badBodyHandler(read io.ReadCloser) error {
 	if err != nil {
 		return errs.NewApiErrorFromError(err)
 	}
-	sdkError := &errs.AlidnsSDKError{}
+	sdkError := new(errs.AlidnsSDKError)
 	err = vjson.ByteArrayConver(bytes, sdkError)
 	if err != nil {
 		return errs.NewApiErrorFromError(err)

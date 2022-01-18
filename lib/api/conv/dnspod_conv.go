@@ -37,7 +37,7 @@ func (_this *DnspodResponseConvert) DescribeResponseCtxConvert(ctx context.Conte
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
-		b := &dnspod_model.DescribeRecordListResponse{}
+		b := new(dnspod_model.DescribeRecordListResponse)
 		err = vjson.ByteArrayConver(bytes, b)
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
@@ -95,7 +95,7 @@ func (_this *DnspodResponseConvert) CreateResponseCtxConvert(_ context.Context, 
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
-		c := &dnspod_model.CreateRecordResponse{}
+		c := new(dnspod_model.CreateRecordResponse)
 		err = vjson.ByteArrayConver(bytes, c)
 		if err != nil {
 			return nil, err
@@ -125,7 +125,7 @@ func (_this *DnspodResponseConvert) UpdateResponseCtxConvert(_ context.Context, 
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
-		c := &dnspod_model.ModifyRecordResponse{}
+		c := new(dnspod_model.ModifyRecordResponse)
 		err = vjson.ByteArrayConver(bytes, c)
 		if err != nil {
 			return nil, err
@@ -155,7 +155,7 @@ func (_this *DnspodResponseConvert) DeleteResponseCtxConvert(_ context.Context, 
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
-		c := &dnspod_model.DeleteRecordResponse{}
+		c := new(dnspod_model.DeleteRecordResponse)
 		err = vjson.ByteArrayConver(bytes, c)
 		if err != nil {
 			return nil, err
