@@ -14,11 +14,11 @@ import (
 	"vdns/lib/util/vjson"
 )
 
-type DnspodResponseConvert struct {
+type DNSPodResponseConvert struct {
 }
 
 //goland:noinspection GoRedundantConversion
-func (_this *DnspodResponseConvert) DescribeResponseCtxConvert(ctx context.Context, resp *http.Response) (*models.DomainRecordsResponse, error) {
+func (_this *DNSPodResponseConvert) DescribeResponseCtxConvert(ctx context.Context, resp *http.Response) (*models.DomainRecordsResponse, error) {
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
@@ -84,7 +84,7 @@ func (_this *DnspodResponseConvert) DescribeResponseCtxConvert(ctx context.Conte
 	return &models.DomainRecordsResponse{}, nil
 }
 
-func (_this *DnspodResponseConvert) CreateResponseCtxConvert(_ context.Context, resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *DNSPodResponseConvert) CreateResponseCtxConvert(_ context.Context, resp *http.Response) (*models.DomainRecordStatusResponse, error) {
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
@@ -114,7 +114,7 @@ func (_this *DnspodResponseConvert) CreateResponseCtxConvert(_ context.Context, 
 	}
 }
 
-func (_this *DnspodResponseConvert) UpdateResponseCtxConvert(_ context.Context, resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *DNSPodResponseConvert) UpdateResponseCtxConvert(_ context.Context, resp *http.Response) (*models.DomainRecordStatusResponse, error) {
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
@@ -144,7 +144,7 @@ func (_this *DnspodResponseConvert) UpdateResponseCtxConvert(_ context.Context, 
 	}
 }
 
-func (_this *DnspodResponseConvert) DeleteResponseCtxConvert(_ context.Context, resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *DNSPodResponseConvert) DeleteResponseCtxConvert(_ context.Context, resp *http.Response) (*models.DomainRecordStatusResponse, error) {
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
@@ -174,23 +174,23 @@ func (_this *DnspodResponseConvert) DeleteResponseCtxConvert(_ context.Context, 
 	}
 }
 
-func (_this *DnspodResponseConvert) DescribeResponseConvert(resp *http.Response) (*models.DomainRecordsResponse, error) {
+func (_this *DNSPodResponseConvert) DescribeResponseConvert(resp *http.Response) (*models.DomainRecordsResponse, error) {
 	return _this.DescribeResponseCtxConvert(nil, resp)
 }
 
-func (_this *DnspodResponseConvert) CreateResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *DNSPodResponseConvert) CreateResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error) {
 	return _this.CreateResponseCtxConvert(nil, resp)
 }
 
-func (_this *DnspodResponseConvert) UpdateResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *DNSPodResponseConvert) UpdateResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error) {
 	return _this.UpdateResponseCtxConvert(nil, resp)
 }
 
-func (_this *DnspodResponseConvert) DeleteResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *DNSPodResponseConvert) DeleteResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error) {
 	return _this.DeleteResponseCtxConvert(nil, resp)
 }
 
-func (_this *DnspodResponseConvert) errorBodyHandler(e *dnspod_model.Error, requestId *string) error {
+func (_this *DNSPodResponseConvert) errorBodyHandler(e *dnspod_model.Error, requestId *string) error {
 	return errs.NewApiErrorFromError(errs.NewTencentCloudSDKError(strs.StringValue(e.Code),
 		strs.StringValue(e.Message), strs.StringValue(requestId)))
 }

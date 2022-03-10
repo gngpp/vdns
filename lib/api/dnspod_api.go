@@ -16,19 +16,20 @@ import (
 	"vdns/lib/util/vhttp"
 )
 
-func NewDnspodProvider(credential auth.Credential) VdnsProvider {
+//goland:noinspection ALL
+func NewDNSPodProvider(credential auth.Credential) VDNSProvider {
 	signatureComposer := compose.NewDnspodSignatureCompose()
-	return &DnspodProvider{
-		RequestAction:     action.NewDnspodAction(),
+	return &DNSPodProvider{
+		RequestAction:     action.NewDNSPodAction(),
 		signatureComposer: signatureComposer,
-		rpc:               rpc.NewDnspodRpc(),
+		rpc:               rpc.NewDNSPodRpc(),
 		api:               standard.DNSPOD_DNS_API.String(),
 		credential:        credential,
-		parameterProvider: parameter.NewDnspodParameterProvider(credential, signatureComposer),
+		parameterProvider: parameter.NewDNSPodParameterProvider(credential, signatureComposer),
 	}
 }
 
-type DnspodProvider struct {
+type DNSPodProvider struct {
 	*action.RequestAction
 	api               *standard.Standard
 	signatureComposer compose.SignatureComposer
@@ -37,64 +38,64 @@ type DnspodProvider struct {
 	rpc               rpc.VdnsRpc
 }
 
-func (_this *DnspodProvider) SetApi(api *standard.Standard) {
+func (_this *DNSPodProvider) SetApi(api *standard.Standard) {
 	_this.api = api
 }
 
-func (_this *DnspodProvider) SetSignatureComposer(signatureComposer compose.SignatureComposer) {
+func (_this *DNSPodProvider) SetSignatureComposer(signatureComposer compose.SignatureComposer) {
 	_this.signatureComposer = signatureComposer
 }
 
-func (_this *DnspodProvider) SetParameterProvider(parameterProvider parameter.ParamaterProvider) {
+func (_this *DNSPodProvider) SetParameterProvider(parameterProvider parameter.ParamaterProvider) {
 	_this.parameterProvider = parameterProvider
 }
 
-func (_this *DnspodProvider) SetCredential(credential auth.Credential) {
+func (_this *DNSPodProvider) SetCredential(credential auth.Credential) {
 	_this.credential = credential
 }
 
-func (_this *DnspodProvider) SetRpc(rpc rpc.VdnsRpc) {
+func (_this *DNSPodProvider) SetRpc(rpc rpc.VdnsRpc) {
 	_this.rpc = rpc
 }
 
-func (_this *DnspodProvider) DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error) {
-	describeParamater, err := _this.parameterProvider.LoadDescribeParamater(request, _this.Describe)
+func (_this *DNSPodProvider) DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error) {
+	p, err := _this.parameterProvider.LoadDescribeParamater(request, _this.Describe)
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(describeParamater)
+	requestUrl := _this.generateRequestUrl(p)
 	ctx := context.WithValue(context.Background(), parameter.DNSPOC_PARAMETER_CONTEXT_DESCRIBE_KEY, request)
 	return _this.rpc.DoDescribeCtxRequest(ctx, requestUrl)
 }
 
-func (_this *DnspodProvider) CreateRecord(request *models.CreateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
-	paramater, err := _this.parameterProvider.LoadCreateParamater(request, _this.Create)
+func (_this *DNSPodProvider) CreateRecord(request *models.CreateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+	p, err := _this.parameterProvider.LoadCreateParamater(request, _this.Create)
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(paramater)
+	requestUrl := _this.generateRequestUrl(p)
 	return _this.rpc.DoCreateRequest(requestUrl)
 }
 
-func (_this *DnspodProvider) UpdateRecord(request *models.UpdateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
-	paramater, err := _this.parameterProvider.LoadUpdateParamater(request, _this.Update)
+func (_this *DNSPodProvider) UpdateRecord(request *models.UpdateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+	p, err := _this.parameterProvider.LoadUpdateParamater(request, _this.Update)
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(paramater)
+	requestUrl := _this.generateRequestUrl(p)
 	return _this.rpc.DoUpdateRequest(requestUrl)
 }
 
-func (_this *DnspodProvider) DeleteRecord(request *models.DeleteDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
-	paramater, err := _this.parameterProvider.LoadDeleteParamater(request, _this.Delete)
+func (_this *DNSPodProvider) DeleteRecord(request *models.DeleteDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+	p, err := _this.parameterProvider.LoadDeleteParamater(request, _this.Delete)
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(paramater)
+	requestUrl := _this.generateRequestUrl(p)
 	return _this.rpc.DoDeleteRequest(requestUrl)
 }
 
-func (_this *DnspodProvider) Support(recordType record.Type) error {
+func (_this *DNSPodProvider) Support(recordType record.Type) error {
 	support := record.Support(recordType)
 	if support {
 		return nil
@@ -102,8 +103,8 @@ func (_this *DnspodProvider) Support(recordType record.Type) error {
 	return errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 }
 
-func (_this *DnspodProvider) generateRequestUrl(paramater *url.Values) string {
-	stringToSign := _this.signatureComposer.ComposeStringToSign(vhttp.HttpMethodGet, paramater)
+func (_this *DNSPodProvider) generateRequestUrl(parameter *url.Values) string {
+	stringToSign := _this.signatureComposer.ComposeStringToSign(vhttp.HttpMethodGet, parameter)
 	signature := _this.signatureComposer.GeneratedSignature(_this.credential.GetSecretKey(), stringToSign)
-	return _this.signatureComposer.CanonicalizeRequestUrl(_this.api.StringValue(), signature, paramater)
+	return _this.signatureComposer.CanonicalizeRequestUrl(_this.api.StringValue(), signature, parameter)
 }

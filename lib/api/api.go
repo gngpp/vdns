@@ -5,7 +5,7 @@ import (
 	"vdns/lib/standard/record"
 )
 
-type VdnsProvider interface {
+type VDNSProvider interface {
 	// DescribeRecords 具体参数作用请看实现注释
 	DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error)
 
@@ -18,6 +18,6 @@ type VdnsProvider interface {
 	// DeleteRecord 具体参数作用请看实现注释
 	DeleteRecord(request *models.DeleteDomainRecordRequest) (*models.DomainRecordStatusResponse, error)
 
-	// Support 某些使用zone区域划分域名记录的DNS服务商，需强迫使用support
+	// Support 某些使用zone区域划分域名记录的DNS服务商，需强制使用support
 	Support(recordType record.Type) error
 }

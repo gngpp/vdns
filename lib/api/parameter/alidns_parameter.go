@@ -16,21 +16,21 @@ import (
 	"vdns/lib/util/vhttp"
 )
 
-type AlidnsParameterProvier struct {
+type AliDNSParameterProvier struct {
 	credential        auth.Credential
 	signatureComposer compose.SignatureComposer
 	version           *standard.Standard
 }
 
-func NewAlidnsParameterProvider(credential auth.Credential, signatureComposer compose.SignatureComposer) ParamaterProvider {
-	return &AlidnsParameterProvier{
+func NewAliDNSParameterProvider(credential auth.Credential, signatureComposer compose.SignatureComposer) ParamaterProvider {
+	return &AliDNSParameterProvier{
 		credential:        credential,
 		signatureComposer: signatureComposer,
 		version:           standard.ALIDNS_API_VERSION.String(),
 	}
 }
 
-func (_this *AlidnsParameterProvier) LoadDescribeParamater(request *models.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
+func (_this *AliDNSParameterProvier) LoadDescribeParamater(request *models.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
@@ -74,7 +74,7 @@ func (_this *AlidnsParameterProvier) LoadDescribeParamater(request *models.Descr
 	return paramter, nil
 }
 
-func (_this *AlidnsParameterProvier) LoadCreateParamater(request *models.CreateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *AliDNSParameterProvier) LoadCreateParamater(request *models.CreateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -109,7 +109,7 @@ func (_this *AlidnsParameterProvier) LoadCreateParamater(request *models.CreateD
 	return paramter, nil
 }
 
-func (_this *AlidnsParameterProvier) LoadUpdateParamater(request *models.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *AliDNSParameterProvier) LoadUpdateParamater(request *models.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -151,7 +151,7 @@ func (_this *AlidnsParameterProvier) LoadUpdateParamater(request *models.UpdateD
 	return paramter, nil
 }
 
-func (_this *AlidnsParameterProvier) LoadDeleteParamater(request *models.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *AliDNSParameterProvier) LoadDeleteParamater(request *models.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -166,7 +166,7 @@ func (_this *AlidnsParameterProvier) LoadDeleteParamater(request *models.DeleteD
 	return paramter, nil
 }
 
-func (_this *AlidnsParameterProvier) loadCommonParamter(action *string) *url.Values {
+func (_this *AliDNSParameterProvier) loadCommonParamter(action *string) *url.Values {
 	timestamp := time.Now().UTC().Format(time2.ALIYUN_FORMAT_ISO8601)
 	nonce := strconv.FormatInt(time.Now().UnixNano(), 10)
 	paramater := make(url.Values, 10)

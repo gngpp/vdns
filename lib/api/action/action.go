@@ -11,7 +11,7 @@ type RequestAction struct {
 	Delete   *string
 }
 
-func NewAlidnsAction() *RequestAction {
+func NewAliDNSAction() *RequestAction {
 	return &RequestAction{
 		Describe: strs.String("DescribeDomainRecords"),
 		Create:   strs.String("AddDomainRecord"),
@@ -20,7 +20,7 @@ func NewAlidnsAction() *RequestAction {
 	}
 }
 
-func NewDnspodAction() *RequestAction {
+func NewDNSPodAction() *RequestAction {
 	return &RequestAction{
 		Describe: strs.String("DescribeRecordList"),
 		Create:   strs.String("CreateRecord"),

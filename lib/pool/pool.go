@@ -85,7 +85,7 @@ func (_this *Pool) Monitor() {
 	realtimeLastDone = _this.taskQueueLen
 	var realtimeSpeed int32
 
-	// interval monintor
+	// interval monitor
 	ticker := time.NewTicker(1 * time.Second)
 	quit := make(chan struct{})
 
