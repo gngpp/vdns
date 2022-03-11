@@ -18,12 +18,12 @@ GOPATH=$(shell `which go` env GOPATH)
 #build_docker_image:
 #	@$(DOCKER_CMD) build -f ./Dockerfile -t vdns-web:$(VERSION) .
 #
-#test:
+#testing:
 #	@$(cd ./testing)
-#	@$(GO) test
+#	@$(GO) testing
 #
-#test-race:
-#	@$(GO) test -race ./
+#testing-race:
+#	@$(GO) testing -race ./
 #
 ## clean all build result
 #clean:

@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
-	"time"
 )
+
+var defaultClient = CreateClient()
 
 // Get Send GET request
 func Get(url string) (response *http.Response, err error) {
-	client := http.Client{Timeout: 5 * time.Second}
-	resp, err := client.Get(url)
+	resp, err := defaultClient.Get(url)
 	if err != nil {
 		return nil, err
 	}
@@ -27,8 +27,7 @@ func Post(url string, data interface{}, contentType string) (response *http.Resp
 	}
 	defer req.Body.Close()
 
-	client := &http.Client{Timeout: 5 * time.Second}
-	response, err = client.Do(req)
+	response, err = defaultClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
