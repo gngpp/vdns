@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"vdns/lib/vlog"
 )
 
 func PrettifyString(i interface{}) string {
@@ -53,7 +54,11 @@ func StructToString(data interface{}) string {
 // ToMap JSON (json转map)
 func ToMap(data string) map[string]interface{} {
 	var jsonData map[string]interface{}
-	json.Unmarshal([]byte(data), &jsonData)
+	err := json.Unmarshal([]byte(data), &jsonData)
+	if err != nil {
+		vlog.Error(err)
+		return nil
+	}
 	return jsonData
 }
 
@@ -61,6 +66,10 @@ func ToMap(data string) map[string]interface{} {
 // JSONstring (json转IntList)
 func ToIntArray(data string) []int {
 	var tmp = make([]int, 0)
-	json.Unmarshal([]byte(data), &tmp)
+	err := json.Unmarshal([]byte(data), &tmp)
+	if err != nil {
+		vlog.Error(err)
+		return nil
+	}
 	return tmp
 }
