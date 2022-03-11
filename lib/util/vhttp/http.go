@@ -18,7 +18,7 @@ func Get(url string) (response *http.Response, err error) {
 }
 
 // Post Send POST request
-func Post(url string, data interface{}, contentType string) (response *http.Response, err error) {
+func Post(url string, contentType string, data interface{}) (response *http.Response, err error) {
 	jsonStr, _ := json.Marshal(data)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 	req.Header.Add("content-type", contentType)
