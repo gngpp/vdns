@@ -15,7 +15,7 @@ import (
 	"vdns/lib/util/vjson"
 )
 
-func NewCloudflareProvider(credential auth.Credential) VDNSProvider {
+func NewCloudflareProvider(credential auth.Credential) VdnsProvider {
 	return &CloudflareProvider{
 		api:        standard.CLOUDFLARE_DNS_API.String(),
 		credential: credential,

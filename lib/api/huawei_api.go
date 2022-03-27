@@ -7,7 +7,7 @@ import (
 	"vdns/lib/standard/record"
 )
 
-func NewHuaweiProvider(credential auth.Credential) VDNSProvider {
+func NewHuaweiProvider(credential auth.Credential) VdnsProvider {
 	return &HuaweiProvider{
 		api:        standard.HUAWEI_DNS_API.String(),
 		credential: credential,

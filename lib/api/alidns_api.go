@@ -15,7 +15,7 @@ import (
 	"vdns/lib/util/vhttp"
 )
 
-func NewAliDNSProvider(credential auth.Credential) VDNSProvider {
+func NewAliDNSProvider(credential auth.Credential) VdnsProvider {
 	signatureComposer := compose.NewAlidnsSignatureCompose()
 	return &AliDNSProvider{
 		RequestAction:     action.NewAliDNSAction(),
@@ -34,26 +34,6 @@ type AliDNSProvider struct {
 	parameterProvider parameter.ParamaterProvider
 	credential        auth.Credential
 	rpc               rpc.VdnsRpc
-}
-
-func (_this *AliDNSProvider) SetApi(api *standard.Standard) {
-	_this.api = api
-}
-
-func (_this *AliDNSProvider) SetSignatureComposer(signatureComposer compose.SignatureComposer) {
-	_this.signatureComposer = signatureComposer
-}
-
-func (_this *AliDNSProvider) SetParameterProvider(parameterProvider parameter.ParamaterProvider) {
-	_this.parameterProvider = parameterProvider
-}
-
-func (_this *AliDNSProvider) SetCredential(credential auth.Credential) {
-	_this.credential = credential
-}
-
-func (_this *AliDNSProvider) SetRpc(rpc rpc.VdnsRpc) {
-	_this.rpc = rpc
 }
 
 func (_this *AliDNSProvider) DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error) {
@@ -104,4 +84,24 @@ func (_this *AliDNSProvider) generateRequestUrl(parameter *url.Values) string {
 	stringToSign := _this.signatureComposer.ComposeStringToSign(vhttp.HttpMethodGet, parameter)
 	signature := _this.signatureComposer.GeneratedSignature(_this.credential.GetSecretKey(), stringToSign)
 	return _this.signatureComposer.CanonicalizeRequestUrl(_this.api.StringValue(), signature, parameter)
+}
+
+func (_this *AliDNSProvider) SetApi(api *standard.Standard) {
+	_this.api = api
+}
+
+func (_this *AliDNSProvider) SetSignatureComposer(signatureComposer compose.SignatureComposer) {
+	_this.signatureComposer = signatureComposer
+}
+
+func (_this *AliDNSProvider) SetParameterProvider(parameterProvider parameter.ParamaterProvider) {
+	_this.parameterProvider = parameterProvider
+}
+
+func (_this *AliDNSProvider) SetCredential(credential auth.Credential) {
+	_this.credential = credential
+}
+
+func (_this *AliDNSProvider) SetRpc(rpc rpc.VdnsRpc) {
+	_this.rpc = rpc
 }

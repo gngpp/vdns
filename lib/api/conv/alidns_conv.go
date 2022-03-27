@@ -29,7 +29,7 @@ func (_this *AliDNSResponseConvert) DescribeResponseCtxConvert(_ context.Context
 			return nil, errs.NewApiErrorFromError(err)
 		}
 		sourceResponse := new(alidns_model.DescribeDomainRecordsResponse)
-		err = vjson.ByteArrayConver(bytes, sourceResponse)
+		err = vjson.ByteArrayConvert(bytes, sourceResponse)
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
@@ -76,7 +76,7 @@ func (_this *AliDNSResponseConvert) CreateResponseCtxConvert(_ context.Context, 
 			return nil, errs.NewApiErrorFromError(err)
 		}
 		sourceResponse := new(alidns_model.CreateDomainRecordResponse)
-		err = vjson.ByteArrayConver(bytes, sourceResponse)
+		err = vjson.ByteArrayConvert(bytes, sourceResponse)
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
@@ -102,7 +102,7 @@ func (_this *AliDNSResponseConvert) UpdateResponseCtxConvert(_ context.Context, 
 			return nil, errs.NewApiErrorFromError(err)
 		}
 		sourceResponse := new(alidns_model.UpdateDomainRecordResponse)
-		err = vjson.ByteArrayConver(bytes, sourceResponse)
+		err = vjson.ByteArrayConvert(bytes, sourceResponse)
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
@@ -128,7 +128,7 @@ func (_this *AliDNSResponseConvert) DeleteResponseCtxConvert(_ context.Context, 
 			return nil, errs.NewApiErrorFromError(err)
 		}
 		sourceBody := new(alidns_model.DeleteDomainRecordResponse)
-		err = vjson.ByteArrayConver(bytes, sourceBody)
+		err = vjson.ByteArrayConvert(bytes, sourceBody)
 		if err != nil {
 			return nil, errs.NewApiErrorFromError(err)
 		}
@@ -165,7 +165,7 @@ func (_this *AliDNSResponseConvert) badBodyHandler(read io.ReadCloser) error {
 		return errs.NewApiErrorFromError(err)
 	}
 	sdkError := new(errs.AlidnsSDKError)
-	err = vjson.ByteArrayConver(bytes, sdkError)
+	err = vjson.ByteArrayConvert(bytes, sdkError)
 	if err != nil {
 		return errs.NewApiErrorFromError(err)
 	}

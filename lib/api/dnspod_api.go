@@ -17,7 +17,7 @@ import (
 )
 
 //goland:noinspection ALL
-func NewDNSPodProvider(credential auth.Credential) VDNSProvider {
+func NewDNSPodProvider(credential auth.Credential) VdnsProvider {
 	signatureComposer := compose.NewDnspodSignatureCompose()
 	return &DNSPodProvider{
 		RequestAction:     action.NewDNSPodAction(),
@@ -36,26 +36,6 @@ type DNSPodProvider struct {
 	parameterProvider parameter.ParamaterProvider
 	credential        auth.Credential
 	rpc               rpc.VdnsRpc
-}
-
-func (_this *DNSPodProvider) SetApi(api *standard.Standard) {
-	_this.api = api
-}
-
-func (_this *DNSPodProvider) SetSignatureComposer(signatureComposer compose.SignatureComposer) {
-	_this.signatureComposer = signatureComposer
-}
-
-func (_this *DNSPodProvider) SetParameterProvider(parameterProvider parameter.ParamaterProvider) {
-	_this.parameterProvider = parameterProvider
-}
-
-func (_this *DNSPodProvider) SetCredential(credential auth.Credential) {
-	_this.credential = credential
-}
-
-func (_this *DNSPodProvider) SetRpc(rpc rpc.VdnsRpc) {
-	_this.rpc = rpc
 }
 
 func (_this *DNSPodProvider) DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error) {
@@ -107,4 +87,24 @@ func (_this *DNSPodProvider) generateRequestUrl(parameter *url.Values) string {
 	stringToSign := _this.signatureComposer.ComposeStringToSign(vhttp.HttpMethodGet, parameter)
 	signature := _this.signatureComposer.GeneratedSignature(_this.credential.GetSecretKey(), stringToSign)
 	return _this.signatureComposer.CanonicalizeRequestUrl(_this.api.StringValue(), signature, parameter)
+}
+
+func (_this *DNSPodProvider) SetApi(api *standard.Standard) {
+	_this.api = api
+}
+
+func (_this *DNSPodProvider) SetSignatureComposer(signatureComposer compose.SignatureComposer) {
+	_this.signatureComposer = signatureComposer
+}
+
+func (_this *DNSPodProvider) SetParameterProvider(parameterProvider parameter.ParamaterProvider) {
+	_this.parameterProvider = parameterProvider
+}
+
+func (_this *DNSPodProvider) SetCredential(credential auth.Credential) {
+	_this.credential = credential
+}
+
+func (_this *DNSPodProvider) SetRpc(rpc rpc.VdnsRpc) {
+	_this.rpc = rpc
 }

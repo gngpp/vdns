@@ -5,7 +5,8 @@ import (
 	"vdns/lib/standard/record"
 )
 
-type VDNSProvider interface {
+//goland:noinspection SpellCheckingInspection
+type VdnsProvider interface {
 	// DescribeRecords 具体参数作用请看实现注释
 	DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error)
 

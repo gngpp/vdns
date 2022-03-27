@@ -23,7 +23,7 @@ func Convert(in interface{}, out interface{}) error {
 	return err
 }
 
-func ByteArrayConver(bytes []byte, out interface{}) error {
+func ByteArrayConvert(bytes []byte, out interface{}) error {
 	return json.Unmarshal(bytes, out)
 }
 
