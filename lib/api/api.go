@@ -5,6 +5,8 @@ import (
 	"vdns/lib/standard/record"
 )
 
+const Version = "v1.0"
+
 //goland:noinspection SpellCheckingInspection
 type VdnsProvider interface {
 	// DescribeRecords 具体参数作用请看实现注释
