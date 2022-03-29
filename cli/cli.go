@@ -36,9 +36,9 @@ func init() {
 	app.Name = CliName
 	app.HelpName = CliName
 	app.Usage = Usage
-	app.Authors = []*cli.Author{{
-		Name:  Author,
-		Email: Email,
-	}}
-	app.Version = CliVersion
+	//app.Authors = []*cli.Author{{
+	//	Name:  Author,
+	//	Email: Email,
+	//}}
+	//app.Version = CliVersion
 }
