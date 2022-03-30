@@ -12,19 +12,19 @@ import (
 	"vdns/lib/vlog"
 )
 
-func NewDnspodSignatureCompose() SignatureComposer {
-	return &DnspodSignatureCompose{
+func NewDNSPodSignatureCompose() SignatureComposer {
+	return &DNSPodSignatureCompose{
 		Separator:       strs.String(SEPARATOR),
 		signatureMethod: strs.String(alg.HMAC_SHA256),
 	}
 }
 
-type DnspodSignatureCompose struct {
+type DNSPodSignatureCompose struct {
 	Separator       *string
 	signatureMethod *string
 }
 
-func (_this *DnspodSignatureCompose) ComposeStringToSign(method vhttp.HttpMethod, queries *url.Values) string {
+func (_this *DNSPodSignatureCompose) ComposeStringToSign(method vhttp.HttpMethod, queries *url.Values) string {
 	// sort encode
 	buf := new(bytes.Buffer)
 	buf.WriteString(strs.Concat(method.String(), "dnspod.tencentcloudapi.com/?"))
@@ -44,34 +44,34 @@ func (_this *DnspodSignatureCompose) ComposeStringToSign(method vhttp.HttpMethod
 	}
 	buf.Truncate(buf.Len() - 1)
 	stringToSign := buf.String()
-	vlog.Debugf("[DnspodSignatureCompose] stringToSign value: %s", stringToSign)
+	vlog.Debugf("[DNSPodSignatureCompose] stringToSign value: %s", stringToSign)
 	return stringToSign
 }
 
-func (_this *DnspodSignatureCompose) GeneratedSignature(secret string, stringToSign string) string {
+func (_this *DNSPodSignatureCompose) GeneratedSignature(secret string, stringToSign string) string {
 	hash := hmac.New(alg.SignMethodMap[alg.HMAC_SHA256], strs.ToBytes(secret))
 	_, err := hash.Write(strs.ToBytes(stringToSign))
 	if err != nil {
-		vlog.Debugf("[DnspodSignatureCompose] hash encrypt error: %s", err)
+		vlog.Debugf("[DNSPodSignatureCompose] hash encrypt error: %s", err)
 		return ""
 	}
 	encodeBytes := hash.Sum(nil)
 	signature := base64.StdEncoding.EncodeToString(encodeBytes)
-	vlog.Debugf("[DnspodSignatureCompose] signature: %s", signature)
+	vlog.Debugf("[DNSPodSignatureCompose] signature: %s", signature)
 	return signature
 }
 
-func (_this *DnspodSignatureCompose) CanonicalizeRequestUrl(urlPattern, signature string, queries *url.Values) string {
+func (_this *DNSPodSignatureCompose) CanonicalizeRequestUrl(urlPattern, signature string, queries *url.Values) string {
 	queries.Set("Signature", signature)
 	requestUrl := strs.Concat(urlPattern, "?", queries.Encode())
-	vlog.Debugf("[DnspodSignatureCompose] request url: %s", requestUrl)
+	vlog.Debugf("[DNSPodSignatureCompose] request url: %s", requestUrl)
 	return requestUrl
 }
 
-func (_this *DnspodSignatureCompose) SignatureMethod() string {
+func (_this *DNSPodSignatureCompose) SignatureMethod() string {
 	return strs.StringValue(_this.signatureMethod)
 }
 
-func (_this *DnspodSignatureCompose) SignerVersion() string {
+func (_this *DNSPodSignatureCompose) SignerVersion() string {
 	return ""
 }

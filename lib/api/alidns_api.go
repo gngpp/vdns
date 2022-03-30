@@ -16,7 +16,7 @@ import (
 )
 
 func NewAliDNSProvider(credential auth.Credential) VdnsProvider {
-	signatureComposer := compose.NewAlidnsSignatureCompose()
+	signatureComposer := compose.NewAliDNSSignatureCompose()
 	return &AliDNSProvider{
 		RequestAction:     action.NewAliDNSAction(),
 		signatureComposer: signatureComposer,

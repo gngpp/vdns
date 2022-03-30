@@ -18,7 +18,7 @@ import (
 
 //goland:noinspection ALL
 func NewDNSPodProvider(credential auth.Credential) VdnsProvider {
-	signatureComposer := compose.NewDnspodSignatureCompose()
+	signatureComposer := compose.NewDNSPodSignatureCompose()
 	return &DNSPodProvider{
 		RequestAction:     action.NewDNSPodAction(),
 		signatureComposer: signatureComposer,
