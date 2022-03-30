@@ -1,6 +1,6 @@
 package parameter
 
-// alidns cloud parameter
+// AliDNS cloud parameter
 //goland:noinspection ALL
 const (
 	ALIDNS_PARAMETER_VALUE          = "Value"
@@ -26,7 +26,7 @@ const (
 	ALIDNS_PARAMETER_JSON              = "JSON"
 )
 
-// dnspod parameter
+// DNSPod parameter
 //goland:noinspection ALL
 const (
 	DNSPOD_PARAMETER_DOMAIN          = "Domain"
