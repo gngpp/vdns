@@ -18,7 +18,7 @@ func ShowInfoCommand() *cli.Command {
 				Aliases: []string{"p"},
 				Usage:   "support providers",
 				Action: func(_ *cli.Context) error {
-					table, err := gotable.Create("providers", "api documents")
+					table, err := gotable.Create("provider", "api document")
 					if err != nil {
 						fmt.Println("Create table failed: ", err.Error())
 						return err
@@ -37,7 +37,7 @@ func ShowInfoCommand() *cli.Command {
 				Usage:   "supports record types",
 				Action: func(_ *cli.Context) error {
 					fmt.Println("supports record types: A|AAAA|NS|MX|CNAME|TXT|SRV|CA|REDIRECT_URL|FORWARD_URL")
-					table, err := gotable.Create("types", "values", "description")
+					table, err := gotable.Create("type", "value", "description")
 					if err != nil {
 						return err
 					}
