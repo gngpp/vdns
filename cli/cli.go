@@ -22,7 +22,7 @@ var app = cli.NewApp()
 //goland:noinspection SpellCheckingInspection
 func main() {
 	app.Commands = []*cli.Command{
-		command.SupportCommand(),
+		command.ShowInfoCommand(),
 		command.DNSConfigCommand(),
 	}
 	err := app.Run(os.Args)
