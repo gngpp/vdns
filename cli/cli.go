@@ -24,6 +24,7 @@ func main() {
 	app.Commands = []*cli.Command{
 		command.ShowInfoCommand(),
 		command.DNSConfigCommand(),
+		command.ResolveDNSRecord(),
 	}
 	err := app.Run(os.Args)
 	if err != nil {

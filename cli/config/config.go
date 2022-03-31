@@ -1,7 +1,9 @@
 package config
 
 import (
+	"errors"
 	"os"
+	"vdns/lib/auth"
 	"vdns/lib/homedir"
 	"vdns/lib/util/file"
 	"vdns/lib/util/strs"
@@ -75,6 +77,22 @@ func NewConfig() *Config {
 	return &config
 }
 
+func ReadCredentials(key string) (auth.Credential, error) {
+	config, err := ReadConfig()
+	if err != nil {
+		return nil, err
+	}
+	get := config.ConfigsMap.Get(key)
+	if get == nil {
+		return nil, errors.New("init credentials not found")
+	}
+	if key != CLOUDFLARE_PROVIDER {
+		return auth.NewBasicCredential(*get.Ak, *get.Sk), nil
+	} else {
+		return auth.NewTokenCredential(*get.Token), nil
+	}
+}
+
 type DNSConfig struct {
 	Provider *string `json:"provider"`
 	Ak       *string `json:"ak,omitempty"`
@@ -107,7 +125,12 @@ func ReadConfig() (*Config, error) {
 
 func WriteConfig(config *Config) error {
 	open, err := os.Create(configPath)
-	defer open.Close()
+	defer func(open *os.File) {
+		err := open.Close()
+		if err != nil {
+			vlog.Error(err)
+		}
+	}(open)
 	if err != nil {
 		return err
 	}
@@ -123,31 +146,33 @@ func init() {
 	dir, err := homedir.Dir()
 	if err != nil {
 		panic("system error")
-		return
 	}
 
+	//goland:noinspection SpellCheckingInspection
 	WorkingDir := strs.Concat(dir, "/.vdns")
 	if !file.Exist(WorkingDir) {
 		err = file.MakeDir(WorkingDir)
 		if err != nil {
 			panic("creating working " + WorkingDir + " directory error: " + err.Error())
-			return
 		}
 	}
 
 	configPath = strs.Concat(WorkingDir, "/config.json")
 	if !file.Exist(configPath) {
-		file, err := os.Create(configPath)
-		defer file.Close()
+		create, err := os.Create(configPath)
+		defer func(file *os.File) {
+			err := file.Close()
+			if err != nil {
+				vlog.Error(err)
+			}
+		}(create)
 		if err != nil {
-			panic("creating " + configPath + " config file error: " + err.Error())
-			return
+			panic("creating " + configPath + " config create error: " + err.Error())
 		}
 		config := NewConfig()
-		_, err = file.WriteString(vjson.PrettifyString(config))
+		_, err = create.WriteString(vjson.PrettifyString(config))
 		if err != nil {
-			panic("initializing " + configPath + " config file error: " + err.Error())
-			return
+			panic("initializing " + configPath + " config create error: " + err.Error())
 		}
 	}
 }
