@@ -104,6 +104,11 @@ func Read(filename string) (string, error) {
 	return string(file), err
 }
 
+func ReadBytes(filename string) ([]byte, error) {
+	file, err := ioutil.ReadFile(filename)
+	return file, err
+}
+
 func Create(first string, more ...string) error {
 	absPath := first
 	for i := range more {

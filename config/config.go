@@ -88,12 +88,7 @@ func getConfigPathDefault() (string, error) {
 	return strs.Concat(dir, string(os.PathSeparator), VDNS_CONFIG_FILE_NAME), nil
 }
 
-func InitWorking() {
-
-}
-
 func init() {
-	InitWorking()
 	timeWriter := &timewriter.TimeWriter{
 		Dir:           "./logs",
 		Compress:      true,
@@ -108,7 +103,7 @@ func init() {
 	}
 	if !file.IsDir(workingPath) {
 		if err := file.MakeDir(workingPath); err != nil {
-			panic(err)
+			vlog.Fatal(err)
 		}
 		vlog.Infof("[Init] working directory: %s\n", workingPath)
 	} else {
@@ -117,7 +112,7 @@ func init() {
 
 	logPath, err := GetLogPath()
 	if err != nil {
-		panic(err)
+		vlog.Fatal(err)
 	}
 	if !file.IsDir(logPath) {
 		if err := file.MakeDir(logPath); err != nil {
@@ -134,7 +129,7 @@ func init() {
 	}
 	if !file.IsFile(configPath) {
 		if err := file.Create(configPath); err != nil {
-			panic(err)
+			vlog.Fatal(err)
 		}
 		vlog.Infof("[Init] config file: %s\n", configPath)
 	} else {
