@@ -31,7 +31,7 @@ func NewDNSPodParameterProvider(credential auth.Credential, signatureComposer co
 	}
 }
 
-func (_this *DNSPodParameterProvider) LoadDescribeParamater(request *models.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
+func (_this *DNSPodParameterProvider) LoadDescribeParameter(request *models.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
@@ -73,7 +73,7 @@ func (_this *DNSPodParameterProvider) LoadDescribeParamater(request *models.Desc
 	return parameter, nil
 }
 
-func (_this *DNSPodParameterProvider) LoadCreateParamater(request *models.CreateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *DNSPodParameterProvider) LoadCreateParameter(request *models.CreateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
@@ -108,7 +108,7 @@ func (_this *DNSPodParameterProvider) LoadCreateParamater(request *models.Create
 	return parameter, nil
 }
 
-func (_this *DNSPodParameterProvider) LoadUpdateParamater(request *models.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *DNSPodParameterProvider) LoadUpdateParameter(request *models.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
@@ -150,7 +150,7 @@ func (_this *DNSPodParameterProvider) LoadUpdateParamater(request *models.Update
 	return parameter, nil
 }
 
-func (_this *DNSPodParameterProvider) LoadDeleteParamater(request *models.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *DNSPodParameterProvider) LoadDeleteParameter(request *models.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}

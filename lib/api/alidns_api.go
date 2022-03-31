@@ -37,7 +37,7 @@ type AliDNSProvider struct {
 }
 
 func (_this *AliDNSProvider) DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error) {
-	p, err := _this.parameterProvider.LoadDescribeParamater(request, _this.Describe)
+	p, err := _this.parameterProvider.LoadDescribeParameter(request, _this.Describe)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (_this *AliDNSProvider) DescribeRecords(request *models.DescribeDomainRecor
 }
 
 func (_this *AliDNSProvider) CreateRecord(request *models.CreateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
-	p, err := _this.parameterProvider.LoadCreateParamater(request, _this.Create)
+	p, err := _this.parameterProvider.LoadCreateParameter(request, _this.Create)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (_this *AliDNSProvider) CreateRecord(request *models.CreateDomainRecordRequ
 }
 
 func (_this *AliDNSProvider) UpdateRecord(request *models.UpdateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
-	p, err := _this.parameterProvider.LoadUpdateParamater(request, _this.Update)
+	p, err := _this.parameterProvider.LoadUpdateParameter(request, _this.Update)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (_this *AliDNSProvider) UpdateRecord(request *models.UpdateDomainRecordRequ
 }
 
 func (_this *AliDNSProvider) DeleteRecord(request *models.DeleteDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
-	p, err := _this.parameterProvider.LoadDeleteParamater(request, _this.Delete)
+	p, err := _this.parameterProvider.LoadDeleteParameter(request, _this.Delete)
 	if err != nil {
 		return nil, err
 	}
