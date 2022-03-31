@@ -40,37 +40,37 @@ func (_this *DNSPodParameterProvider) LoadDescribeParamater(request *models.Desc
 	if err != nil {
 		return nil, errs.NewApiErrorFromError(err)
 	}
-	paramter := _this.loadCommonParamter(action)
-	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
+	parameter := _this.loadCommonParamter(action)
+	parameter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
 
 	// assert record type
 	if !record.Support(request.RecordType) {
 		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
-	paramter.Set(DNSPOD_PARAMETER_RECORD_TYPE, request.RecordType.String())
+	parameter.Set(DNSPOD_PARAMETER_RECORD_TYPE, request.RecordType.String())
 
 	// assert page size
 	if request.PageSize != nil {
-		paramter.Set(DNSPOD_PARAMETER_LIMIT, convert.AsStringValue(request.PageSize))
+		parameter.Set(DNSPOD_PARAMETER_LIMIT, convert.AsStringValue(request.PageSize))
 	}
 
 	// assert offset start from 0
 	if request.PageNumber != nil {
-		paramter.Set(DNSPOD_PARAMETER_OFFSET, convert.AsStringValue(*request.PageNumber-1))
+		parameter.Set(DNSPOD_PARAMETER_OFFSET, convert.AsStringValue(*request.PageNumber-1))
 	}
 
 	// search and parse records by keyword, currently supports searching for host headers and record values
 	if request.ValueKeyWord != nil {
-		paramter.Set(DNSPOD_PARAMETER_KEY_WORD, *request.ValueKeyWord)
+		parameter.Set(DNSPOD_PARAMETER_KEY_WORD, *request.ValueKeyWord)
 	}
 
 	// assert rr key word
 	if request.RRKeyWord != nil {
-		paramter.Set(DNSPOD_PARAMETER_SUBDOMAIN_1, *request.RRKeyWord)
+		parameter.Set(DNSPOD_PARAMETER_SUBDOMAIN_1, *request.RRKeyWord)
 	} else if strs.NotEmpty(domain.SubDomain) {
-		paramter.Set(DNSPOD_PARAMETER_SUBDOMAIN_1, domain.SubDomain)
+		parameter.Set(DNSPOD_PARAMETER_SUBDOMAIN_1, domain.SubDomain)
 	}
-	return paramter, nil
+	return parameter, nil
 }
 
 func (_this *DNSPodParameterProvider) LoadCreateParamater(request *models.CreateDomainRecordRequest, action *string) (*url.Values, error) {
@@ -93,19 +93,19 @@ func (_this *DNSPodParameterProvider) LoadCreateParamater(request *models.Create
 	if err != nil {
 		return nil, errs.NewApiErrorFromError(err)
 	}
-	paramter := _this.loadCommonParamter(action)
-	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
-	paramter.Set(DNSPOD_PARAMETER_RECORD_TYPE, request.RecordType.String())
-	paramter.Set(DNSPOD_PARAMETER_VALUE, strs.StringValue(request.Value))
-	paramter.Set(DNSPOD_PARAMETER_RECORD_LINE, DNSPOD_PARAMETER_DEFAULT)
+	parameter := _this.loadCommonParamter(action)
+	parameter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
+	parameter.Set(DNSPOD_PARAMETER_RECORD_TYPE, request.RecordType.String())
+	parameter.Set(DNSPOD_PARAMETER_VALUE, strs.StringValue(request.Value))
+	parameter.Set(DNSPOD_PARAMETER_RECORD_LINE, DNSPOD_PARAMETER_DEFAULT)
 
 	// assert rr
 	if strs.IsEmpty(domain.SubDomain) {
-		paramter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, record.PAN_ANALYSIS_RR_KEY_WORD.String())
+		parameter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, record.PAN_ANALYSIS_RR_KEY_WORD.String())
 	} else {
-		paramter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, domain.SubDomain)
+		parameter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, domain.SubDomain)
 	}
-	return paramter, nil
+	return parameter, nil
 }
 
 func (_this *DNSPodParameterProvider) LoadUpdateParamater(request *models.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
@@ -133,21 +133,21 @@ func (_this *DNSPodParameterProvider) LoadUpdateParamater(request *models.Update
 	if err != nil {
 		return nil, errs.NewApiErrorFromError(err)
 	}
-	paramter := _this.loadCommonParamter(action)
-	paramter.Set(DNSPOD_PARAMETER_RECORD_ID, *request.ID)
-	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
-	paramter.Set(DNSPOD_PARAMETER_RECORD_TYPE, request.RecordType.String())
-	paramter.Set(DNSPOD_PARAMETER_VALUE, strs.StringValue(request.Value))
-	paramter.Set(DNSPOD_PARAMETER_RECORD_LINE, DNSPOD_PARAMETER_DEFAULT)
+	parameter := _this.loadCommonParamter(action)
+	parameter.Set(DNSPOD_PARAMETER_RECORD_ID, *request.ID)
+	parameter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
+	parameter.Set(DNSPOD_PARAMETER_RECORD_TYPE, request.RecordType.String())
+	parameter.Set(DNSPOD_PARAMETER_VALUE, strs.StringValue(request.Value))
+	parameter.Set(DNSPOD_PARAMETER_RECORD_LINE, DNSPOD_PARAMETER_DEFAULT)
 
 	// assert rr
 	if strs.IsEmpty(domain.SubDomain) {
-		paramter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, record.PAN_ANALYSIS_RR_KEY_WORD.String())
+		parameter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, record.PAN_ANALYSIS_RR_KEY_WORD.String())
 	} else {
-		paramter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, domain.SubDomain)
+		parameter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, domain.SubDomain)
 	}
 
-	return paramter, nil
+	return parameter, nil
 }
 
 func (_this *DNSPodParameterProvider) LoadDeleteParamater(request *models.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
@@ -165,22 +165,22 @@ func (_this *DNSPodParameterProvider) LoadDeleteParamater(request *models.Delete
 	if err != nil {
 		return nil, errs.NewApiErrorFromError(err)
 	}
-	paramter := _this.loadCommonParamter(action)
-	paramter.Set(DNSPOD_PARAMETER_RECORD_ID, *request.ID)
-	paramter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
-	return paramter, nil
+	parameter := _this.loadCommonParamter(action)
+	parameter.Set(DNSPOD_PARAMETER_RECORD_ID, *request.ID)
+	parameter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
+	return parameter, nil
 }
 
 func (_this *DNSPodParameterProvider) loadCommonParamter(action *string) *url.Values {
-	paramater := make(url.Values, 10)
+	parameter := make(url.Values, 10)
 	nonce := strconv.FormatInt(rand.Int63()+time.Now().UnixMilli(), 10)
 	timestamp := strconv.FormatInt(time.Now().UnixMilli()/1000, 10)
-	paramater.Set(DNSPOD_PARAMETER_ACTION, strs.StringValue(action))
-	paramater.Set(DNSPOD_PARAMETER_NONCE, nonce)
-	paramater.Set(DNSPOD_PARAMETER_TIMESTAMP, timestamp)
-	paramater.Set(DNSPOD_PARAMETER_SECRET_ID, _this.credential.GetSecretId())
-	paramater.Set(DNSPOD_PARAMETER_SIGNATUREMETHOD, _this.signatureComposer.SignatureMethod())
-	paramater.Set(DNSPOD_PARAMETER_VERSION, _this.version.StringValue())
+	parameter.Set(DNSPOD_PARAMETER_ACTION, strs.StringValue(action))
+	parameter.Set(DNSPOD_PARAMETER_NONCE, nonce)
+	parameter.Set(DNSPOD_PARAMETER_TIMESTAMP, timestamp)
+	parameter.Set(DNSPOD_PARAMETER_SECRET_ID, _this.credential.GetSecretId())
+	parameter.Set(DNSPOD_PARAMETER_SIGNATUREMETHOD, _this.signatureComposer.SignatureMethod())
+	parameter.Set(DNSPOD_PARAMETER_VERSION, _this.version.StringValue())
 
-	return &paramater
+	return &parameter
 }
