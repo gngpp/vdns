@@ -5,6 +5,8 @@ import (
 	"vdns/cli/config"
 	"vdns/lib/api"
 	"vdns/lib/api/models"
+	"vdns/lib/standard/record"
+	"vdns/lib/util/convert"
 	"vdns/lib/util/strs"
 
 	"github.com/liushuochen/gotable"
@@ -16,12 +18,12 @@ func ShowInfoCommand() *cli.Command {
 	return &cli.Command{
 		Name:    "show",
 		Aliases: []string{"s"},
-		Usage:   "Show vdns information",
+		Usage:   "Show vdns information.",
 		Subcommands: []*cli.Command{
 			{
 				Name:    "provider",
 				Aliases: []string{"p"},
-				Usage:   "support providers",
+				Usage:   "support providers.",
 				Action: func(_ *cli.Context) error {
 					table, err := gotable.Create("provider", "api document")
 					if err != nil {
@@ -42,9 +44,9 @@ func ShowInfoCommand() *cli.Command {
 			{
 				Name:    "record",
 				Aliases: []string{"r"},
-				Usage:   "supports record types",
+				Usage:   "supports record types.",
 				Action: func(_ *cli.Context) error {
-					fmt.Println("supports record types: A|AAAA|NS|MX|CNAME|TXT|SRV|CA|REDIRECT_URL|FORWARD_URL")
+					fmt.Println("supports record types: A、AAAA、NS、MX、CNAME、TXT、SRV、CA、REDIRECT_URL、FORWARD_URL")
 					table, err := gotable.Create("type", "value", "description")
 					if err != nil {
 						return err
@@ -73,7 +75,7 @@ func DNSConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:    "config",
 		Aliases: []string{"c"},
-		Usage:   "Configure dns service provider access key pair",
+		Usage:   "Configure dns service provider access key pair.",
 		Subcommands: []*cli.Command{
 			configCommand("alidns", config.ALIDNS_PROVIDER),
 			configCommand("dnspod", config.DNSPOD_PROVIDER),
@@ -81,7 +83,7 @@ func DNSConfigCommand() *cli.Command {
 			configCommand("cloudflare", config.CLOUDFLARE_PROVIDER),
 			{
 				Name:  "cat",
-				Usage: "Print all dns configuration",
+				Usage: "Print all dns configuration.",
 				Action: func(_ *cli.Context) error {
 					config, err := config.ReadConfig()
 					if err != nil {
@@ -117,11 +119,11 @@ func configCommand(commandName string, providerKey string) *cli.Command {
 	var token string
 	return &cli.Command{
 		Name:  commandName,
-		Usage: "Configure " + commandName + " access key pair",
+		Usage: "Configure " + commandName + " access key pair.",
 		Subcommands: []*cli.Command{
 			{
 				Name:  "cat",
-				Usage: "Print dns provider configuration",
+				Usage: "Print dns provider configuration.",
 				Action: func(_ *cli.Context) error {
 					readConfig, err := config.ReadConfig()
 					if err != nil {
@@ -141,17 +143,17 @@ func configCommand(commandName string, providerKey string) *cli.Command {
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:        "ak",
-				Usage:       "api accessKey",
+				Usage:       "api accessKey.",
 				Destination: &ak,
 			},
 			&cli.StringFlag{
 				Name:        "sk",
-				Usage:       "api secretKey",
+				Usage:       "api secretKey.",
 				Destination: &sk,
 			},
 			&cli.StringFlag{
 				Name:        "token",
-				Usage:       "api token",
+				Usage:       "api token.",
 				Destination: &token,
 			},
 		},
@@ -203,12 +205,12 @@ func ResolveDNSRecord() *cli.Command {
 	cloudflareCommandName := "cloudflare"
 	return &cli.Command{
 		Name:    "resolve",
-		Usage:   "Resolving DNS records",
+		Usage:   "Resolving DNS records.",
 		Aliases: []string{"r"},
 		Subcommands: []*cli.Command{
 			{
 				Name:  alidnsCommandName,
-				Usage: "resolve " + config.ALIDNS_PROVIDER + " DNS records",
+				Usage: "resolve " + config.ALIDNS_PROVIDER + " DNS records.",
 				Subcommands: []*cli.Command{
 					DescribeDNSRecord(config.ALIDNS_PROVIDER),
 					CreateDNSRecord(config.ALIDNS_PROVIDER),
@@ -218,7 +220,7 @@ func ResolveDNSRecord() *cli.Command {
 			},
 			{
 				Name:  dnspodCommandName,
-				Usage: "resolve " + config.DNSPOD_PROVIDER + " DNS records",
+				Usage: "resolve " + config.DNSPOD_PROVIDER + " DNS records.",
 				Subcommands: []*cli.Command{
 					DescribeDNSRecord(config.DNSPOD_PROVIDER),
 					CreateDNSRecord(config.DNSPOD_PROVIDER),
@@ -228,7 +230,7 @@ func ResolveDNSRecord() *cli.Command {
 			},
 			{
 				Name:  huaweidnsCommandName,
-				Usage: "resolve " + config.HUAWERI_DNS_PROVIDER + " DNS records",
+				Usage: "resolve " + config.HUAWERI_DNS_PROVIDER + " DNS records.",
 				Subcommands: []*cli.Command{
 					DescribeDNSRecord(config.HUAWERI_DNS_PROVIDER),
 					CreateDNSRecord(config.HUAWERI_DNS_PROVIDER),
@@ -238,7 +240,7 @@ func ResolveDNSRecord() *cli.Command {
 			},
 			{
 				Name:  cloudflareCommandName,
-				Usage: "resolve " + config.CLOUDFLARE_PROVIDER + " DNS records",
+				Usage: "resolve " + config.CLOUDFLARE_PROVIDER + " DNS records.",
 				Subcommands: []*cli.Command{
 					DescribeDNSRecord(config.CLOUDFLARE_PROVIDER),
 					CreateDNSRecord(config.CLOUDFLARE_PROVIDER),
@@ -251,47 +253,247 @@ func ResolveDNSRecord() *cli.Command {
 }
 
 func DescribeDNSRecord(providerKey string) *cli.Command {
+	var pageSize int64
+	var pageNumber int64
+	var domain string
+	var recordType string
+	var rrKeyWork string
+	var valueKeyWork string
 	return &cli.Command{
 		Name:    "search",
 		Aliases: []string{"s"},
-		Usage:   "describe " + providerKey + " DNS records",
+		Usage:   "describe " + providerKey + " DNS records.",
+		Flags: []cli.Flag{
+			&cli.Int64Flag{
+				Name:        "ps",
+				Usage:       "page size.",
+				Value:       5,
+				Destination: &pageSize,
+			},
+			&cli.Int64Flag{
+				Name:        "pn",
+				Usage:       "page number.",
+				Value:       1,
+				Destination: &pageNumber,
+			},
+			&cli.StringFlag{
+				Name:        "domain",
+				Usage:       "record domain.",
+				Destination: &domain,
+			},
+			&cli.StringFlag{
+				Name:        "type",
+				Usage:       "record type.",
+				Destination: &recordType,
+			},
+			&cli.StringFlag{
+				Name:        "rk",
+				Usage:       "the keywords recorded by the host, (fuzzy matching before and after) pattern search, are not case-sensitive.",
+				Destination: &rrKeyWork,
+			},
+			&cli.StringFlag{
+				Name:        "vk",
+				Usage:       "the record value keyword (fuzzy match before and after) pattern search, not case-sensitive.",
+				Destination: &valueKeyWork,
+			},
+		},
 		Action: func(_ *cli.Context) error {
 			provider, err := getProvider(providerKey)
 			if err != nil {
 				return err
 			}
 			request := models.NewDescribeDomainRecordsRequest()
-			records, err := provider.DescribeRecords(request)
+			request.Domain = &domain
+			request.PageSize = &pageSize
+			request.PageNumber = &pageNumber
+			request.ValueKeyWord = &valueKeyWork
+			request.RRKeyWord = &rrKeyWork
+			//goland:noinspection GoRedundantConversion
+			ofType, b := record.OfType(record.Type(recordType))
+			if b {
+				request.RecordType = ofType
+			}
+			describeRecords, err := provider.DescribeRecords(request)
 			if err != nil {
 				return err
 			}
-			fmt.Println(records)
+			if *describeRecords.ListCount > 0 {
+				table, err := gotable.CreateByStruct(describeRecords.Records[0])
+				if err != nil {
+					return err
+				}
+				for _, record := range describeRecords.Records {
+					_ = table.AddRow([]string{*record.ID, record.RecordType.String(), *record.RR, *record.Domain, *record.Value, *record.Status, convert.AsStringValue(*record.TTL)})
+				}
+				fmt.Print(table)
+				table, err = gotable.Create("Total", "PageSize", "PageNumber")
+				if err != nil {
+					return err
+				}
+				table.AddRow([]string{
+					convert.AsStringValue(*describeRecords.TotalCount),
+					convert.AsStringValue(*describeRecords.PageSize),
+					convert.AsStringValue(*describeRecords.PageNumber),
+				})
+				fmt.Println(table)
+			}
 			return nil
 		},
 	}
 }
 
 func CreateDNSRecord(providerKey string) *cli.Command {
+	var domain string
+	var recordType string
+	var value string
 	return &cli.Command{
 		Name:    "create",
 		Aliases: []string{"c"},
-		Usage:   "create " + providerKey + " DNS record",
+		Usage:   "create " + providerKey + " DNS record.",
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:        "domain",
+				Usage:       "domain record.",
+				Destination: &domain,
+			},
+			&cli.StringFlag{
+				Name:        "type",
+				Usage:       "domain record type.",
+				Destination: &recordType,
+			},
+			&cli.StringFlag{
+				Name:        "value",
+				Usage:       "domain record value.",
+				Destination: &value,
+			},
+		},
+		Action: func(_ *cli.Context) error {
+			provider, err := getProvider(providerKey)
+			if err != nil {
+				return err
+			}
+			request := models.NewCreateDomainRecordRequest()
+			request.Domain = &domain
+			request.Value = &value
+			//goland:noinspection GoRedundantConversion
+			ofType, b := record.OfType(record.Type(recordType))
+			if b {
+				request.RecordType = &ofType
+			}
+			createRecord, err := provider.CreateRecord(request)
+			if err != nil {
+				return err
+			}
+			table, err := gotable.CreateByStruct(createRecord)
+			if err != nil {
+				return err
+			}
+			_ = table.AddRow([]string{*createRecord.RequestId, *createRecord.RecordId})
+			fmt.Println(table)
+			return nil
+		},
 	}
 }
 
 func UpdateDNSRecord(providerKey string) *cli.Command {
+	var id string
+	var domain string
+	var recordType string
+	var value string
 	return &cli.Command{
 		Name:    "update",
 		Aliases: []string{"u"},
-		Usage:   "update " + providerKey + " DNS record",
+		Usage:   "update " + providerKey + " DNS record.",
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:        "id",
+				Usage:       "domain record identifier",
+				Destination: &id,
+			},
+			&cli.StringFlag{
+				Name:        "domain",
+				Usage:       "domain record.",
+				Destination: &domain,
+			},
+			&cli.StringFlag{
+				Name:        "type",
+				Usage:       "domain record type.",
+				Destination: &recordType,
+			},
+			&cli.StringFlag{
+				Name:        "value",
+				Usage:       "domain record value.",
+				Destination: &value,
+			},
+		},
+		Action: func(_ *cli.Context) error {
+			provider, err := getProvider(providerKey)
+			if err != nil {
+				return err
+			}
+			request := models.NewUpdateDomainRecordRequest()
+			request.ID = &id
+			request.Domain = &domain
+			request.Value = &value
+			//goland:noinspection GoRedundantConversion
+			ofType, b := record.OfType(record.Type(recordType))
+			if b {
+				request.RecordType = &ofType
+			}
+			updateRecord, err := provider.UpdateRecord(request)
+			if err != nil {
+				return err
+			}
+			table, err := gotable.CreateByStruct(updateRecord)
+			if err != nil {
+				return err
+			}
+			_ = table.AddRow([]string{*updateRecord.RequestId, *updateRecord.RecordId})
+			fmt.Println(table)
+			return nil
+		},
 	}
 }
 
 func DeleteDNSRecord(providerKey string) *cli.Command {
+	var id string
+	var domain string
 	return &cli.Command{
 		Name:    "delete",
 		Aliases: []string{"d"},
-		Usage:   "delete " + providerKey + " DNS record",
+		Usage:   "delete " + providerKey + " DNS record.",
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:        "id",
+				Usage:       "record identifier.",
+				Destination: &id,
+			},
+			&cli.StringFlag{
+				Name:        "domain",
+				Usage:       "record super domain.",
+				Destination: &domain,
+			},
+		},
+		Action: func(_ *cli.Context) error {
+			provider, err := getProvider(providerKey)
+			if err != nil {
+				return err
+			}
+			request := models.NewDeleteDomainRecordRequest()
+			request.Domain = &domain
+			request.ID = &id
+			deleteRecord, err := provider.DeleteRecord(request)
+			if err != nil {
+				return err
+			}
+			table, err := gotable.CreateByStruct(deleteRecord)
+			if err != nil {
+				return err
+			}
+			_ = table.AddRow([]string{*deleteRecord.RequestId, *deleteRecord.RecordId})
+			fmt.Println(table)
+			return nil
+		},
 	}
 }
 
