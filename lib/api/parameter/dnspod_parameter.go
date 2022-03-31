@@ -119,7 +119,7 @@ func (_this *DNSPodParameterProvider) LoadUpdateParameter(request *models.Update
 	}
 
 	// assert record type assert
-	if !record.Support(request.RecordType) {
+	if !record.Support(*request.RecordType) {
 		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
 

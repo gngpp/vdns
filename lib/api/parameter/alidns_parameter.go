@@ -120,7 +120,7 @@ func (_this *AliDNSParameterProvier) LoadUpdateParameter(request *models.UpdateD
 	}
 
 	// assert record type
-	if !record.Support(request.RecordType) {
+	if !record.Support(*request.RecordType) {
 		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
 

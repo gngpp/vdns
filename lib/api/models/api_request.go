@@ -79,10 +79,10 @@ func NewCreateDomainRecordRequest() *CreateDomainRecordRequest {
 }
 
 type UpdateDomainRecordRequest struct {
-	ID         *string     `json:"id,omitempty"`
-	Domain     *string     `json:"domain,omitempty"`
-	Value      *string     `json:"value,omitempty"`
-	RecordType record.Type `json:"record_type,omitempty"`
+	ID         *string      `json:"id,omitempty"`
+	Domain     *string      `json:"domain,omitempty"`
+	Value      *string      `json:"value,omitempty"`
+	RecordType *record.Type `json:"record_type,omitempty"`
 }
 
 func (_this *UpdateDomainRecordRequest) SetID(id string) *UpdateDomainRecordRequest {
@@ -101,7 +101,7 @@ func (_this *UpdateDomainRecordRequest) SetValue(value string) *UpdateDomainReco
 }
 
 func (_this *UpdateDomainRecordRequest) SetRecordType(recordType record.Type) *UpdateDomainRecordRequest {
-	_this.RecordType = recordType
+	_this.RecordType = &recordType
 	return _this
 }
 
