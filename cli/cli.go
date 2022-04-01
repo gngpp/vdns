@@ -3,29 +3,24 @@ package main
 import (
 	"github.com/urfave/cli/v2"
 	"os"
+	"time"
 	"vdns/cli/command"
 	"vdns/lib/api"
 	"vdns/lib/vlog"
 )
 
-//goland:noinspection SpellCheckingInspection
-const (
-	CliVersion = api.Version
-	Author     = "zf1976"
-	CliName    = "vdns"
-	Usage      = "vdns is a tool that supports multi-DNS service provider resolution operations."
-	Email      = "verticle@foxmail.com"
-)
-
 var app = cli.NewApp()
 
 //goland:noinspection SpellCheckingInspection
+const (
+	CliVersion = api.Version
+	CliName    = "vdns"
+	Usage      = "A tool that supports multi-DNS service provider resolution operations"
+)
+
+//goland:noinspection SpellCheckingInspection
 func main() {
-	app.Commands = []*cli.Command{
-		command.ShowInfoCommand(),
-		command.DNSConfigCommand(),
-		command.ResolveDNSRecord(),
-	}
+	initCLI()
 	err := app.Run(os.Args)
 	if err != nil {
 		vlog.Fatalf("running err: %v", err)
@@ -33,13 +28,40 @@ func main() {
 	}
 }
 
+//goland:noinspection SpellCheckingInspection
+func initCLI() {
+
+	app.Commands = []*cli.Command{
+		command.ShowCommand(),
+		command.ConfigCommand(),
+		command.ResolveRecord(),
+		{
+			Name:  "start",
+			Usage: "Start vdns service",
+		},
+		{
+			Name:  "stop",
+			Usage: "Stop vdns service",
+		},
+		{
+			Name:  "restart",
+			Usage: "Restart vdns service",
+		},
+		{
+			Name:  "install",
+			Usage: "Install vdns service",
+		},
+		{
+			Name:  "uninstall",
+			Usage: "Uninstall vdns service",
+		},
+	}
+}
+
 func init() {
 	app.Name = CliName
 	app.HelpName = CliName
 	app.Usage = Usage
-	//app.Authors = []*cli.Author{{
-	//	Name:  Author,
-	//	Email: Email,
-	//}}
-	//app.Version = CliVersion
+	app.Compiled = time.Now()
+	app.Version = CliVersion
 }

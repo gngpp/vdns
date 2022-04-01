@@ -16,7 +16,7 @@ GOPATH=$(shell `which go` env GOPATH)
 #	@$(GO) build $(GO_FLAGS) -o $(BIN) $(DIR_SRC)
 #
 #build_docker_image:
-#	@$(DOCKER_CMD) build -f ./Dockerfile -t vdns-web:$(VERSION) .
+#	@$(DOCKER_CMD) build -f ./Dockerfile -t vdns-server:$(VERSION) .
 #
 #testing:
 #	@$(cd ./testing)
