@@ -18,7 +18,6 @@ const (
 	Usage      = "A tool that supports multi-DNS service provider resolution operations"
 )
 
-//goland:noinspection SpellCheckingInspection
 func main() {
 	initCLI()
 	err := app.Run(os.Args)
@@ -28,33 +27,12 @@ func main() {
 	}
 }
 
-//goland:noinspection SpellCheckingInspection
 func initCLI() {
-
 	app.Commands = []*cli.Command{
 		command.ShowCommand(),
 		command.ConfigCommand(),
 		command.ResolveRecord(),
-		{
-			Name:  "start",
-			Usage: "Start vdns service",
-		},
-		{
-			Name:  "stop",
-			Usage: "Stop vdns service",
-		},
-		{
-			Name:  "restart",
-			Usage: "Restart vdns service",
-		},
-		{
-			Name:  "install",
-			Usage: "Install vdns service",
-		},
-		{
-			Name:  "uninstall",
-			Usage: "Uninstall vdns service",
-		},
+		command.ServerCommand(),
 	}
 }
 
