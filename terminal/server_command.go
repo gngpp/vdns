@@ -1,4 +1,4 @@
-package command
+package terminal
 
 import (
 	"github.com/kardianos/service"

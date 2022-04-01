@@ -1,8 +1,8 @@
-package command
+package terminal
 
 import (
 	"fmt"
-	"vdns/cli/config"
+	"vdns/config"
 	"vdns/lib/api"
 	"vdns/lib/api/models"
 	"vdns/lib/standard/record"

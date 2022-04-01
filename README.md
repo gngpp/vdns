@@ -9,13 +9,13 @@ NAME:
    vdns - vdns is a tool that supports multi-DNS service provider resolution operations.
 
 USAGE:
-   vdns [global options] command [command options] [arguments...]
+   vdns [global options] terminal [terminal options] [arguments...]
 
 COMMANDS:
    show, s     Show vdns information.
    config, c   Configure dns service provider access key pair.
    resolve, r  Resolving DNS records.
-   help, h     Shows a list of commands or help for one command
+   help, h     Shows a list of commands or help for one terminal
 
 GLOBAL OPTIONS:
    --help, -h  show help (default: false)
@@ -28,12 +28,12 @@ NAME:
    vdns show - Show vdns information.
 
 USAGE:
-   vdns show command [command options] [arguments...]
+   vdns show terminal [terminal options] [arguments...]
 
 COMMANDS:
    provider, p  support providers.
    record, r    supports record types.
-   help, h      Shows a list of commands or help for one command
+   help, h      Shows a list of commands or help for one terminal
 
 OPTIONS:
    --help, -h  show help (default: false)
@@ -46,7 +46,7 @@ NAME:
    vdns config - Configure dns service provider access key pair.
 
 USAGE:
-   vdns config command [command options] [arguments...]
+   vdns config terminal [terminal options] [arguments...]
 
 COMMANDS:
    alidns      Configure alidns access key pair.
@@ -54,7 +54,7 @@ COMMANDS:
    huaweidns   Configure huaweidns access key pair.
    cloudflare  Configure cloudflare access key pair.
    cat         Print all dns configuration.
-   help, h     Shows a list of commands or help for one command
+   help, h     Shows a list of commands or help for one terminal
 
 OPTIONS:
    --help, -h  show help (default: false)
@@ -64,11 +64,11 @@ NAME:
    vdns config alidns - Configure alidns access key pair.
 
 USAGE:
-   vdns config alidns command [command options] [arguments...]
+   vdns config alidns terminal [terminal options] [arguments...]
 
 COMMANDS:
    cat      Print dns provider configuration.
-   help, h  Shows a list of commands or help for one command
+   help, h  Shows a list of commands or help for one terminal
 
 OPTIONS:
    --ak value     api accessKey.
@@ -84,14 +84,14 @@ NAME:
    vdns resolve alidns - resolve AliDNS DNS records.
 
 USAGE:
-   vdns resolve alidns command [command options] [arguments...]
+   vdns resolve alidns terminal [terminal options] [arguments...]
 
 COMMANDS:
    search, s  describe AliDNS DNS records.
    create, c  create AliDNS DNS record.
    update, u  update AliDNS DNS record.
    delete, d  delete AliDNS DNS record.
-   help, h    Shows a list of commands or help for one command
+   help, h    Shows a list of commands or help for one terminal
 
 OPTIONS:
    --help, -h  show help (default: false)
@@ -101,7 +101,7 @@ NAME:
    vdns resolve alidns search - describe AliDNS DNS records.
 
 USAGE:
-   vdns resolve alidns search [command options] [arguments...]
+   vdns resolve alidns search [terminal options] [arguments...]
 
 OPTIONS:
    --ps value      page size. (default: 5)

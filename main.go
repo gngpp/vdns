@@ -4,9 +4,9 @@ import (
 	"github.com/urfave/cli/v2"
 	"os"
 	"time"
-	"vdns/cli/command"
 	"vdns/lib/api"
 	"vdns/lib/vlog"
+	"vdns/terminal"
 )
 
 var app = cli.NewApp()
@@ -29,10 +29,10 @@ func main() {
 
 func initCLI() {
 	app.Commands = []*cli.Command{
-		command.ShowCommand(),
-		command.ConfigCommand(),
-		command.ResolveRecord(),
-		command.ServerCommand(),
+		terminal.ShowCommand(),
+		terminal.ConfigCommand(),
+		terminal.ResolveRecord(),
+		terminal.ServerCommand(),
 	}
 }
 

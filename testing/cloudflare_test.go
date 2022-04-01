@@ -25,7 +25,6 @@ func getZones(domain *vhttp.Domain) (err error) {
 		nil,
 		nil,
 	)
-
 	return
 }
 
