@@ -44,10 +44,10 @@ CGO_ENABLED=0 GOOS=linux GOARCH=mips go build -ldflags="-s -w" -o linux_mips_vdn
 tar -czvf linux_mips_vdns.tar.gz ./linux_mips_vdns
 
 CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -ldflags="-s -w" -o windows_386_vdns.exe ./main.go
-tar -czvf windows_386_vdns.tar.gz ./windows_386_vdns
+tar -czvf windows_386_vdns.tar.gz ./windows_386_vdns.exe
 
 CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o windows_amd64_vdns.exe ./main.go
-tar -czvf windows_amd64_vdns.tar.gz ./windows_amd64_vdns
+tar -czvf windows_amd64_vdns.tar.gz ./windows_amd64_vdns.exe
 
 CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o darwin_amd64_vdns ./main.go
 tar -czvf darwin_amd64_vdns.tar.gz ./darwin_amd64_vdns
