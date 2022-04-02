@@ -29,7 +29,7 @@ func main() {
 
 func initCLI() {
 	app.Commands = []*cli.Command{
-		terminal.ShowCommand(),
+		terminal.SearchCommand(),
 		terminal.ConfigCommand(),
 		terminal.ResolveRecord(),
 		terminal.ServerCommand(),

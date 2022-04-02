@@ -62,10 +62,10 @@ func NewConfig() *Config {
 	config := Config{
 		ConfigsMap: Configs{},
 	}
-	config.ConfigsMap.Add(ALIDNS_PROVIDER, NewDNSConfig(ALIDNS_PROVIDER))
-	config.ConfigsMap.Add(DNSPOD_PROVIDER, NewDNSConfig(DNSPOD_PROVIDER))
-	config.ConfigsMap.Add(HUAWERI_DNS_PROVIDER, NewDNSConfig(HUAWERI_DNS_PROVIDER))
-	config.ConfigsMap.Add(CLOUDFLARE_PROVIDER, NewDNSConfig(CLOUDFLARE_PROVIDER))
+	config.ConfigsMap.Add(AlidnsProvider, NewDNSConfig(AlidnsProvider))
+	config.ConfigsMap.Add(DnspodProvider, NewDNSConfig(DnspodProvider))
+	config.ConfigsMap.Add(HuaweiDnsProvider, NewDNSConfig(HuaweiDnsProvider))
+	config.ConfigsMap.Add(CloudflareProvider, NewDNSConfig(CloudflareProvider))
 	return &config
 }
 
@@ -78,7 +78,7 @@ func ReadCredentials(key string) (auth.Credential, error) {
 	if get == nil {
 		return nil, errors.New("init credentials not found")
 	}
-	if key != CLOUDFLARE_PROVIDER {
+	if key != CloudflareProvider {
 		return auth.NewBasicCredential(*get.Ak, *get.Sk), nil
 	} else {
 		return auth.NewTokenCredential(*get.Token), nil

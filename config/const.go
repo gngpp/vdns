@@ -1,12 +1,11 @@
 package config
 
 // provides
-//goland:noinspection GoUnusedConst,GoSnakeCaseUsage,SpellCheckingInspection
 const (
-	ALIDNS_PROVIDER      = "AliDNS"
-	DNSPOD_PROVIDER      = "DNSPod"
-	CLOUDFLARE_PROVIDER  = "Cloudflare"
-	HUAWERI_DNS_PROVIDER = "HuaweiDNS"
+	AlidnsProvider     = "alidns"
+	DnspodProvider     = "dnspod"
+	CloudflareProvider = "cloudflare"
+	HuaweiDnsProvider  = "huaweidns"
 )
 
 // ipv4 api endpoint
@@ -26,3 +25,11 @@ const (
 	V6Api2 = "https://v6.myip.la/json"
 	V6Api3 = "https://speed.neu6.edu.cn/getIP.php"
 )
+
+func GetIpv4ApiList() []string {
+	return []string{V4Api1, V4Api2, V4Api3, V4Api4, V4Api5}
+}
+
+func GetIpv6ApiList() []string {
+	return []string{V6Api1, V6Api2, V6Api3}
+}
