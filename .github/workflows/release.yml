@@ -35,13 +35,13 @@ jobs:
           files: |
             freebsd_386_vdns.tar.gz
             freebsd_amd64_vdns.tar.gz
-            freebsd_arm_vdns.tar.gz
+            freebsd_arm64_vdns.tar.gz
             linux_386_vdns.tar.gz
             linux_amd64_vdns.tar.gz
             linux_arm64_vdns.tar.gz
-            linux_arm_v5_vdns.tar.gz
-            linux_arm_v6_vdns.tar.gz
-            linux_arm_v7_vdns.tar.gz
+            linux_armv5_vdns.tar.gz
+            linux_armv6_vdns.tar.gz
+            linux_armv7_vdns.tar.gz
             linux_mips64le_vdns.tar.gz
             linux_mips64_vdns.tar.gz
             linux_mipsle_vdns.tar.gz
