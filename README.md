@@ -12,6 +12,7 @@
 		<img alt="GitHub Release" src="https://img.shields.io/github/v/release/zf1976/vdns.svg?logo=github">
 	</a>
 </p>
+
 # vdns
 `vdns`支持多平台`DNS`解析操作, 同时以服务方式支持`DDNS`，支持多种解析记录类型：A、AAAA、NS、MX、CNAME、TXT、SRV、CA、REDIRECT_URL、FORWARD_URL
 
