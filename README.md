@@ -3,7 +3,7 @@
 		<img src="https://img.shields.io/badge/license-MIT-blue.svg"/>
 	</a>
 	<a target="_blank" href="https://go.dev/">
-		<img src="https://img.shields.io/badge/Go1.17+-green.svg"/>
+		<img src="https://img.shields.io/github/go-mod/go-version/zf1976/vdns"/>
 	</a>
 	<a target="_blank" href="https://github.com/zf1976/vdns/actions">
 		<img src="https://github.com/zf1976/vdns/actions/workflows/release.yml/badge.svg"/>
