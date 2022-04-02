@@ -15,7 +15,7 @@ var app = cli.NewApp()
 const (
 	CliVersion = api.Version
 	CliName    = "vdns"
-	Usage      = "A tool that supports multi-DNS service provider resolution operations"
+	Usage      = "This is A tool that supports multi-DNS service provider resolution operations."
 )
 
 func main() {
@@ -41,5 +41,4 @@ func init() {
 	app.HelpName = CliName
 	app.Usage = Usage
 	app.Compiled = time.Now()
-	app.Version = CliVersion
 }

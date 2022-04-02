@@ -2,6 +2,7 @@ package terminal
 
 import (
 	"github.com/kardianos/service"
+	"github.com/liushuochen/gotable"
 	"github.com/urfave/cli/v2"
 	"os"
 	"strings"
@@ -25,9 +26,17 @@ func ServerCommand() *cli.Command {
 			},
 		}
 	}
+
+	table, err := gotable.Create("Usage")
+	if err != nil {
+		vlog.Fatalf("error creating")
+	}
+	_ = table.AddRow([]string{"Service will install / un-install, start / stop, and run a program as a service (daemon)."})
+	_ = table.AddRow([]string{"Currently supports Windows XP+, Linux/(systemd | Upstart | SysV), and OSX/Launchd."})
 	return &cli.Command{
 		Name:        "server",
 		Usage:       "Use vdns server (support DDNS)",
+		Description: table.String(),
 		Subcommands: subCommand,
 	}
 }
