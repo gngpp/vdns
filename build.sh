@@ -8,7 +8,7 @@ CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o linux_amd64_v
 tar -czvf linux_amd64_vdns.tar.gz ./linux_amd64_vdns
 
 CGO_ENABLED=0 GOOS=linux GOARCH=386 go build -ldflags="-s -w" -o linux_386_vdns ./main.go
-tar -czvf linux_386_vdns.tar.gz ./linux_386_qrcode-token
+tar -czvf linux_386_vdns.tar.gz ./linux_386_vdns
 
 CGO_ENABLED=0 GOOS=freebsd GOARCH=386 go build -ldflags="-s -w" -o freebsd_386_vdns ./main.go
 tar -czvf freebsd_386_vdns.tar.gz ./freebsd_386_vdns
