@@ -11,14 +11,6 @@ import (
 	"vdns/lib/vlog"
 )
 
-//goland:noinspection GoUnusedConst,GoSnakeCaseUsage,SpellCheckingInspection
-const (
-	ALIDNS_PROVIDER      = "AliDNS"
-	DNSPOD_PROVIDER      = "DNSPod"
-	CLOUDFLARE_PROVIDER  = "Cloudflare"
-	HUAWERI_DNS_PROVIDER = "HuaweiDNS"
-)
-
 var configPath string
 
 type Configs map[string]*DNSConfig
@@ -107,6 +99,9 @@ func NewDNSConfig(name string) *DNSConfig {
 		Sk:       strs.String(""),
 		Token:    strs.String(""),
 	}
+}
+
+type DDNSConfig struct {
 }
 
 func ReadConfig() (*Config, error) {
