@@ -1,11 +1,14 @@
 package terminal
 
 import (
+	"errors"
 	"fmt"
 	"github.com/liushuochen/gotable"
+	"github.com/liushuochen/gotable/table"
 	"github.com/urfave/cli/v2"
 	"math"
 	"vdns/config"
+	"vdns/lib/util/vhttp"
 )
 
 //goland:noinspection SpellCheckingInspection
@@ -39,16 +42,28 @@ func SearchCommand() *cli.Command {
 				Action: recordAction(),
 			},
 			{
-				Name:    "print-api",
-				Aliases: []string{"pa"},
-				Usage:   "Print common Request APIs",
+				Name:    "print-ip-api",
+				Aliases: []string{"pia"},
+				Usage:   "Print search ip request api list",
 				Flags: []cli.Flag{
 					&cli.StringFlag{
 						Name:  "path",
 						Usage: "sava table to csv filepath",
 					},
 				},
-				Action: printApiAction(),
+				Action: printIpApiAction(),
+			},
+			{
+				Name:    "test-ip-api",
+				Aliases: []string{"tia"},
+				Usage:   "Test the API for requesting query ip",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:  "type",
+						Usage: "value is ipv4 or ipv6",
+					},
+				},
+				Action: testIpApiAction(),
 			},
 		},
 	}
@@ -102,7 +117,7 @@ func providerAction() cli.ActionFunc {
 	}
 }
 
-func printApiAction() cli.ActionFunc {
+func printIpApiAction() cli.ActionFunc {
 	return func(ctx *cli.Context) error {
 		table, err := gotable.Create("Ipv4 Request API", "Ipv6 Request API")
 		if err != nil {
@@ -126,5 +141,36 @@ func printApiAction() cli.ActionFunc {
 		}
 
 		return printTableAndSavaToCSVFile(table, ctx)
+	}
+}
+
+func testIpApiAction() cli.ActionFunc {
+	return func(ctx *cli.Context) error {
+		ipType := ctx.String("type")
+		if (ipType != "ipv4") && (ipType != "ipv6") {
+			return errors.New("ip type must be: ipv4 or ipv6")
+		}
+		var table *table.Table
+		var err error
+		var ipApiList []string
+		if ipType == "ipv4" {
+			table, err = gotable.Create("Ipv4 Request API", "Status")
+			if err != nil {
+				return err
+			}
+			ipApiList = config.GetIpv4ApiList()
+		}
+		if ipType == "ipv6" {
+			table, err = gotable.Create("Ipv6 Request API", "Status")
+			if err != nil {
+				return err
+			}
+			ipApiList = config.GetIpv6ApiList()
+		}
+		for _, api := range ipApiList {
+			_ = table.AddRow([]string{api, vhttp.GetIpv4AddrForUrl(api)})
+		}
+		fmt.Println(table)
+		return err
 	}
 }

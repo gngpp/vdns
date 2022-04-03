@@ -5,7 +5,6 @@ import (
 	"github.com/urfave/cli/v2"
 	"io"
 	"io/ioutil"
-	"net/http"
 	"strings"
 	"vdns/lib/util/vhttp"
 	"vdns/lib/vlog"
@@ -31,17 +30,13 @@ func requestCommand() *cli.Command {
 				Usage: "request url",
 			},
 		},
-
 		Action: func(ctx *cli.Context) error {
 			url := strings.TrimSpace(ctx.String("url"))
-			client := vhttp.CreateClient()
-			request, err := http.NewRequest(vhttp.HttpMethodGet.String(), url, nil)
-			request.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36")
+			req, err := vhttp.Get(url)
 			if err != nil {
-				return nil
+				return err
 			}
-			response, err := client.Do(request)
-			body := response.Body
+			body := req.Body
 			defer func(body io.ReadCloser) {
 				err := body.Close()
 				if err != nil {
@@ -49,7 +44,7 @@ func requestCommand() *cli.Command {
 				}
 			}(body)
 			bytes, err := ioutil.ReadAll(body)
-			fmt.Printf("\n%v\n", string(bytes))
+			fmt.Printf("body: %v", string(bytes))
 			return nil
 		},
 	}

@@ -16,7 +16,6 @@ const (
 	V4Api2 = "https://api-ipv4.ip.sb/ip"
 	V4Api3 = "https://api.ip.sb/ip"
 	V4Api4 = "https://myip.ipip.net"
-	V4Api5 = "https://api-ipv4.ip.sb/ip"
 )
 
 // ipv6 api endpoint
@@ -28,7 +27,7 @@ const (
 )
 
 func GetIpv4ApiList() []string {
-	return []string{V4Api1, V4Api2, V4Api3, V4Api4, V4Api5}
+	return []string{V4Api1, V4Api2, V4Api3, V4Api4}
 }
 
 func GetIpv6ApiList() []string {
