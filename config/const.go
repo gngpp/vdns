@@ -1,6 +1,7 @@
 package config
 
 // provides
+//goland:noinspection SpellCheckingInspection
 const (
 	AlidnsProvider     = "alidns"
 	DnspodProvider     = "dnspod"

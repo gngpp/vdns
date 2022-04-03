@@ -91,10 +91,10 @@ func providerAction() func(*cli.Context) error {
 		if err != nil {
 			return err
 		}
-		_ = table.AddRow([]string{"AliDNS", "https://help.aliyun.com/document_detail/39863.html"})
-		_ = table.AddRow([]string{"DNSPod", "https://cloud.tencent.com/document/product/1427"})
-		_ = table.AddRow([]string{"Cloudflare", "https://api.cloudflare.com/#dns-records-for-a-zone-properties"})
-		_ = table.AddRow([]string{"HuaweiDNS", "https://support.huaweicloud.com/function-dns/index.html"})
+		_ = table.AddRow([]string{config.AlidnsProvider, "https://help.aliyun.com/document_detail/39863.html"})
+		_ = table.AddRow([]string{config.DnspodProvider, "https://cloud.tencent.com/document/product/1427"})
+		_ = table.AddRow([]string{config.CloudflareProvider, "https://api.cloudflare.com/#dns-records-for-a-zone-properties"})
+		_ = table.AddRow([]string{config.HuaweiDnsProvider, "https://support.huaweicloud.com/function-dns/index.html"})
 
 		fmt.Print(table)
 		path := ctx.String("path")

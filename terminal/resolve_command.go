@@ -85,7 +85,7 @@ func describeDNSRecord(providerKey string) *cli.Command {
 			&cli.Int64Flag{
 				Name:        "ps",
 				Usage:       "page size",
-				Value:       5,
+				Value:       10,
 				Destination: &pageSize,
 			},
 			&cli.Int64Flag{

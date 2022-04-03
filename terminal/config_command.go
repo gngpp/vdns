@@ -16,10 +16,10 @@ func ConfigCommand() *cli.Command {
 		Aliases: []string{"c"},
 		Usage:   "Configure dns service provider access key pair",
 		Subcommands: []*cli.Command{
-			configCommand("alidns", config.AlidnsProvider),
-			configCommand("dnspod", config.DnspodProvider),
-			configCommand("huaweidns", config.HuaweiDnsProvider),
-			configCommand("cloudflare", config.CloudflareProvider),
+			configCommand(config.AlidnsProvider),
+			configCommand(config.DnspodProvider),
+			configCommand(config.HuaweiDnsProvider),
+			configCommand(config.CloudflareProvider),
 			{
 				Name:  "cat",
 				Usage: "Print all dns configuration",
@@ -52,7 +52,7 @@ func ConfigCommand() *cli.Command {
 }
 
 //goland:noinspection SpellCheckingInspection
-func configCommand(commandName string, providerKey string) *cli.Command {
+func configCommand(commandName string) *cli.Command {
 	var ak string
 	var sk string
 	var token string
@@ -69,7 +69,7 @@ func configCommand(commandName string, providerKey string) *cli.Command {
 					if err != nil {
 						return err
 					}
-					dnsConfig := readConfig.ConfigsMap.Get(providerKey)
+					dnsConfig := readConfig.ConfigsMap.Get(commandName)
 					table, err := gotable.CreateByStruct(dnsConfig)
 					if err != nil {
 						return err
@@ -99,7 +99,7 @@ func configCommand(commandName string, providerKey string) *cli.Command {
 		},
 		Action: func(ctx *cli.Context) error {
 			readConfig, err := config.ReadConfig()
-			dnsConfig := readConfig.ConfigsMap.Get(providerKey)
+			dnsConfig := readConfig.ConfigsMap.Get(commandName)
 			if err != nil {
 				return err
 			}
