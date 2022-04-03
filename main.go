@@ -13,9 +13,8 @@ var app = cli.NewApp()
 
 //goland:noinspection SpellCheckingInspection
 const (
-	CliVersion = api.Version
-	CliName    = "vdns"
-	Usage      = "This is A tool that supports multi-DNS service provider resolution operations."
+	CliName = "vdns"
+	Usage   = "This is A tool that supports multi-DNS service provider resolution operations."
 )
 
 func main() {
@@ -33,6 +32,7 @@ func initCLI() {
 		terminal.ConfigCommand(),
 		terminal.ResolveRecord(),
 		terminal.ServerCommand(),
+		terminal.ToolCommand(),
 	}
 }
 
@@ -40,5 +40,6 @@ func init() {
 	app.Name = CliName
 	app.HelpName = CliName
 	app.Usage = Usage
+	app.Version = api.Version
 	app.Compiled = time.Now()
 }

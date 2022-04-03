@@ -18,9 +18,8 @@ func ResolveRecord() *cli.Command {
 	huaweidnsCommandName := "huaweidns"
 	cloudflareCommandName := "cloudflare"
 	return &cli.Command{
-		Name:    "resolve",
-		Usage:   "Resolving dns records",
-		Aliases: []string{"r"},
+		Name:  "resolve",
+		Usage: "Resolving dns records",
 		Subcommands: []*cli.Command{
 			{
 				Name:    alidnsCommandName,
@@ -78,9 +77,8 @@ func describeDNSRecord(providerKey string) *cli.Command {
 	var rrKeyWork string
 	var valueKeyWork string
 	return &cli.Command{
-		Name:    "search",
-		Aliases: []string{"s"},
-		Usage:   "Search " + providerKey + " records",
+		Name:  "describe",
+		Usage: "Describe " + providerKey + " records",
 		Flags: []cli.Flag{
 			&cli.Int64Flag{
 				Name:        "ps",
@@ -148,7 +146,7 @@ func describeDNSRecord(providerKey string) *cli.Command {
 				if err != nil {
 					return err
 				}
-				table.AddRow([]string{
+				_ = table.AddRow([]string{
 					convert.AsStringValue(*describeRecords.TotalCount),
 					convert.AsStringValue(*describeRecords.PageSize),
 					convert.AsStringValue(*describeRecords.PageNumber),

@@ -13,39 +13,34 @@ import (
 func ConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:    "config",
-		Aliases: []string{"c"},
+		Aliases: []string{"conf"},
 		Usage:   "Configure dns service provider access key pair",
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:  "path",
+				Usage: "sava data table to csv filepath",
+			},
+		},
 		Subcommands: []*cli.Command{
 			configCommand(config.AlidnsProvider),
 			configCommand(config.DnspodProvider),
 			configCommand(config.HuaweiDnsProvider),
 			configCommand(config.CloudflareProvider),
 			{
-				Name:  "cat",
+				Name:  "print",
 				Usage: "Print all dns configuration",
-				Action: func(_ *cli.Context) error {
-					config, err := config.ReadConfig()
-					if err != nil {
-						return err
-					}
-					table, err := gotable.Create("provider", "ak", "sk", "token")
-					for key := range config.ConfigsMap {
-						dnsConfig := config.ConfigsMap.Get(key)
-						if dnsConfig != nil {
-							err := table.AddRow([]string{*dnsConfig.Provider, *dnsConfig.Ak, *dnsConfig.Sk, *dnsConfig.Token})
-							if err != nil {
-								return err
-							}
-						} else {
-							err := table.AddRow([]string{key})
-							if err != nil {
-								return err
-							}
-						}
-					}
-					fmt.Println(table)
-					return nil
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:  "path",
+						Usage: "sava table to csv filepath",
+					},
 				},
+				Action: printConfigAction(),
+			},
+			{
+				Name:   "import",
+				Usage:  "Import all dns configuration",
+				Action: importConfigAction(),
 			},
 		},
 	}
@@ -57,13 +52,15 @@ func configCommand(commandName string) *cli.Command {
 	var sk string
 	var token string
 	return &cli.Command{
-		Name:    commandName,
-		Aliases: []string{convert.AsStringValue(string(commandName[0]))},
-		Usage:   "Configure " + commandName + " access key pair",
+		Name:                   commandName,
+		Aliases:                []string{convert.AsStringValue(string(commandName[0]))},
+		Usage:                  "Configure " + commandName + " access key pair",
+		UseShortOptionHandling: true,
 		Subcommands: []*cli.Command{
 			{
-				Name:  "cat",
-				Usage: "Print dns provider configuration",
+				Name:    "print",
+				Aliases: []string{"p"},
+				Usage:   "Print dns provider configuration",
 				Action: func(_ *cli.Context) error {
 					readConfig, err := config.ReadConfig()
 					if err != nil {
@@ -134,5 +131,41 @@ func configCommand(commandName string) *cli.Command {
 			}
 			return nil
 		},
+	}
+}
+
+func printConfigAction() cli.ActionFunc {
+	return func(ctx *cli.Context) error {
+		config, err := config.ReadConfig()
+		if err != nil {
+			return err
+		}
+		table, err := gotable.Create("provider", "ak", "sk", "token")
+		for key := range config.ConfigsMap {
+			dnsConfig := config.ConfigsMap.Get(key)
+			if dnsConfig != nil {
+				err := table.AddRow([]string{*dnsConfig.Provider, *dnsConfig.Ak, *dnsConfig.Sk, *dnsConfig.Token})
+				if err != nil {
+					return err
+				}
+			} else {
+				err := table.AddRow([]string{key})
+				if err != nil {
+					return err
+				}
+			}
+		}
+		return printTableAndSavaToJSONFile(table, ctx)
+	}
+}
+
+func importConfigAction() cli.ActionFunc {
+	return func(context *cli.Context) error {
+		//readConfig, err := config.ReadConfig()
+		//if err != nil {
+		//	return err
+		//}
+		//
+		return nil
 	}
 }
