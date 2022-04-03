@@ -9,10 +9,10 @@ func TestURL(t *testing.T) {
 	a := IsURL("hi/there?")
 	log.Print(a)
 
-	b := IsURL("http://golang.cafe/")
+	b := IsURL("https://golang.cafe/")
 	log.Print(b)
 
-	c := IsURL("http://golang.org/index.html?#page1")
+	c := IsURL("https://golang.org/index.html?#page1")
 	log.Print(c)
 
 	d := IsURL("golang.org")
