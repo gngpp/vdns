@@ -44,3 +44,8 @@ GLOBAL OPTIONS:
    --version, -v  print the version (default: false)
 
 ```
+
+## License
+
+This work is released under the MIT license. A copy of the license is provided
+in the [LICENSE](./LICENSE) file
