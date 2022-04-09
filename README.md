@@ -47,5 +47,5 @@ GLOBAL OPTIONS:
 
 ## License
 
-This work is released under the MIT license. A copy of the license is provided
-in the [LICENSE](./LICENSE) file
+这项工作是在 MIT 许可下发布的，
+提供许可证副本在 [LICENSE](./LICENSE) 文件中。
