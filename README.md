@@ -8,9 +8,9 @@
 	<a target="_blank" href="https://github.com/zf1976/vdns/actions">
 		<img src="https://github.com/zf1976/vdns/actions/workflows/sync.yaml/badge.svg"/>
 	</a>
-	<a target="_blank" href="https://github.com/zf1976/vdns/releases/latest">
+<!-- 	<a target="_blank" href="https://github.com/zf1976/vdns/releases/latest">
 		<img alt="GitHub Release" src="https://img.shields.io/github/v/release/zf1976/vdns.svg?logo=github">
-	</a>
+	</a> -->
 </p>
 
 # vdns
