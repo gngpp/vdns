@@ -28,12 +28,11 @@ func main() {
 
 func initCLI() {
 	app.Commands = []*cli.Command{
-		terminal.SearchCommand(),
 		terminal.ConfigCommand(),
 		terminal.ResolveRecord(),
 		terminal.ServerCommand(),
-		terminal.ToolCommand(),
 	}
+	app.Commands = append(app.Commands, terminal.Command()...)
 }
 
 func init() {

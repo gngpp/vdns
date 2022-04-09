@@ -6,65 +6,94 @@ import (
 	"github.com/liushuochen/gotable"
 	"github.com/liushuochen/gotable/table"
 	"github.com/urfave/cli/v2"
+	"io"
+	"io/ioutil"
 	"math"
+	"strings"
 	"vdns/config"
 	"vdns/lib/util/vhttp"
+	"vdns/lib/vlog"
 )
 
 //goland:noinspection SpellCheckingInspection
-func SearchCommand() *cli.Command {
+func Command() []*cli.Command {
+	return []*cli.Command{
+		{
+			Name:  "provider",
+			Usage: "Support providers",
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:  "path",
+					Usage: "sava table to csv filepath",
+				},
+			},
+			Action: providerAction(),
+		},
+		{
+			Name:  "record",
+			Usage: "Support record types",
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:  "path",
+					Usage: "sava table to csv filepath",
+				},
+			},
+			Action: recordAction(),
+		},
+		{
+			Name:    "print-ip-api",
+			Aliases: []string{"pia"},
+			Usage:   "Print search ip request api list",
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:  "path",
+					Usage: "sava table to csv filepath",
+				},
+			},
+			Action: printIpApiAction(),
+		},
+		{
+			Name:    "test-ip-api",
+			Aliases: []string{"tia"},
+			Usage:   "Test the API for requesting query ip",
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:  "type",
+					Usage: "value is ipv4 or ipv6",
+				},
+			},
+			Action: testIpApiAction(),
+		},
+		requestCommand(),
+	}
+}
+
+func requestCommand() *cli.Command {
 	return &cli.Command{
-		Name:  "search",
-		Usage: "Search vdns information",
-		Subcommands: []*cli.Command{
-			{
-				Name:    "support-provider",
-				Aliases: []string{"sp"},
-				Usage:   "Support providers",
-				Flags: []cli.Flag{
-					&cli.StringFlag{
-						Name:  "path",
-						Usage: "sava table to csv filepath",
-					},
-				},
-				Action: providerAction(),
+		Name:  "request",
+		Usage: "Request Api (only support get method)",
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:  "url",
+				Usage: "request url",
 			},
-			{
-				Name:    "support-record-type",
-				Aliases: []string{"srt"},
-				Usage:   "Support record types",
-				Flags: []cli.Flag{
-					&cli.StringFlag{
-						Name:  "path",
-						Usage: "sava table to csv filepath",
-					},
-				},
-				Action: recordAction(),
-			},
-			{
-				Name:    "print-ip-api",
-				Aliases: []string{"pia"},
-				Usage:   "Print search ip request api list",
-				Flags: []cli.Flag{
-					&cli.StringFlag{
-						Name:  "path",
-						Usage: "sava table to csv filepath",
-					},
-				},
-				Action: printIpApiAction(),
-			},
-			{
-				Name:    "test-ip-api",
-				Aliases: []string{"tia"},
-				Usage:   "Test the API for requesting query ip",
-				Flags: []cli.Flag{
-					&cli.StringFlag{
-						Name:  "type",
-						Usage: "value is ipv4 or ipv6",
-					},
-				},
-				Action: testIpApiAction(),
-			},
+		},
+		Action: func(ctx *cli.Context) error {
+			url := strings.TrimSpace(ctx.String("url"))
+			req, err := vhttp.Get(url)
+			if err != nil {
+				return err
+			}
+			body := req.Body
+			defer func(body io.ReadCloser) {
+				err := body.Close()
+				if err != nil {
+					vlog.Fatal(err)
+				}
+			}(body)
+			bytes, err := ioutil.ReadAll(body)
+			fmt.Printf("body: %v", string(bytes))
+			return nil
 		},
 	}
 }
