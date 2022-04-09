@@ -19,9 +19,8 @@
 
 ### Terminal CLI
 ```shell
-❯ go run main.go
 NAME:
-   vdns - A tool that supports multi-DNS service provider resolution operations
+   vdns - This is A tool that supports multi-DNS service provider resolution operations.
 
 USAGE:
    vdns [global options] command [command options] [arguments...]
@@ -30,13 +29,18 @@ VERSION:
    v1.0
 
 COMMANDS:
-   show, s     Show vdns information
-   config, c   Configure dns service provider access key pair
-   resolve, r  Resolving dns records
-   server      Use vdns server (support DDNS)
-   help, h     Shows a list of commands or help for one command
+   config, conf       Configure dns service provider access key pair
+   resolve            Resolving dns records
+   server             Use vdns server (support DDNS)
+   provider           Support providers
+   record             Support record types
+   print-ip-api, pia  Print search ip request api list
+   test-ip-api, tia   Test the API for requesting query ip
+   request            Request Api (only support get method)
+   help, h            Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
    --help, -h     show help (default: false)
    --version, -v  print the version (default: false)
+
 ```
