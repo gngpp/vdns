@@ -47,5 +47,5 @@ GLOBAL OPTIONS:
 
 ## License
 
-这项工作是在 MIT 许可下发布的，
+`vdns`是在 MIT 许可下发布的，
 提供许可证副本在 [LICENSE](./LICENSE) 文件中。
