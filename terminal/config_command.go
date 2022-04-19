@@ -12,9 +12,8 @@ import (
 //goland:noinspection SpellCheckingInspection
 func ConfigCommand() *cli.Command {
 	return &cli.Command{
-		Name:    "config",
-		Aliases: []string{"conf"},
-		Usage:   "Configure dns service provider access key pair",
+		Name:  "config",
+		Usage: "Configure dns service provider access key pair",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  "path",

@@ -29,7 +29,7 @@ VERSION:
    v1.0
 
 COMMANDS:
-   config, conf       Configure dns service provider access key pair
+   config       Configure dns service provider access key pair
    resolve            Resolving dns records
    server             Use vdns server (support DDNS)
    provider           Support providers
