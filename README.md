@@ -44,3 +44,8 @@ GLOBAL OPTIONS:
    --version, -v  print the version (default: false)
 
 ```
+
+## License
+
+`vdns`是在 MIT 许可下发布的，
+提供许可证副本在 [LICENSE](./LICENSE) 文件中。
