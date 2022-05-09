@@ -23,7 +23,7 @@ func NewAliDNSProvider(credential auth.Credential) VdnsProvider {
 		rpc:               rpc.NewAliDNSRpc(),
 		api:               standard.ALIYUN_DNS_API.String(),
 		credential:        credential,
-		parameterProvider: parameter.NewAliDNSParameterProvider(credential, signatureComposer),
+		parameter:         parameter.NewAliDNSParameter(credential, signatureComposer),
 	}
 }
 
@@ -31,13 +31,13 @@ type AliDNSProvider struct {
 	*action.RequestAction
 	api               *standard.Standard
 	signatureComposer compose.SignatureComposer
-	parameterProvider parameter.ParamaterProvider
+	parameter         parameter.Parameter
 	credential        auth.Credential
 	rpc               rpc.VdnsRpc
 }
 
 func (_this *AliDNSProvider) DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error) {
-	p, err := _this.parameterProvider.LoadDescribeParameter(request, _this.Describe)
+	p, err := _this.parameter.LoadDescribeParameter(request, _this.Describe)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (_this *AliDNSProvider) DescribeRecords(request *models.DescribeDomainRecor
 }
 
 func (_this *AliDNSProvider) CreateRecord(request *models.CreateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
-	p, err := _this.parameterProvider.LoadCreateParameter(request, _this.Create)
+	p, err := _this.parameter.LoadCreateParameter(request, _this.Create)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (_this *AliDNSProvider) CreateRecord(request *models.CreateDomainRecordRequ
 }
 
 func (_this *AliDNSProvider) UpdateRecord(request *models.UpdateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
-	p, err := _this.parameterProvider.LoadUpdateParameter(request, _this.Update)
+	p, err := _this.parameter.LoadUpdateParameter(request, _this.Update)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (_this *AliDNSProvider) UpdateRecord(request *models.UpdateDomainRecordRequ
 }
 
 func (_this *AliDNSProvider) DeleteRecord(request *models.DeleteDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
-	p, err := _this.parameterProvider.LoadDeleteParameter(request, _this.Delete)
+	p, err := _this.parameter.LoadDeleteParameter(request, _this.Delete)
 	if err != nil {
 		return nil, err
 	}
@@ -94,8 +94,8 @@ func (_this *AliDNSProvider) SetSignatureComposer(signatureComposer compose.Sign
 	_this.signatureComposer = signatureComposer
 }
 
-func (_this *AliDNSProvider) SetParameterProvider(parameterProvider parameter.ParamaterProvider) {
-	_this.parameterProvider = parameterProvider
+func (_this *AliDNSProvider) SetParameterProvider(parameterProvider parameter.Parameter) {
+	_this.parameter = parameterProvider
 }
 
 func (_this *AliDNSProvider) SetCredential(credential auth.Credential) {

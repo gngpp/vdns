@@ -5,7 +5,7 @@ import (
 	"vdns/lib/api/models"
 )
 
-type ParamaterProvider interface {
+type Parameter interface {
 	// LoadDescribeParameter 加载Describe参数
 	LoadDescribeParameter(request *models.DescribeDomainRecordsRequest, action *string) (*url.Values, error)
 

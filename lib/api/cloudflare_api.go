@@ -1,12 +1,7 @@
 package api
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
 	"io/ioutil"
-	"log"
-	"net/http"
 	"vdns/lib/api/errs"
 	"vdns/lib/api/models"
 	"vdns/lib/auth"
@@ -104,38 +99,4 @@ func (_this *CloudflareProvider) getZones() (map[string]string, error) {
 		vlog.Debugf("cloudflare: zones ->\n %s", vjson.PrettifyString(zones))
 	}
 	return zonesMap, nil
-}
-
-// request 统一请求接口
-func (_this *CloudflareProvider) request(method string, url string, data interface{}, result interface{}) (err error) {
-	jsonStr := make([]byte, 0)
-	if data != nil {
-		jsonStr, _ = json.Marshal(data)
-	}
-	req, err := http.NewRequest(
-		method,
-		url,
-		bytes.NewBuffer(jsonStr),
-	)
-	if err != nil {
-		log.Println("http.NewRequest失败. Error: ", err)
-		return
-	}
-	req.Header.Set("Authorization", "Bearer "+_this.credential.GetToken())
-	req.Header.Set("Content-Type", "application/json")
-
-	client := vhttp.NewClient()
-	resp, err := client.Do(req)
-	if vhttp.IsOK(resp) {
-		body := resp.Body
-		defer body.Close()
-		all, err := ioutil.ReadAll(body)
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println(vjson.PrettifyString(string(all)))
-	} else {
-		fmt.Println(err)
-	}
-	return
 }
