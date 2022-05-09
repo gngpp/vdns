@@ -1,15 +1,15 @@
 <p align="center">
-	<a target="_blank" href="https://github.com/zf1976/vdns/blob/main/LICENSE">
+	<a target="_blank" href="https://github.com/gngpp/vdns/blob/main/LICENSE">
 		<img src="https://img.shields.io/badge/license-MIT-blue.svg"/>
 	</a>
 	<a target="_blank" href="https://go.dev/">
-		<img src="https://img.shields.io/github/go-mod/go-version/zf1976/vdns"/>
+		<img src="https://img.shields.io/github/go-mod/go-version/gngpp/vdns/main"/>
 	</a>
-	<a target="_blank" href="https://github.com/zf1976/vdns/actions">
-		<img src="https://github.com/zf1976/vdns/actions/workflows/sync.yaml/badge.svg"/>
+	<a target="_blank" href="https://github.com/gngpp/vdns/actions">
+		<img src="https://github.com/gngpp/vdns/actions/workflows/sync.yaml/badge.svg"/>
 	</a>
-<!-- 	<a target="_blank" href="https://github.com/zf1976/vdns/releases/latest">
-		<img alt="GitHub Release" src="https://img.shields.io/github/v/release/zf1976/vdns.svg?logo=github">
+<!-- 	<a target="_blank" href="https://github.com/gngpp/vdns/releases/latest">
+		<img alt="GitHub Release" src="https://img.shields.io/github/v/release/gngpp/vdns.svg?logo=github">
 	</a> -->
 </p>
 
