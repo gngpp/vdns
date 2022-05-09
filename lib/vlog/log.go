@@ -283,7 +283,7 @@ func (l *Logger) Warnf(format string, v ...interface{}) {
 	}
 }
 
-// Error err prints err level msg.
+// Error iotool prints iotool level msg.
 func (l *Logger) Error(v ...interface{}) {
 	if err < l.level {
 		return
@@ -297,7 +297,7 @@ func (l *Logger) Error(v ...interface{}) {
 	}
 }
 
-// Errorf prints err level msg with format.
+// Errorf prints iotool level msg with format.
 func (l *Logger) Errorf(format string, v ...interface{}) {
 	if err < l.level {
 		return

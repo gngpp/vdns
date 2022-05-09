@@ -1,10 +1,10 @@
 package vhttp
 
 import (
-	"io"
 	"io/ioutil"
 	"regexp"
 	"vdns/config"
+	"vdns/lib/util/iotool"
 	"vdns/lib/vlog"
 )
 
@@ -29,19 +29,14 @@ func GetIpv6Addr() string {
 }
 
 func getIpAddr(reg string, url string) (result string) {
-	resp, err := Get(url)
+	resp, err := Get(url, nil)
 	if err != nil {
 		vlog.Error(err)
 		return
 	}
 
 	body := resp.Body
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			vlog.Error(err)
-		}
-	}(body)
+	defer iotool.ReadCloser(body)
 	bytes, err := ioutil.ReadAll(body)
 	vlog.Debugf("request: %s\nbody: %v", url, string(bytes))
 	if err != nil {

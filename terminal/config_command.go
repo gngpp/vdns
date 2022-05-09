@@ -160,9 +160,9 @@ func printConfigAction() cli.ActionFunc {
 
 func importConfigAction() cli.ActionFunc {
 	return func(context *cli.Context) error {
-		//readConfig, err := config.ReadConfig()
-		//if err != nil {
-		//	return err
+		//readConfig, iotool := config.ReadConfig()
+		//if iotool != nil {
+		//	return iotool
 		//}
 		//
 		return nil

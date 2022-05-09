@@ -26,7 +26,7 @@ func (_this *Interface) Ipv6() bool {
 func GetInterface() (ipv4NetInterfaces []Interface, ipv6NetInterfaces []Interface, err error) {
 	allNetInterfaces, err := net.Interfaces()
 	if err != nil {
-		fmt.Println("net.Interfaces failed, err:", err.Error())
+		fmt.Println("net.Interfaces failed, iotool:", err.Error())
 		return ipv4NetInterfaces, ipv6NetInterfaces, err
 	}
 

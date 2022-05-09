@@ -35,12 +35,12 @@ func (_this *DNSPodResponseConvert) DescribeResponseCtxConvert(ctx context.Conte
 	if resp.StatusCode == http.StatusOK {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
-			return nil, errs.NewApiErrorFromError(err)
+			return nil, errs.NewVdnsFromError(err)
 		}
 		b := new(dnspod_model.DescribeRecordListResponse)
 		err = vjson.ByteArrayConvert(bytes, b)
 		if err != nil {
-			return nil, errs.NewApiErrorFromError(err)
+			return nil, errs.NewVdnsFromError(err)
 		}
 		sourceResponse := b.Response
 		if sourceResponse != nil {
@@ -93,7 +93,7 @@ func (_this *DNSPodResponseConvert) CreateResponseCtxConvert(_ context.Context, 
 	if resp.StatusCode == http.StatusOK {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
-			return nil, errs.NewApiErrorFromError(err)
+			return nil, errs.NewVdnsFromError(err)
 		}
 		c := new(dnspod_model.CreateRecordResponse)
 		err = vjson.ByteArrayConvert(bytes, c)
@@ -123,7 +123,7 @@ func (_this *DNSPodResponseConvert) UpdateResponseCtxConvert(_ context.Context, 
 	if resp.StatusCode == http.StatusOK {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
-			return nil, errs.NewApiErrorFromError(err)
+			return nil, errs.NewVdnsFromError(err)
 		}
 		c := new(dnspod_model.ModifyRecordResponse)
 		err = vjson.ByteArrayConvert(bytes, c)
@@ -153,7 +153,7 @@ func (_this *DNSPodResponseConvert) DeleteResponseCtxConvert(_ context.Context, 
 	if resp.StatusCode == http.StatusOK {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
-			return nil, errs.NewApiErrorFromError(err)
+			return nil, errs.NewVdnsFromError(err)
 		}
 		c := new(dnspod_model.DeleteRecordResponse)
 		err = vjson.ByteArrayConvert(bytes, c)
@@ -191,6 +191,6 @@ func (_this *DNSPodResponseConvert) DeleteResponseConvert(resp *http.Response) (
 }
 
 func (_this *DNSPodResponseConvert) errorBodyHandler(e *dnspod_model.Error, requestId *string) error {
-	return errs.NewApiErrorFromError(errs.NewTencentCloudSDKError(strs.StringValue(e.Code),
+	return errs.NewVdnsFromError(errs.NewTencentCloudSDKError(strs.StringValue(e.Code),
 		strs.StringValue(e.Message), strs.StringValue(requestId)))
 }

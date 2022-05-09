@@ -38,7 +38,7 @@ func (_this *DNSPodParameterProvider) LoadDescribeParameter(request *models.Desc
 	// assert domain
 	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
-		return nil, errs.NewApiErrorFromError(err)
+		return nil, errs.NewVdnsFromError(err)
 	}
 	parameter := _this.loadCommonParameter(action)
 	parameter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
@@ -91,7 +91,7 @@ func (_this *DNSPodParameterProvider) LoadCreateParameter(request *models.Create
 	// assert domain
 	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
-		return nil, errs.NewApiErrorFromError(err)
+		return nil, errs.NewVdnsFromError(err)
 	}
 	parameter := _this.loadCommonParameter(action)
 	parameter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
@@ -131,7 +131,7 @@ func (_this *DNSPodParameterProvider) LoadUpdateParameter(request *models.Update
 	// assert domain
 	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
-		return nil, errs.NewApiErrorFromError(err)
+		return nil, errs.NewVdnsFromError(err)
 	}
 	parameter := _this.loadCommonParameter(action)
 	parameter.Set(DNSPOD_PARAMETER_RECORD_ID, *request.ID)
@@ -163,7 +163,7 @@ func (_this *DNSPodParameterProvider) LoadDeleteParameter(request *models.Delete
 	// assert domain
 	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
-		return nil, errs.NewApiErrorFromError(err)
+		return nil, errs.NewVdnsFromError(err)
 	}
 	parameter := _this.loadCommonParameter(action)
 	parameter.Set(DNSPOD_PARAMETER_RECORD_ID, *request.ID)

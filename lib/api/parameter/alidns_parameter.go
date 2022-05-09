@@ -38,7 +38,7 @@ func (_this *AliDNSParameterProvier) LoadDescribeParameter(request *models.Descr
 	// assert domain
 	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
-		return nil, errs.NewApiErrorFromError(err)
+		return nil, errs.NewVdnsFromError(err)
 	}
 	parameter := _this.loadCommonParameter(action)
 	parameter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain.DomainName)
@@ -92,7 +92,7 @@ func (_this *AliDNSParameterProvier) LoadCreateParameter(request *models.CreateD
 	// assert domain
 	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
-		return nil, errs.NewApiErrorFromError(err)
+		return nil, errs.NewVdnsFromError(err)
 	}
 	parameter := _this.loadCommonParameter(action)
 	parameter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain.DomainName)

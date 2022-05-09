@@ -32,14 +32,14 @@ func TestGetNetInterface(t *testing.T) {
 	}
 	t.Log(ipv4NetInterfaces, ipv6NetInterfaces)
 
-	//interfaces, err := net.Interfaces()
-	//if err != nil {
+	//interfaces, iotool := net.Interfaces()
+	//if iotool != nil {
 	//	return
 	//}
 	//for i := range interfaces {
 	//	inter := interfaces[i]
-	//	addrs, err := inter.Addrs()
-	//	if err != nil {
+	//	addrs, iotool := inter.Addrs()
+	//	if iotool != nil {
 	//		return
 	//	}
 	//	fmt.Print(inter.Name + ":")

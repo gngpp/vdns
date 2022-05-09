@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func CreateClient() *http.Client {
+func NewClient() *http.Client {
 	dialer := &net.Dialer{
 		Timeout:   10 * time.Second,
 		KeepAlive: 30 * time.Second,

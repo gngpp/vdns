@@ -21,7 +21,7 @@ type DNSPodRpc struct {
 func (_this *DNSPodRpc) DoDescribeCtxRequest(ctx context.Context, url string) (*models.DomainRecordsResponse, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		return &models.DomainRecordsResponse{}, errs.NewApiErrorFromError(err)
+		return &models.DomainRecordsResponse{}, errs.NewVdnsFromError(err)
 	}
 	return _this.conv.DescribeResponseCtxConvert(ctx, resp)
 }
@@ -29,7 +29,7 @@ func (_this *DNSPodRpc) DoDescribeCtxRequest(ctx context.Context, url string) (*
 func (_this *DNSPodRpc) DoCreateCtxRequest(_ context.Context, url string) (*models.DomainRecordStatusResponse, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		return &models.DomainRecordStatusResponse{}, errs.NewApiErrorFromError(err)
+		return &models.DomainRecordStatusResponse{}, errs.NewVdnsFromError(err)
 	}
 	return _this.conv.CreateResponseConvert(resp)
 }
@@ -37,7 +37,7 @@ func (_this *DNSPodRpc) DoCreateCtxRequest(_ context.Context, url string) (*mode
 func (_this *DNSPodRpc) DoUpdateCtxRequest(_ context.Context, url string) (*models.DomainRecordStatusResponse, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		return &models.DomainRecordStatusResponse{}, errs.NewApiErrorFromError(err)
+		return &models.DomainRecordStatusResponse{}, errs.NewVdnsFromError(err)
 	}
 	return _this.conv.UpdateResponseConvert(resp)
 }
@@ -45,7 +45,7 @@ func (_this *DNSPodRpc) DoUpdateCtxRequest(_ context.Context, url string) (*mode
 func (_this *DNSPodRpc) DoDeleteCtxRequest(_ context.Context, url string) (*models.DomainRecordStatusResponse, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		return &models.DomainRecordStatusResponse{}, errs.NewApiErrorFromError(err)
+		return &models.DomainRecordStatusResponse{}, errs.NewVdnsFromError(err)
 	}
 	return _this.conv.DeleteResponseConvert(resp)
 }

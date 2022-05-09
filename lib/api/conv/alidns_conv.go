@@ -26,12 +26,12 @@ func (_this *AliDNSResponseConvert) DescribeResponseCtxConvert(_ context.Context
 	if resp.StatusCode == http.StatusOK {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
-			return nil, errs.NewApiErrorFromError(err)
+			return nil, errs.NewVdnsFromError(err)
 		}
 		sourceResponse := new(alidns_model.DescribeDomainRecordsResponse)
 		err = vjson.ByteArrayConvert(bytes, sourceResponse)
 		if err != nil {
-			return nil, errs.NewApiErrorFromError(err)
+			return nil, errs.NewVdnsFromError(err)
 		}
 		response := new(models.DomainRecordsResponse)
 		response.TotalCount = sourceResponse.TotalCount
@@ -73,12 +73,12 @@ func (_this *AliDNSResponseConvert) CreateResponseCtxConvert(_ context.Context, 
 	if resp.StatusCode == http.StatusOK {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
-			return nil, errs.NewApiErrorFromError(err)
+			return nil, errs.NewVdnsFromError(err)
 		}
 		sourceResponse := new(alidns_model.CreateDomainRecordResponse)
 		err = vjson.ByteArrayConvert(bytes, sourceResponse)
 		if err != nil {
-			return nil, errs.NewApiErrorFromError(err)
+			return nil, errs.NewVdnsFromError(err)
 		}
 		response := &models.DomainRecordStatusResponse{
 			RecordId:  sourceResponse.RecordId,
@@ -99,12 +99,12 @@ func (_this *AliDNSResponseConvert) UpdateResponseCtxConvert(_ context.Context, 
 	if resp.StatusCode == http.StatusOK {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
-			return nil, errs.NewApiErrorFromError(err)
+			return nil, errs.NewVdnsFromError(err)
 		}
 		sourceResponse := new(alidns_model.UpdateDomainRecordResponse)
 		err = vjson.ByteArrayConvert(bytes, sourceResponse)
 		if err != nil {
-			return nil, errs.NewApiErrorFromError(err)
+			return nil, errs.NewVdnsFromError(err)
 		}
 		response := &models.DomainRecordStatusResponse{
 			RecordId:  sourceResponse.RecordId,
@@ -125,12 +125,12 @@ func (_this *AliDNSResponseConvert) DeleteResponseCtxConvert(_ context.Context, 
 	if resp.StatusCode == http.StatusOK {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
-			return nil, errs.NewApiErrorFromError(err)
+			return nil, errs.NewVdnsFromError(err)
 		}
 		sourceBody := new(alidns_model.DeleteDomainRecordResponse)
 		err = vjson.ByteArrayConvert(bytes, sourceBody)
 		if err != nil {
-			return nil, errs.NewApiErrorFromError(err)
+			return nil, errs.NewVdnsFromError(err)
 		}
 		response := &models.DomainRecordStatusResponse{
 			RecordId:  sourceBody.RecordId,
@@ -162,14 +162,14 @@ func (_this *AliDNSResponseConvert) DeleteResponseConvert(resp *http.Response) (
 func (_this *AliDNSResponseConvert) badBodyHandler(read io.ReadCloser) error {
 	bytes, err := ioutil.ReadAll(read)
 	if err != nil {
-		return errs.NewApiErrorFromError(err)
+		return errs.NewVdnsFromError(err)
 	}
 	sdkError := new(errs.AlidnsSDKError)
 	err = vjson.ByteArrayConvert(bytes, sdkError)
 	if err != nil {
-		return errs.NewApiErrorFromError(err)
+		return errs.NewVdnsFromError(err)
 	}
-	return errs.NewApiErrorFromError(sdkError)
+	return errs.NewVdnsFromError(sdkError)
 }
 
 func (_this AliDNSResponseConvert) closeBody(body io.ReadCloser) {

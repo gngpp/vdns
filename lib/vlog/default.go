@@ -37,12 +37,12 @@ func Warnf(format string, v ...interface{}) {
 	logger.Warnf(format, v...)
 }
 
-// Error err prints err level msg.
+// Error iotool prints iotool level msg.
 func Error(v ...interface{}) {
 	logger.Error(v...)
 }
 
-// Errorf prints err level msg with format.
+// Errorf prints iotool level msg with format.
 func Errorf(format string, v ...interface{}) {
 	logger.Errorf(format, v...)
 }

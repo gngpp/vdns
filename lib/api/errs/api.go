@@ -13,7 +13,7 @@ func NewVdnsError(message string) *VdnsError {
 	return &VdnsError{message: &message}
 }
 
-func NewApiErrorFromError(e error) *VdnsError {
+func NewVdnsFromError(e error) *VdnsError {
 	err := e.Error()
 	return &VdnsError{message: &err}
 }
