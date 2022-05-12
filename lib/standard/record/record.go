@@ -63,7 +63,7 @@ func OfType(t Type) (Type, bool) {
 func Support(t Type) bool {
 	_, isOk := OfType(t)
 	// allow to be empty
-	return isOk || strs.IsEmpty(t.String())
+	return isOk || !strs.IsEmpty(t.String())
 }
 
 func init() {

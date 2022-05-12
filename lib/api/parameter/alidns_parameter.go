@@ -80,7 +80,7 @@ func (_this *AliDNSParameter) LoadCreateParameter(request *models.CreateDomainRe
 	}
 
 	// assert record type
-	if request.RecordType != nil && !record.Support(*request.RecordType) {
+	if !record.Support(request.RecordType) {
 		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
 
@@ -120,7 +120,7 @@ func (_this *AliDNSParameter) LoadUpdateParameter(request *models.UpdateDomainRe
 	}
 
 	// assert record type
-	if !record.Support(*request.RecordType) {
+	if !record.Support(request.RecordType) {
 		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
 

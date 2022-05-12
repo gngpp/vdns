@@ -28,3 +28,12 @@ func NewDNSPodAction() *RequestAction {
 		Delete:   strs.String("DeleteRecord"),
 	}
 }
+
+func NewCloudflareAction() *RequestAction {
+	return &RequestAction{
+		Describe: strs.String("DescribeRecordList"),
+		Create:   strs.String("CreateRecord"),
+		Update:   strs.String("ModifyRecord"),
+		Delete:   strs.String("DeleteRecord"),
+	}
+}

@@ -1,8 +1,16 @@
 package models
 
-import "vdns/lib/standard/record"
+import (
+	"vdns/lib/standard/record"
+	"vdns/lib/util/vhttp"
+	"vdns/lib/vlog"
+)
 
 // on aliyun document https://help.aliyun.com/document_detail/29776.html
+
+func NewDescribeDomainRecordsRequest() *DescribeDomainRecordsRequest {
+	return &DescribeDomainRecordsRequest{}
+}
 
 // DescribeDomainRecordsRequest
 // RRKeyWord 记录关键字
@@ -49,14 +57,38 @@ func (_this *DescribeDomainRecordsRequest) SetPageSize(PageSize int64) *Describe
 	return _this
 }
 
-func NewDescribeDomainRecordsRequest() *DescribeDomainRecordsRequest {
-	return &DescribeDomainRecordsRequest{}
+func (_this *DescribeDomainRecordsRequest) GetDomain() string {
+	domain := _this.Domain
+	if domain != nil {
+		extractDomain, err := vhttp.CheckExtractDomain(*domain)
+		if err != nil {
+			vlog.Error(err)
+		}
+		return extractDomain.DomainName
+	}
+	return ""
+}
+
+func (_this *DescribeDomainRecordsRequest) GetSubdomain() string {
+	domain := _this.Domain
+	if domain != nil {
+		extractDomain, err := vhttp.CheckExtractDomain(*domain)
+		if err != nil {
+			vlog.Error(err)
+		}
+		return extractDomain.SubDomain
+	}
+	return ""
+}
+
+func NewCreateDomainRecordRequest() *CreateDomainRecordRequest {
+	return &CreateDomainRecordRequest{}
 }
 
 type CreateDomainRecordRequest struct {
-	Domain     *string      `json:"domain,omitempty"`
-	Value      *string      `json:"value,omitempty"`
-	RecordType *record.Type `json:"record_type,omitempty"`
+	Domain     *string     `json:"domain,omitempty"`
+	Value      *string     `json:"value,omitempty"`
+	RecordType record.Type `json:"record_type,omitempty"`
 }
 
 func (_this *CreateDomainRecordRequest) SetDomain(domain string) *CreateDomainRecordRequest {
@@ -70,19 +102,43 @@ func (_this *CreateDomainRecordRequest) SetValue(value string) *CreateDomainReco
 }
 
 func (_this *CreateDomainRecordRequest) SetRecordType(recordType record.Type) *CreateDomainRecordRequest {
-	_this.RecordType = &recordType
+	_this.RecordType = recordType
 	return _this
 }
 
-func NewCreateDomainRecordRequest() *CreateDomainRecordRequest {
-	return &CreateDomainRecordRequest{}
+func (_this *CreateDomainRecordRequest) GetDomain() string {
+	domain := _this.Domain
+	if domain != nil {
+		extractDomain, err := vhttp.CheckExtractDomain(*domain)
+		if err != nil {
+			vlog.Error(err)
+		}
+		return extractDomain.DomainName
+	}
+	return ""
+}
+
+func (_this *CreateDomainRecordRequest) GetSubdomain() string {
+	domain := _this.Domain
+	if domain != nil {
+		extractDomain, err := vhttp.CheckExtractDomain(*domain)
+		if err != nil {
+			vlog.Error(err)
+		}
+		return extractDomain.SubDomain
+	}
+	return ""
+}
+
+func NewUpdateDomainRecordRequest() *UpdateDomainRecordRequest {
+	return &UpdateDomainRecordRequest{}
 }
 
 type UpdateDomainRecordRequest struct {
-	ID         *string      `json:"id,omitempty"`
-	Domain     *string      `json:"domain,omitempty"`
-	Value      *string      `json:"value,omitempty"`
-	RecordType *record.Type `json:"record_type,omitempty"`
+	ID         *string     `json:"id,omitempty"`
+	Domain     *string     `json:"domain,omitempty"`
+	Value      *string     `json:"value,omitempty"`
+	RecordType record.Type `json:"record_type,omitempty"`
 }
 
 func (_this *UpdateDomainRecordRequest) SetID(id string) *UpdateDomainRecordRequest {
@@ -101,12 +157,36 @@ func (_this *UpdateDomainRecordRequest) SetValue(value string) *UpdateDomainReco
 }
 
 func (_this *UpdateDomainRecordRequest) SetRecordType(recordType record.Type) *UpdateDomainRecordRequest {
-	_this.RecordType = &recordType
+	_this.RecordType = recordType
 	return _this
 }
 
-func NewUpdateDomainRecordRequest() *UpdateDomainRecordRequest {
-	return &UpdateDomainRecordRequest{}
+func (_this *UpdateDomainRecordRequest) GetDomain() string {
+	domain := _this.Domain
+	if domain != nil {
+		extractDomain, err := vhttp.CheckExtractDomain(*domain)
+		if err != nil {
+			vlog.Error(err)
+		}
+		return extractDomain.DomainName
+	}
+	return ""
+}
+
+func (_this *UpdateDomainRecordRequest) GetSubdomain() string {
+	domain := _this.Domain
+	if domain != nil {
+		extractDomain, err := vhttp.CheckExtractDomain(*domain)
+		if err != nil {
+			vlog.Error(err)
+		}
+		return extractDomain.SubDomain
+	}
+	return ""
+}
+
+func NewDeleteDomainRecordRequest() *DeleteDomainRecordRequest {
+	return &DeleteDomainRecordRequest{}
 }
 
 type DeleteDomainRecordRequest struct {
@@ -124,6 +204,26 @@ func (_this *DeleteDomainRecordRequest) SetDomain(domain string) *DeleteDomainRe
 	return _this
 }
 
-func NewDeleteDomainRecordRequest() *DeleteDomainRecordRequest {
-	return &DeleteDomainRecordRequest{}
+func (_this *DeleteDomainRecordRequest) GetDomain() string {
+	domain := _this.Domain
+	if domain != nil {
+		extractDomain, err := vhttp.CheckExtractDomain(*domain)
+		if err != nil {
+			vlog.Error(err)
+		}
+		return extractDomain.DomainName
+	}
+	return ""
+}
+
+func (_this *DeleteDomainRecordRequest) GetSubdomain() string {
+	domain := _this.Domain
+	if domain != nil {
+		extractDomain, err := vhttp.CheckExtractDomain(*domain)
+		if err != nil {
+			vlog.Error(err)
+		}
+		return extractDomain.SubDomain
+	}
+	return ""
 }

@@ -78,8 +78,8 @@ func (_this *DNSPodParameter) LoadCreateParameter(request *models.CreateDomainRe
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
 
-	// assert record type assert
-	if request.RecordType != nil && !record.Support(*request.RecordType) {
+	// assert record type
+	if !record.Support(request.RecordType) {
 		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
 
@@ -118,8 +118,8 @@ func (_this *DNSPodParameter) LoadUpdateParameter(request *models.UpdateDomainRe
 		return nil, errs.NewVdnsError(msg.RECORD_ID_NOT_SUPPORT)
 	}
 
-	// assert record type assert
-	if !record.Support(*request.RecordType) {
+	// assert record type
+	if !record.Support(request.RecordType) {
 		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
 

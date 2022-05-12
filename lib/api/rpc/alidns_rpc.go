@@ -3,19 +3,19 @@ package rpc
 import (
 	"context"
 	"net/http"
-	"vdns/lib/api/conv"
 	"vdns/lib/api/errs"
 	"vdns/lib/api/models"
+	conv2 "vdns/lib/api/rpc/conv"
 )
 
 func NewAliDNSRpc() VdnsRpc {
 	return &AliDNSRpc{
-		conv: &conv.AliDNSResponseConvert{},
+		conv: &conv2.AliDNSResponseConvert{},
 	}
 }
 
 type AliDNSRpc struct {
-	conv conv.VdnsResponseConverter
+	conv conv2.VdnsResponseConverter
 }
 
 func (_this *AliDNSRpc) DoDescribeCtxRequest(_ context.Context, url string) (*models.DomainRecordsResponse, error) {

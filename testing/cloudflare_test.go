@@ -9,22 +9,30 @@ import (
 	"net/http"
 	"testing"
 	"vdns/lib/api"
+	"vdns/lib/api/models"
 	"vdns/lib/auth"
 	"vdns/lib/standard/record"
 	"vdns/lib/util/iotool"
 	"vdns/lib/util/vhttp"
 	"vdns/lib/util/vjson"
-	"vdns/lib/vlog"
 )
 
 func TestName(t *testing.T) {
-	vlog.SetLevel(vlog.Level.DEBUG)
+	//vlog.SetLevel(vlog.Level.DEBUG)
 	credential := auth.NewTokenCredential("shww4JpWY1Ilp43DHDMwY8ja_aoPs-RSJwmTcobi")
 	provider := api.NewCloudflareProvider(credential)
 	err := provider.Support(record.A)
 	if err != nil {
 		fmt.Println(err)
 	}
+	recordsRequest := models.NewDescribeDomainRecordsRequest()
+	recordsRequest.SetDomain("innas.work")
+	recordsRequest.SetRecordType(record.A)
+	records, err := provider.DescribeRecords(recordsRequest)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(vjson.PrettifyString(records))
 
 }
 

@@ -3,19 +3,19 @@ package rpc
 import (
 	"context"
 	"net/http"
-	"vdns/lib/api/conv"
 	"vdns/lib/api/errs"
 	"vdns/lib/api/models"
+	conv2 "vdns/lib/api/rpc/conv"
 )
 
 func NewDNSPodRpc() VdnsRpc {
 	return &DNSPodRpc{
-		conv: &conv.DNSPodResponseConvert{},
+		conv: &conv2.DNSPodResponseConvert{},
 	}
 }
 
 type DNSPodRpc struct {
-	conv conv.VdnsResponseConverter
+	conv conv2.VdnsResponseConverter
 }
 
 func (_this *DNSPodRpc) DoDescribeCtxRequest(ctx context.Context, url string) (*models.DomainRecordsResponse, error) {
