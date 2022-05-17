@@ -58,14 +58,9 @@ func Post(url string, contentType string, data *interface{}, token *string) (res
 
 func IsOK(resp *http.Response) bool {
 	switch resp.StatusCode {
-	case http.StatusOK:
-	case http.StatusCreated:
-	case http.StatusAccepted:
-	case http.StatusAlreadyReported:
-	case http.StatusNoContent:
+	case http.StatusOK, http.StatusCreated, http.StatusAccepted, http.StatusAlreadyReported, http.StatusNoContent:
 		return true
 	default:
 		return false
 	}
-	return false
 }
