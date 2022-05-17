@@ -9,8 +9,9 @@ import (
 	"vdns/lib/api/models"
 	"vdns/lib/api/models/alidns_model"
 	"vdns/lib/standard/record"
+	"vdns/lib/util/iotool"
+	"vdns/lib/util/vhttp"
 	"vdns/lib/util/vjson"
-	"vdns/lib/vlog"
 )
 
 type AliDNSResponseConvert struct {
@@ -22,8 +23,8 @@ func (_this *AliDNSResponseConvert) DescribeResponseCtxConvert(_ context.Context
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
 	body := resp.Body
-	defer _this.closeBody(body)
-	if resp.StatusCode == http.StatusOK {
+	defer iotool.ReadCloser(body)
+	if vhttp.IsOK(resp) {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
@@ -69,8 +70,8 @@ func (_this *AliDNSResponseConvert) CreateResponseCtxConvert(_ context.Context, 
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
 	body := resp.Body
-	defer _this.closeBody(body)
-	if resp.StatusCode == http.StatusOK {
+	defer iotool.ReadCloser(body)
+	if vhttp.IsOK(resp) {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
@@ -95,8 +96,8 @@ func (_this *AliDNSResponseConvert) UpdateResponseCtxConvert(_ context.Context, 
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
 	body := resp.Body
-	defer _this.closeBody(body)
-	if resp.StatusCode == http.StatusOK {
+	defer iotool.ReadCloser(body)
+	if vhttp.IsOK(resp) {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
@@ -121,8 +122,8 @@ func (_this *AliDNSResponseConvert) DeleteResponseCtxConvert(_ context.Context, 
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
 	body := resp.Body
-	defer _this.closeBody(body)
-	if resp.StatusCode == http.StatusOK {
+	defer iotool.ReadCloser(body)
+	if vhttp.IsOK(resp) {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
@@ -170,14 +171,4 @@ func (_this *AliDNSResponseConvert) badBodyHandler(read io.ReadCloser) error {
 		return errs.NewVdnsFromError(err)
 	}
 	return errs.NewVdnsFromError(sdkError)
-}
-
-func (_this AliDNSResponseConvert) closeBody(body io.ReadCloser) {
-	if body == nil {
-		return
-	}
-	err := body.Close()
-	if err != nil {
-		vlog.Error(err)
-	}
 }

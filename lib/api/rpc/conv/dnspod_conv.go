@@ -10,7 +10,9 @@ import (
 	"vdns/lib/api/parameter"
 	"vdns/lib/standard/record"
 	"vdns/lib/util/convert"
+	"vdns/lib/util/iotool"
 	"vdns/lib/util/strs"
+	"vdns/lib/util/vhttp"
 	"vdns/lib/util/vjson"
 )
 
@@ -31,8 +33,8 @@ func (_this *DNSPodResponseConvert) DescribeResponseCtxConvert(ctx context.Conte
 		}
 	}
 	body := resp.Body
-	defer body.Close()
-	if resp.StatusCode == http.StatusOK {
+	defer iotool.ReadCloser(body)
+	if vhttp.IsOK(resp) {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
@@ -89,8 +91,8 @@ func (_this *DNSPodResponseConvert) CreateResponseCtxConvert(_ context.Context, 
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
 	body := resp.Body
-	defer body.Close()
-	if resp.StatusCode == http.StatusOK {
+	defer iotool.ReadCloser(body)
+	if vhttp.IsOK(resp) {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
@@ -119,8 +121,8 @@ func (_this *DNSPodResponseConvert) UpdateResponseCtxConvert(_ context.Context, 
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
 	body := resp.Body
-	defer body.Close()
-	if resp.StatusCode == http.StatusOK {
+	defer iotool.ReadCloser(body)
+	if vhttp.IsOK(resp) {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
@@ -149,8 +151,8 @@ func (_this *DNSPodResponseConvert) DeleteResponseCtxConvert(_ context.Context, 
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
 	body := resp.Body
-	defer body.Close()
-	if resp.StatusCode == http.StatusOK {
+	defer iotool.ReadCloser(body)
+	if vhttp.IsOK(resp) {
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)

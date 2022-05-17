@@ -49,8 +49,7 @@ func (_this *CloudflareRpc) DoDeleteRequest(url string) (*models.DomainRecordSta
 	panic("implement me")
 }
 
-func (_this *CloudflareRpc) DoDescribeCtxRequest(ctx context.Context, url string) (*models.DomainRecordsResponse, error) {
-	fmt.Println("url:" + url)
+func (_this *CloudflareRpc) DoDescribeCtxRequest(_ context.Context, url string) (*models.DomainRecordsResponse, error) {
 	resp, err := vhttp.Get(url, strs.String(_this.credential.GetToken()))
 	if err != nil {
 		return nil, errs.NewVdnsFromError(err)
