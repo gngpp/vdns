@@ -36,11 +36,14 @@ func (_this *CloudflareParameter) LoadDescribeParameter(request *models.Describe
 }
 
 func (_this *CloudflareParameter) LoadCreateParameter(request *models.CreateDomainRecordRequest, action *string) (*url.Values, error) {
+	if request == nil {
+		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
+	}
 	parameter := _this.loadCommonParameter(request.RecordType)
 	// assert domain
 	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
-		return nil, err
+		return nil, errs.NewVdnsFromError(err)
 	}
 
 	// assert record type
@@ -60,6 +63,9 @@ func (_this *CloudflareParameter) LoadCreateParameter(request *models.CreateDoma
 }
 
 func (_this *CloudflareParameter) LoadUpdateParameter(request *models.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
+	if request == nil {
+		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
+	}
 	parameter := _this.loadCommonParameter(request.RecordType)
 	// assert domain
 	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
@@ -77,6 +83,9 @@ func (_this *CloudflareParameter) LoadUpdateParameter(request *models.UpdateDoma
 }
 
 func (_this *CloudflareParameter) LoadDeleteParameter(request *models.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
+	if request == nil {
+		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
+	}
 	parameter := _this.loadCommonParameter("")
 	return parameter, nil
 }
