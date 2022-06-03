@@ -3,7 +3,7 @@
 		<img src="https://img.shields.io/badge/license-MIT-blue.svg"/>
 	</a>
 	<a target="_blank" href="https://go.dev/">
-		<img src="https://img.shields.io/github/go-mod/go-version/gngpp/vdns/main"/>
+		<img src="https://img.shields.io/github/go-mod/go-version/gngpp/vdns"/>
 	</a>
 	<a target="_blank" href="https://github.com/gngpp/vdns/actions">
 		<img src="https://github.com/gngpp/vdns/actions/workflows/sync.yaml/badge.svg"/>
@@ -45,7 +45,12 @@ GLOBAL OPTIONS:
 
 ```
 
-## License
+### License
 
-`vdns`是在 MIT 许可下发布的，
-提供许可证副本在 [LICENSE](./LICENSE) 文件中。
+- [MIT License](https://raw.githubusercontent.com/gngpp/vdns/main/LICENSE)
+
+### JetBrains 开源证书支持
+
+> `vdns` 项目一直以来都是在 JetBrains 公司旗下的 GoLand 集成开发环境中进行开发，基于 **free JetBrains Open Source license(s)** 正版免费授权，在此表达我的谢意。
+
+<a href="https://www.jetbrains.com/?from=gnet" target="_blank"><img src="https://raw.githubusercontent.com/panjf2000/illustrations/master/jetbrains/jetbrains-variant-4.png" width="250" align="middle"/></a>
