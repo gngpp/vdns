@@ -21,7 +21,7 @@ func main() {
 	initCLI()
 	err := app.Run(os.Args)
 	if err != nil {
-		vlog.Fatalf("running iotool: %v", err)
+		vlog.Fatalf("running fatal: %v", err)
 		return
 	}
 }
