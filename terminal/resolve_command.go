@@ -194,7 +194,7 @@ func createDNSRecord(providerKey string) *cli.Command {
 			//goland:noinspection GoRedundantConversion
 			ofType, b := record.OfType(record.Type(recordType))
 			if b {
-				request.RecordType = &ofType
+				request.RecordType = ofType
 			}
 			createRecord, err := provider.CreateRecord(request)
 			if err != nil {
@@ -254,7 +254,7 @@ func updateDNSRecord(providerKey string) *cli.Command {
 			//goland:noinspection GoRedundantConversion
 			ofType, b := record.OfType(record.Type(recordType))
 			if b {
-				request.RecordType = &ofType
+				request.RecordType = ofType
 			}
 			updateRecord, err := provider.UpdateRecord(request)
 			if err != nil {
