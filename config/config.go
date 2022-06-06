@@ -13,13 +13,13 @@ import (
 
 var configPath string
 
-type Configs map[string]*DNSConfig
+type Configs map[string]*ProviderConfig
 
 // Get gets the first value associated with the given key.
 // If there are no values associated with the key, Get returns
 // the empty string. To access multiple values, use the map
 // directly.
-func (v Configs) Get(key string) *DNSConfig {
+func (v Configs) Get(key string) *ProviderConfig {
 	if v == nil {
 		return nil
 	}
@@ -29,13 +29,13 @@ func (v Configs) Get(key string) *DNSConfig {
 
 // Set sets the key to value. It replaces any existing
 // values.
-func (v Configs) Set(key string, value *DNSConfig) {
+func (v Configs) Set(key string, value *ProviderConfig) {
 	v[key] = value
 }
 
 // Add adds the value to key. It appends to any existing
 // values associated with key.
-func (v Configs) Add(key string, value *DNSConfig) {
+func (v Configs) Add(key string, value *ProviderConfig) {
 	config := v.Get(key)
 	if config != nil {
 		return
@@ -62,10 +62,10 @@ func NewConfig() *Config {
 	config := Config{
 		ConfigsMap: Configs{},
 	}
-	config.ConfigsMap.Add(AlidnsProvider, NewDNSConfig(AlidnsProvider))
-	config.ConfigsMap.Add(DnspodProvider, NewDNSConfig(DnspodProvider))
-	config.ConfigsMap.Add(HuaweiDnsProvider, NewDNSConfig(HuaweiDnsProvider))
-	config.ConfigsMap.Add(CloudflareProvider, NewDNSConfig(CloudflareProvider))
+	config.ConfigsMap.Add(AlidnsProvider, NewProviderConfig(AlidnsProvider))
+	config.ConfigsMap.Add(DnspodProvider, NewProviderConfig(DnspodProvider))
+	config.ConfigsMap.Add(HuaweiDnsProvider, NewProviderConfig(HuaweiDnsProvider))
+	config.ConfigsMap.Add(CloudflareProvider, NewProviderConfig(CloudflareProvider))
 	return &config
 }
 
@@ -85,15 +85,15 @@ func ReadCredentials(key string) (auth.Credential, error) {
 	}
 }
 
-type DNSConfig struct {
+type ProviderConfig struct {
 	Provider *string `json:"provider"`
 	Ak       *string `json:"ak,omitempty"`
 	Sk       *string `json:"sk,omitempty"`
 	Token    *string `json:"token,omitempty"`
 }
 
-func NewDNSConfig(name string) *DNSConfig {
-	return &DNSConfig{
+func NewProviderConfig(name string) *ProviderConfig {
+	return &ProviderConfig{
 		Provider: &name,
 		Ak:       strs.String(""),
 		Sk:       strs.String(""),
