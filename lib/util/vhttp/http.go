@@ -37,6 +37,11 @@ func Post(url string, contentType string, data any, token string) (resp *http.Re
 		if err != nil {
 			return nil, err
 		}
+	} else {
+		req, err = http.NewRequest("DELETE", url, nil)
+		if err != nil {
+			return nil, err
+		}
 	}
 	req.Header.Set("User-Agent", UserAgent)
 	if !strs.IsEmpty(contentType) {
@@ -65,6 +70,11 @@ func Put(url string, contentType string, data any, token string) (resp *http.Res
 		if err != nil {
 			return nil, err
 		}
+	} else {
+		req, err = http.NewRequest("DELETE", url, nil)
+		if err != nil {
+			return nil, err
+		}
 	}
 	req.Header.Set("User-Agent", UserAgent)
 	if !strs.IsEmpty(contentType) {
@@ -90,6 +100,11 @@ func Delete(url string, contentType string, data any, token string) (resp *http.
 	if data != nil {
 		jsonStr, _ := json.Marshal(data)
 		req, err = http.NewRequest("DELETE", url, bytes.NewBuffer(jsonStr))
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		req, err = http.NewRequest("DELETE", url, nil)
 		if err != nil {
 			return nil, err
 		}

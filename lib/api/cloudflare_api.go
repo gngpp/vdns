@@ -68,7 +68,7 @@ func (_this *CloudflareProvider) UpdateRecord(request *model.UpdateDomainRecordR
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(nil, model.Domain(request), nil)
+	requestUrl := _this.generateRequestUrl(request.ID, model.Domain(request), nil)
 	ctx := context.WithValue(context.Background(), parameter.CfParameterContextUpdateKey, p)
 	return _this.rpc.DoUpdateCtxRequest(ctx, requestUrl)
 }
@@ -78,7 +78,7 @@ func (_this *CloudflareProvider) DeleteRecord(request *model.DeleteDomainRecordR
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(nil, model.Domain(request), nil)
+	requestUrl := _this.generateRequestUrl(request.ID, model.Domain(request), nil)
 	return _this.rpc.DoDeleteRequest(requestUrl)
 }
 
@@ -170,6 +170,9 @@ func (_this *CloudflareProvider) generateRequestUrl(identifier *string, domain m
 }
 
 func (_this *CloudflareProvider) toCanonicalizeStringQueryString(parameter *url.Values) string {
+	if parameter == nil {
+		return ""
+	}
 	buf := new(bytes.Buffer)
 	// sort keys by ascii asc order
 	keys := make([]string, 0, len(*parameter))
