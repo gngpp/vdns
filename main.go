@@ -27,11 +27,14 @@ func main() {
 }
 
 func initCLI() {
+	// provider config and ddns server cli
 	app.Commands = []*cli.Command{
 		terminal.ConfigCommand(),
-		terminal.ResolveRecord(),
 		terminal.ServerCommand(),
 	}
+	// dns record resolve cli
+	app.Commands = append(app.Commands, terminal.ResolveRecordList()...)
+	// common cli
 	app.Commands = append(app.Commands, terminal.Command()...)
 }
 

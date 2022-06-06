@@ -12,58 +12,54 @@ import (
 )
 
 //goland:noinspection SpellCheckingInspection
-func ResolveRecord() *cli.Command {
+func ResolveRecordList() []*cli.Command {
 	alidnsCommandName := "alidns"
 	dnspodCommandName := "dnspod"
 	huaweidnsCommandName := "huaweidns"
 	cloudflareCommandName := "cloudflare"
-	return &cli.Command{
-		Name:  "resolve",
-		Usage: "Resolving dns records",
-		Subcommands: []*cli.Command{
-			{
-				Name:    alidnsCommandName,
-				Aliases: []string{convert.AsStringValue(string(alidnsCommandName[0]))},
-				Usage:   "Resolve " + config.AlidnsProvider + " records",
-				Subcommands: []*cli.Command{
-					describeDNSRecord(config.AlidnsProvider),
-					createDNSRecord(config.AlidnsProvider),
-					updateDNSRecord(config.AlidnsProvider),
-					deleteDNSRecord(config.AlidnsProvider),
-				},
+	return []*cli.Command{
+		{
+			Name:    alidnsCommandName,
+			Aliases: []string{convert.AsStringValue(string(alidnsCommandName[0]))},
+			Usage:   "Resolve " + config.AlidnsProvider + " records",
+			Subcommands: []*cli.Command{
+				describeDNSRecord(config.AlidnsProvider),
+				createDNSRecord(config.AlidnsProvider),
+				updateDNSRecord(config.AlidnsProvider),
+				deleteDNSRecord(config.AlidnsProvider),
 			},
-			{
-				Name:    dnspodCommandName,
-				Aliases: []string{convert.AsStringValue(string(dnspodCommandName[0]))},
-				Usage:   "Resolve " + config.DnspodProvider + " records",
-				Subcommands: []*cli.Command{
-					describeDNSRecord(config.DnspodProvider),
-					createDNSRecord(config.DnspodProvider),
-					updateDNSRecord(config.DnspodProvider),
-					deleteDNSRecord(config.DnspodProvider),
-				},
+		},
+		{
+			Name:    dnspodCommandName,
+			Aliases: []string{convert.AsStringValue(string(dnspodCommandName[0]))},
+			Usage:   "Resolve " + config.DnspodProvider + " records",
+			Subcommands: []*cli.Command{
+				describeDNSRecord(config.DnspodProvider),
+				createDNSRecord(config.DnspodProvider),
+				updateDNSRecord(config.DnspodProvider),
+				deleteDNSRecord(config.DnspodProvider),
 			},
-			{
-				Name:    huaweidnsCommandName,
-				Aliases: []string{convert.AsStringValue(string(huaweidnsCommandName[0]))},
-				Usage:   "Resolve " + config.HuaweiDnsProvider + " records",
-				Subcommands: []*cli.Command{
-					describeDNSRecord(config.HuaweiDnsProvider),
-					createDNSRecord(config.HuaweiDnsProvider),
-					updateDNSRecord(config.HuaweiDnsProvider),
-					deleteDNSRecord(config.HuaweiDnsProvider),
-				},
+		},
+		{
+			Name:    huaweidnsCommandName,
+			Aliases: []string{convert.AsStringValue(string(huaweidnsCommandName[0]))},
+			Usage:   "Resolve " + config.HuaweiDnsProvider + " records",
+			Subcommands: []*cli.Command{
+				describeDNSRecord(config.HuaweiDnsProvider),
+				createDNSRecord(config.HuaweiDnsProvider),
+				updateDNSRecord(config.HuaweiDnsProvider),
+				deleteDNSRecord(config.HuaweiDnsProvider),
 			},
-			{
-				Name:    cloudflareCommandName,
-				Aliases: []string{convert.AsStringValue(string(cloudflareCommandName[0]))},
-				Usage:   "Resolve " + config.CloudflareProvider + " records",
-				Subcommands: []*cli.Command{
-					describeDNSRecord(config.CloudflareProvider),
-					createDNSRecord(config.CloudflareProvider),
-					updateDNSRecord(config.CloudflareProvider),
-					deleteDNSRecord(config.CloudflareProvider),
-				},
+		},
+		{
+			Name:    cloudflareCommandName,
+			Aliases: []string{convert.AsStringValue(string(cloudflareCommandName[0]))},
+			Usage:   "Resolve " + config.CloudflareProvider + " records",
+			Subcommands: []*cli.Command{
+				describeDNSRecord(config.CloudflareProvider),
+				createDNSRecord(config.CloudflareProvider),
+				updateDNSRecord(config.CloudflareProvider),
+				deleteDNSRecord(config.CloudflareProvider),
 			},
 		},
 	}
