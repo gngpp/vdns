@@ -177,29 +177,29 @@ func testIpApiAction() cli.ActionFunc {
 	return func(ctx *cli.Context) error {
 		ipType := ctx.String("type")
 		if (ipType != "ipv4") && (ipType != "ipv6") {
-			return errors.New("ip type must be: ipv4 or ipv6")
+			return errors.New("ip type must be: ipv4 or ipv6.\nfor example: --type=ipv4 or --type=ipv6")
 		}
-		var table *table.Table
+		var t *table.Table
 		var err error
 		var ipApiList []string
 		if ipType == "ipv4" {
-			table, err = gotable.Create("Ipv4 Request API", "Status")
+			t, err = gotable.Create("Ipv4 Request API", "Status")
 			if err != nil {
 				return err
 			}
 			ipApiList = config.GetIpv4ApiList()
 		}
 		if ipType == "ipv6" {
-			table, err = gotable.Create("Ipv6 Request API", "Status")
+			t, err = gotable.Create("Ipv6 Request API", "Status")
 			if err != nil {
 				return err
 			}
 			ipApiList = config.GetIpv6ApiList()
 		}
 		for _, api := range ipApiList {
-			_ = table.AddRow([]string{api, vhttp.GetIpv4AddrForUrl(api)})
+			_ = t.AddRow([]string{api, vhttp.GetIpv4AddrForUrl(api)})
 		}
-		fmt.Println(table)
+		fmt.Println(t)
 		return err
 	}
 }
