@@ -73,9 +73,9 @@ func (_this *CloudflareParameter) LoadCreateParameter(request *model.CreateDomai
 		return nil, errs.NewVdnsError(msg.RECORD_VALUE_NOT_SUPPORT)
 	}
 
-	parameter.Set("name", domain.DomainName)
-	parameter.Set("content", *request.Value)
-	parameter.Set("ttl", "120")
+	parameter.Set(CfParameterName, domain.DomainName)
+	parameter.Set(CfParameterContent, *request.Value)
+	parameter.Set(CfParameterTTL, "120")
 	return parameter, nil
 }
 
@@ -93,23 +93,19 @@ func (_this *CloudflareParameter) LoadUpdateParameter(request *model.UpdateDomai
 		return nil, errs.NewVdnsError(msg.RECORD_VALUE_NOT_SUPPORT)
 	}
 
-	parameter.Set("name", domain.DomainName)
-	parameter.Set("content", *request.Value)
-	parameter.Set("ttl", "120")
+	parameter.Set(CfParameterName, domain.DomainName)
+	parameter.Set(CfParameterContent, *request.Value)
+	parameter.Set(CfParameterTTL, "120")
 	return parameter, nil
 }
 
 func (_this *CloudflareParameter) LoadDeleteParameter(request *model.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
-	if request == nil {
-		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
-	}
-	parameter := _this.loadCommonParameter("")
-	return parameter, nil
+	return nil, nil
 }
 
 func (_this *CloudflareParameter) loadCommonParameter(record record.Type) *url.Values {
 	parameter := make(url.Values, 10)
-	parameter.Set("match", "all")
-	parameter.Set("type", record.String())
+	parameter.Set(CfParameterMatch, "all")
+	parameter.Set(CfParameterType, record.String())
 	return &parameter
 }

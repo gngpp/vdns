@@ -45,11 +45,18 @@ const (
 	DnspodParameterDefault         = "默认"
 
 	// DnspocParameterContextDescribeKey context key
-	DnspocParameterContextDescribeKey = "ctx_describe_key"
+	DnspocParameterContextDescribeKey = "dnspod_ctx_describe_key"
 )
 
 const (
 	CfParameterPerPage = "per_page"
 	CfParameterPage    = "page"
 	CfParameterContent = "content"
+	CfParameterName    = "name"
+	CfParameterTTL     = "ttl"
+	CfParameterMatch   = "match"
+	CfParameterType    = "type"
+
+	CfParameterContextCreateKey = "cf_ctx_create_key"
+	CfParameterContextUpdateKey = "cf_ctx_update_key"
 )

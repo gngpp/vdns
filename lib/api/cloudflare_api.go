@@ -2,6 +2,7 @@ package api
 
 import (
 	"bytes"
+	"context"
 	"io/ioutil"
 	"net/url"
 	"vdns/lib/api/action"
@@ -48,23 +49,37 @@ func (_this *CloudflareProvider) DescribeRecords(request *model.DescribeDomainRe
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(nil, request, p)
+	requestUrl := _this.generateRequestUrl(nil, model.Domain(request), p)
 	return _this.rpc.DoDescribeRequest(requestUrl)
 }
 
 func (_this *CloudflareProvider) CreateRecord(request *model.CreateDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	p, err := _this.parameter.LoadCreateParameter(request, _this.Create)
+	if err != nil {
+		return nil, err
+	}
+	requestUrl := _this.generateRequestUrl(nil, model.Domain(request), nil)
+	ctx := context.WithValue(context.Background(), parameter.CfParameterContextCreateKey, p)
+	return _this.rpc.DoCreateCtxRequest(ctx, requestUrl)
 }
 
 func (_this *CloudflareProvider) UpdateRecord(request *model.UpdateDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	p, err := _this.parameter.LoadUpdateParameter(request, _this.Update)
+	if err != nil {
+		return nil, err
+	}
+	requestUrl := _this.generateRequestUrl(nil, model.Domain(request), nil)
+	ctx := context.WithValue(context.Background(), parameter.CfParameterContextUpdateKey, p)
+	return _this.rpc.DoUpdateCtxRequest(ctx, requestUrl)
 }
 
 func (_this *CloudflareProvider) DeleteRecord(request *model.DeleteDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	_, err := _this.parameter.LoadDeleteParameter(request, _this.Update)
+	if err != nil {
+		return nil, err
+	}
+	requestUrl := _this.generateRequestUrl(nil, model.Domain(request), nil)
+	return _this.rpc.DoDeleteRequest(requestUrl)
 }
 
 func (_this *CloudflareProvider) Support(recordType record.Type) error {
@@ -92,7 +107,7 @@ func (_this *CloudflareProvider) Support(recordType record.Type) error {
 
 // 获得域名区域列表
 func (_this *CloudflareProvider) getZones() (map[string]string, error) {
-	do, err := vhttp.Get(_this.api.StringValue(), strs.String(_this.credential.GetToken()))
+	do, err := vhttp.Get(_this.api.StringValue(), _this.credential.GetToken())
 	if err != nil {
 		return nil, err
 	}

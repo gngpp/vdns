@@ -4,9 +4,9 @@ import (
 	"context"
 	"vdns/lib/api/errs"
 	"vdns/lib/api/model"
+	"vdns/lib/api/parameter"
 	"vdns/lib/api/rpc/conv"
 	"vdns/lib/auth"
-	"vdns/lib/util/strs"
 	"vdns/lib/util/vhttp"
 )
 
@@ -39,7 +39,7 @@ func (_this *CloudflareRpc) DoDeleteRequest(url string) (*model.DomainRecordStat
 }
 
 func (_this *CloudflareRpc) DoDescribeCtxRequest(_ context.Context, url string) (*model.DomainRecordsResponse, error) {
-	resp, err := vhttp.Get(url, strs.String(_this.credential.GetToken()))
+	resp, err := vhttp.Get(url, _this.credential.GetToken())
 	if err != nil {
 		return &model.DomainRecordsResponse{}, errs.NewVdnsFromError(err)
 	}
@@ -47,16 +47,27 @@ func (_this *CloudflareRpc) DoDescribeCtxRequest(_ context.Context, url string) 
 }
 
 func (_this *CloudflareRpc) DoCreateCtxRequest(ctx context.Context, url string) (*model.DomainRecordStatusResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	data := ctx.Value(parameter.CfParameterContextCreateKey)
+	resp, err := vhttp.Post(url, "application/json", data, _this.credential.GetToken())
+	if err != nil {
+		return &model.DomainRecordStatusResponse{}, errs.NewVdnsFromError(err)
+	}
+	return _this.conv.CreateResponseConvert(resp)
 }
 
 func (_this *CloudflareRpc) DoUpdateCtxRequest(ctx context.Context, url string) (*model.DomainRecordStatusResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	data := ctx.Value(parameter.CfParameterContextUpdateKey)
+	resp, err := vhttp.Put(url, "application/json", data, _this.credential.GetToken())
+	if err != nil {
+		return &model.DomainRecordStatusResponse{}, errs.NewVdnsFromError(err)
+	}
+	return _this.conv.UpdateResponseConvert(resp)
 }
 
-func (_this *CloudflareRpc) DoDeleteCtxRequest(ctx context.Context, url string) (*model.DomainRecordStatusResponse, error) {
-	//TODO implement me
-	panic("implement me")
+func (_this *CloudflareRpc) DoDeleteCtxRequest(_ context.Context, url string) (*model.DomainRecordStatusResponse, error) {
+	resp, err := vhttp.Delete(url, "application/json", nil, _this.credential.GetToken())
+	if err != nil {
+		return &model.DomainRecordStatusResponse{}, errs.NewVdnsFromError(err)
+	}
+	return _this.conv.UpdateResponseConvert(resp)
 }

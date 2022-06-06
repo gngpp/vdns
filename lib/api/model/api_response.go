@@ -41,6 +41,16 @@ type DomainRecordStatusResponse struct {
 	RecordId  *string `json:"record_id,omitempty"`
 }
 
+func (_this *DomainRecordStatusResponse) SetRecordId(recordId *string) *DomainRecordStatusResponse {
+	_this.RecordId = recordId
+	return _this
+}
+
+func (_this *DomainRecordStatusResponse) SetRequestId(requestId *string) *DomainRecordStatusResponse {
+	_this.RequestId = requestId
+	return _this
+}
+
 func (_this *DomainRecordStatusResponse) String() string {
 	return vjson.PrettifyString(_this)
 }

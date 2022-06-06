@@ -60,9 +60,8 @@ func (_this *AliDNSResponseConvert) DescribeResponseCtxConvert(_ context.Context
 			target.ListCount = &listCount
 		}
 		return target, nil
-	} else {
-		return nil, _this.badBodyHandler(body)
 	}
+	return nil, _this.badBodyHandler(body)
 }
 
 func (_this *AliDNSResponseConvert) CreateResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
@@ -76,19 +75,15 @@ func (_this *AliDNSResponseConvert) CreateResponseCtxConvert(_ context.Context, 
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
 		}
-		sourceResponse := new(alidns_model.CreateDomainRecordResponse)
-		err = vjson.ByteArrayConvert(bytes, sourceResponse)
+		source := new(alidns_model.CreateDomainRecordResponse)
+		err = vjson.ByteArrayConvert(bytes, source)
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
 		}
-		response := &model.DomainRecordStatusResponse{
-			RecordId:  sourceResponse.RecordId,
-			RequestId: sourceResponse.RequestId,
-		}
-		return response, nil
-	} else {
-		return nil, _this.badBodyHandler(resp.Body)
+		target := new(model.DomainRecordStatusResponse)
+		return target.SetRecordId(source.RecordId).SetRequestId(source.RequestId), nil
 	}
+	return nil, _this.badBodyHandler(resp.Body)
 }
 
 func (_this *AliDNSResponseConvert) UpdateResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
@@ -102,19 +97,15 @@ func (_this *AliDNSResponseConvert) UpdateResponseCtxConvert(_ context.Context, 
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
 		}
-		sourceResponse := new(alidns_model.UpdateDomainRecordResponse)
-		err = vjson.ByteArrayConvert(bytes, sourceResponse)
+		source := new(alidns_model.UpdateDomainRecordResponse)
+		err = vjson.ByteArrayConvert(bytes, source)
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
 		}
-		response := &model.DomainRecordStatusResponse{
-			RecordId:  sourceResponse.RecordId,
-			RequestId: sourceResponse.RequestId,
-		}
-		return response, nil
-	} else {
-		return nil, _this.badBodyHandler(resp.Body)
+		target := new(model.DomainRecordStatusResponse)
+		return target.SetRecordId(source.RecordId).SetRequestId(source.RequestId), nil
 	}
+	return nil, _this.badBodyHandler(resp.Body)
 }
 
 func (_this *AliDNSResponseConvert) DeleteResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
@@ -128,19 +119,15 @@ func (_this *AliDNSResponseConvert) DeleteResponseCtxConvert(_ context.Context, 
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
 		}
-		sourceBody := new(alidns_model.DeleteDomainRecordResponse)
-		err = vjson.ByteArrayConvert(bytes, sourceBody)
+		source := new(alidns_model.DeleteDomainRecordResponse)
+		err = vjson.ByteArrayConvert(bytes, source)
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
 		}
-		response := &model.DomainRecordStatusResponse{
-			RecordId:  sourceBody.RecordId,
-			RequestId: sourceBody.RequestId,
-		}
-		return response, nil
-	} else {
-		return nil, _this.badBodyHandler(resp.Body)
+		target := new(model.DomainRecordStatusResponse)
+		return target.SetRecordId(source.RecordId).SetRequestId(source.RequestId), nil
 	}
+	return nil, _this.badBodyHandler(resp.Body)
 }
 
 //goland:noinspection GoRedundantConversion

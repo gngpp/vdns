@@ -34,7 +34,10 @@ func (_this *CloudflareResponseConvert) DeleteResponseConvert(resp *http.Respons
 	return _this.DeleteResponseCtxConvert(nil, resp)
 }
 
-func (_this *CloudflareResponseConvert) DescribeResponseCtxConvert(ctx context.Context, resp *http.Response) (*model.DomainRecordsResponse, error) {
+func (_this *CloudflareResponseConvert) DescribeResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordsResponse, error) {
+	if resp == nil {
+		return nil, errs.NewVdnsError("*http.Response cannot been null.")
+	}
 	if vhttp.IsOK(resp) {
 		body := resp.Body
 		defer iotool.ReadCloser(body)
@@ -42,21 +45,22 @@ func (_this *CloudflareResponseConvert) DescribeResponseCtxConvert(ctx context.C
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
 		}
-		r := &cloudflare_model.DescribeRecordResponse{}
-		err = vjson.ByteArrayConvert(bytes, r)
+		source := &cloudflare_model.DescribeRecordResponse{}
+		err = vjson.ByteArrayConvert(bytes, source)
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
 		}
-		if len(r.Errors) != 0 {
-			return nil, errs.NewCloudFlareSDKError(vjson.PrettifyString(r.Errors))
+		if len(source.Errors) != 0 {
+			return nil, errs.NewCloudFlareSDKError(vjson.PrettifyString(source.Errors))
 		}
-		if r.Success && len(r.Result) > 0 {
+		if source.Success && len(source.Result) > 0 {
 			target := &model.DomainRecordsResponse{}
-			target.PageSize = r.ResultInfo.PerPage
-			target.TotalCount = r.ResultInfo.TotalCount
-			target.ListCount = r.ResultInfo.Count
-			target.PageNumber = r.ResultInfo.Page
-			for _, result := range r.Result {
+			target.Records = make([]*model.Record, len(source.Result))
+			target.PageSize = source.ResultInfo.PerPage
+			target.TotalCount = source.ResultInfo.TotalCount
+			target.ListCount = source.ResultInfo.Count
+			target.PageNumber = source.ResultInfo.Page
+			for index, result := range source.Result {
 				domain, err := vhttp.CheckExtractDomain(*result.Name)
 				if err != nil {
 					return nil, errs.NewVdnsFromError(err)
@@ -69,22 +73,82 @@ func (_this *CloudflareResponseConvert) DescribeResponseCtxConvert(ctx context.C
 				record.RecordType = record2.Type(*result.Type)
 				record.TTL = result.TTL
 				record.Status = strs.String(strs.Concat("proxied=", convert.AsStringValue(result.Proxied)))
-				target.Records = append(target.Records, record)
+				target.Records[index] = record
 			}
 			return target, nil
 		}
 	}
-	return &model.DomainRecordsResponse{}, nil
+	return nil, errs.NewVdnsError("cloudflare bad response.")
 }
 
-func (_this *CloudflareResponseConvert) CreateResponseCtxConvert(ctx context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
-	return &model.DomainRecordStatusResponse{}, nil
+func (_this *CloudflareResponseConvert) CreateResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
+	if resp == nil {
+		return nil, errs.NewVdnsError("*http.Response cannot been null.")
+	}
+	if vhttp.IsOK(resp) {
+		body := resp.Body
+		defer iotool.ReadCloser(body)
+		bytes, err := ioutil.ReadAll(body)
+		if err != nil {
+			return nil, errs.NewVdnsFromError(err)
+		}
+		source := new(cloudflare_model.CreateRecordResponse)
+		err = vjson.ByteArrayConvert(bytes, source)
+		if err != nil {
+			return nil, errs.NewVdnsFromError(err)
+		}
+		if len(source.Errors) > 0 {
+			return nil, errs.NewVdnsError(vjson.PrettifyString(source.Errors))
+		}
+		target := new(model.DomainRecordStatusResponse)
+		return target.SetRecordId(source.Result.ID).SetRequestId(strs.String("none")), err
+	}
+	return nil, errs.NewVdnsError("cloudflare bad response.")
 }
 
-func (_this *CloudflareResponseConvert) UpdateResponseCtxConvert(ctx context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
-	return &model.DomainRecordStatusResponse{}, nil
+func (_this *CloudflareResponseConvert) UpdateResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
+	if resp == nil {
+		return nil, errs.NewVdnsError("*http.Response cannot been null.")
+	}
+	if vhttp.IsOK(resp) {
+		body := resp.Body
+		defer iotool.ReadCloser(body)
+		bytes, err := ioutil.ReadAll(body)
+		if err != nil {
+			return nil, errs.NewVdnsFromError(err)
+		}
+		source := new(cloudflare_model.UpdateRecordResponse)
+		err = vjson.ByteArrayConvert(bytes, source)
+		if err != nil {
+			return nil, errs.NewVdnsFromError(err)
+		}
+		if len(source.Errors) > 0 {
+			return nil, errs.NewVdnsError(vjson.PrettifyString(source.Errors))
+		}
+		target := new(model.DomainRecordStatusResponse)
+		return target.SetRecordId(source.Result.ID).SetRequestId(strs.String("none")), err
+	}
+	return nil, errs.NewVdnsError("cloudflare bad response.")
 }
 
-func (_this *CloudflareResponseConvert) DeleteResponseCtxConvert(ctx context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
-	return &model.DomainRecordStatusResponse{}, nil
+func (_this *CloudflareResponseConvert) DeleteResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
+	if resp == nil {
+		return nil, errs.NewVdnsError("*http.Response cannot been null.")
+	}
+	if vhttp.IsOK(resp) {
+		body := resp.Body
+		defer iotool.ReadCloser(body)
+		bytes, err := ioutil.ReadAll(body)
+		if err != nil {
+			return nil, errs.NewVdnsFromError(err)
+		}
+		source := new(cloudflare_model.DeleteRecordResponse)
+		err = vjson.ByteArrayConvert(bytes, source)
+		if err != nil {
+			return nil, errs.NewVdnsFromError(err)
+		}
+		target := new(model.DomainRecordStatusResponse)
+		return target.SetRecordId(source.Result.ID).SetRequestId(strs.String("none")), err
+	}
+	return nil, errs.NewVdnsError("cloudflare bad response.")
 }

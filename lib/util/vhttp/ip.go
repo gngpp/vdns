@@ -29,7 +29,7 @@ func GetIpv6Addr() string {
 }
 
 func getIpAddr(reg string, url string) (result string) {
-	resp, err := Get(url, nil)
+	resp, err := Get(url, "")
 	if err != nil {
 		vlog.Error(err)
 		return

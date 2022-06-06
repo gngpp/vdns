@@ -24,75 +24,76 @@ func (_this *DNSPodResponseConvert) DescribeResponseCtxConvert(ctx context.Conte
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
-	ctxDescribeRequest := new(model.DescribeDomainRecordsRequest)
-	if ctx != nil {
-		request := ctx.Value(parameter.DnspocParameterContextDescribeKey)
-		err := vjson.Convert(request, ctxDescribeRequest)
-		if err != nil {
-			return nil, err
-		}
-	}
-	body := resp.Body
-	defer iotool.ReadCloser(body)
 	if vhttp.IsOK(resp) {
-		bytes, err := ioutil.ReadAll(body)
-		if err != nil {
-			return nil, errs.NewVdnsFromError(err)
-		}
-		b := new(dnspod_model.DescribeRecordListResponse)
-		err = vjson.ByteArrayConvert(bytes, b)
-		if err != nil {
-			return nil, errs.NewVdnsFromError(err)
-		}
-		sourceResponse := b.Response
-		if sourceResponse != nil {
-			if sourceResponse.Error != nil {
-				return nil, _this.errorBodyHandler(sourceResponse.Error, sourceResponse.RequestId)
+		ctxDescribeRequest := new(model.DescribeDomainRecordsRequest)
+		if ctx != nil {
+			request := ctx.Value(parameter.DnspocParameterContextDescribeKey)
+			err := vjson.Convert(request, ctxDescribeRequest)
+			if err != nil {
+				return nil, err
 			}
-			dnspodRecords := sourceResponse.RecordList
-			if dnspodRecords != nil || len(dnspodRecords) > 0 {
-				records := make([]*model.Record, len(dnspodRecords))
-				for i, dnspodRecord := range dnspodRecords {
-					if dnspodRecord != nil {
-						target := &model.Record{
-							ID:         convert.AsString(dnspodRecord.RecordId),
-							RecordType: record.Type(*dnspodRecord.Type),
-							Domain:     ctxDescribeRequest.Domain,
-							RR:         dnspodRecord.Name,
-							Value:      dnspodRecord.Value,
-							Status:     dnspodRecord.Status,
-							TTL:        dnspodRecord.TTL,
+		}
+		body := resp.Body
+		defer iotool.ReadCloser(body)
+		if vhttp.IsOK(resp) {
+			bytes, err := ioutil.ReadAll(body)
+			if err != nil {
+				return nil, errs.NewVdnsFromError(err)
+			}
+			b := new(dnspod_model.DescribeRecordListResponse)
+			err = vjson.ByteArrayConvert(bytes, b)
+			if err != nil {
+				return nil, errs.NewVdnsFromError(err)
+			}
+			sourceResponse := b.Response
+			if sourceResponse != nil {
+				if sourceResponse.Error != nil {
+					return nil, _this.errorBodyHandler(sourceResponse.Error, sourceResponse.RequestId)
+				}
+				dnspodRecords := sourceResponse.RecordList
+				if dnspodRecords != nil || len(dnspodRecords) > 0 {
+					records := make([]*model.Record, len(dnspodRecords))
+					for i, dnspodRecord := range dnspodRecords {
+						if dnspodRecord != nil {
+							target := &model.Record{
+								ID:         convert.AsString(dnspodRecord.RecordId),
+								RecordType: record.Type(*dnspodRecord.Type),
+								Domain:     ctxDescribeRequest.Domain,
+								RR:         dnspodRecord.Name,
+								Value:      dnspodRecord.Value,
+								Status:     dnspodRecord.Status,
+								TTL:        dnspodRecord.TTL,
+							}
+							records[i] = target
 						}
-						records[i] = target
 					}
+					var pageSize int64 = 100
+					if ctxDescribeRequest.PageSize != nil {
+						pageSize = *ctxDescribeRequest.PageSize
+					}
+					listCount := int64(len(records))
+					response := &model.DomainRecordsResponse{
+						TotalCount: sourceResponse.RecordCountInfo.TotalCount,
+						PageSize:   &pageSize,
+						PageNumber: ctxDescribeRequest.PageNumber,
+						Records:    records,
+						ListCount:  &listCount,
+					}
+					return response, nil
 				}
-				var pageSize int64 = 100
-				if ctxDescribeRequest.PageSize != nil {
-					pageSize = *ctxDescribeRequest.PageSize
-				}
-				listCount := int64(len(records))
-				response := &model.DomainRecordsResponse{
-					TotalCount: sourceResponse.RecordCountInfo.TotalCount,
-					PageSize:   &pageSize,
-					PageNumber: ctxDescribeRequest.PageNumber,
-					Records:    records,
-					ListCount:  &listCount,
-				}
-				return response, nil
 			}
 		}
-		return &model.DomainRecordsResponse{}, nil
 	}
-	return &model.DomainRecordsResponse{}, nil
+	return nil, errs.NewVdnsError("dnspod bad response.")
 }
 
 func (_this *DNSPodResponseConvert) CreateResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
-	body := resp.Body
-	defer iotool.ReadCloser(body)
 	if vhttp.IsOK(resp) {
+		body := resp.Body
+		defer iotool.ReadCloser(body)
 		bytes, err := ioutil.ReadAll(body)
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
@@ -102,18 +103,14 @@ func (_this *DNSPodResponseConvert) CreateResponseCtxConvert(_ context.Context, 
 		if err != nil {
 			return nil, err
 		}
-		sourceResponse := c.Response
-		if sourceResponse.Error != nil {
-			return nil, _this.errorBodyHandler(sourceResponse.Error, sourceResponse.RequestId)
+		source := c.Response
+		if source.Error != nil {
+			return nil, _this.errorBodyHandler(source.Error, source.RequestId)
 		}
-		response := &model.DomainRecordStatusResponse{
-			RecordId:  convert.AsString(sourceResponse.RecordId),
-			RequestId: sourceResponse.RequestId,
-		}
-		return response, nil
-	} else {
-		return nil, errs.NewVdnsError("dnspod bad response.")
+		target := new(model.DomainRecordStatusResponse)
+		return target.SetRecordId(convert.AsString(source.RecordId)).SetRequestId(source.RequestId), nil
 	}
+	return nil, errs.NewVdnsError("dnspod bad response.")
 }
 
 func (_this *DNSPodResponseConvert) UpdateResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
@@ -132,18 +129,14 @@ func (_this *DNSPodResponseConvert) UpdateResponseCtxConvert(_ context.Context, 
 		if err != nil {
 			return nil, err
 		}
-		sourceResponse := c.Response
-		if sourceResponse.Error != nil {
-			return nil, _this.errorBodyHandler(sourceResponse.Error, sourceResponse.RequestId)
+		source := c.Response
+		if source.Error != nil {
+			return nil, _this.errorBodyHandler(source.Error, source.RequestId)
 		}
-		response := &model.DomainRecordStatusResponse{
-			RecordId:  convert.AsString(sourceResponse.RecordId),
-			RequestId: sourceResponse.RequestId,
-		}
-		return response, nil
-	} else {
-		return nil, errs.NewVdnsError("dnspod bad response.")
+		target := new(model.DomainRecordStatusResponse)
+		return target.SetRecordId(convert.AsString(source.RecordId)).SetRequestId(source.RequestId), nil
 	}
+	return nil, errs.NewVdnsError("dnspod bad response.")
 }
 
 func (_this *DNSPodResponseConvert) DeleteResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
@@ -162,18 +155,14 @@ func (_this *DNSPodResponseConvert) DeleteResponseCtxConvert(_ context.Context, 
 		if err != nil {
 			return nil, err
 		}
-		sourceResponse := c.Response
-		if sourceResponse.Error != nil {
-			return nil, _this.errorBodyHandler(sourceResponse.Error, sourceResponse.RequestId)
+		source := c.Response
+		if source.Error != nil {
+			return nil, _this.errorBodyHandler(source.Error, source.RequestId)
 		}
-		response := &model.DomainRecordStatusResponse{
-			RecordId:  convert.AsString("none"),
-			RequestId: sourceResponse.RequestId,
-		}
-		return response, nil
-	} else {
-		return nil, errs.NewVdnsError("dnspod bad response.")
+		target := new(model.DomainRecordStatusResponse)
+		return target.SetRecordId(strs.String("none")).SetRequestId(source.RequestId), nil
 	}
+	return nil, errs.NewVdnsError("dnspod bad response.")
 }
 
 func (_this *DNSPodResponseConvert) DescribeResponseConvert(resp *http.Response) (*model.DomainRecordsResponse, error) {
