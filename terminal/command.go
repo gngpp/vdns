@@ -10,7 +10,6 @@ import (
 	"io/ioutil"
 	"math"
 	"strings"
-	"time"
 	"vdns/config"
 	"vdns/lib/util/vhttp"
 	"vdns/lib/vlog"
@@ -197,7 +196,7 @@ func testIpApiAction() cli.ActionFunc {
 			}
 			ipApiList = config.GetIpv6ApiList()
 		}
-		go spinner(100 * time.Millisecond)
+		go spinner()
 		for _, api := range ipApiList {
 			_ = t.AddRow([]string{api, vhttp.GetIpv4AddrForUrl(api)})
 		}

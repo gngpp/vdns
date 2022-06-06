@@ -6,8 +6,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"vdns/lib/api/errs"
-	"vdns/lib/api/models"
-	"vdns/lib/api/models/alidns_model"
+	"vdns/lib/api/model"
+	"vdns/lib/api/model/alidns_model"
 	"vdns/lib/standard/record"
 	"vdns/lib/util/iotool"
 	"vdns/lib/util/vhttp"
@@ -18,7 +18,7 @@ type AliDNSResponseConvert struct {
 }
 
 //goland:noinspection GoRedundantConversion
-func (_this *AliDNSResponseConvert) DescribeResponseCtxConvert(_ context.Context, resp *http.Response) (*models.DomainRecordsResponse, error) {
+func (_this *AliDNSResponseConvert) DescribeResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordsResponse, error) {
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
@@ -29,21 +29,21 @@ func (_this *AliDNSResponseConvert) DescribeResponseCtxConvert(_ context.Context
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
 		}
-		sourceResponse := new(alidns_model.DescribeDomainRecordsResponse)
-		err = vjson.ByteArrayConvert(bytes, sourceResponse)
+		source := new(alidns_model.DescribeDomainRecordsResponse)
+		err = vjson.ByteArrayConvert(bytes, source)
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
 		}
-		response := new(models.DomainRecordsResponse)
-		response.TotalCount = sourceResponse.TotalCount
-		response.PageSize = sourceResponse.PageSize
-		response.PageNumber = sourceResponse.PageNumber
-		aliyunRecords := sourceResponse.DomainRecords.Record
+		target := new(model.DomainRecordsResponse)
+		target.TotalCount = source.TotalCount
+		target.PageSize = source.PageSize
+		target.PageNumber = source.PageNumber
+		aliyunRecords := source.DomainRecords.Record
 		if aliyunRecords != nil || len(aliyunRecords) > 0 {
-			records := make([]*models.Record, len(aliyunRecords))
+			records := make([]*model.Record, len(aliyunRecords))
 			for i, aliyunRecord := range aliyunRecords {
 				if aliyunRecord != nil {
-					target := &models.Record{
+					target := &model.Record{
 						ID:         aliyunRecord.RecordId,
 						RecordType: record.Type(*aliyunRecord.Type),
 						Domain:     aliyunRecord.DomainName,
@@ -56,16 +56,16 @@ func (_this *AliDNSResponseConvert) DescribeResponseCtxConvert(_ context.Context
 				}
 			}
 			listCount := int64(len(records))
-			response.Records = records
-			response.ListCount = &listCount
+			target.Records = records
+			target.ListCount = &listCount
 		}
-		return response, nil
+		return target, nil
 	} else {
 		return nil, _this.badBodyHandler(body)
 	}
 }
 
-func (_this *AliDNSResponseConvert) CreateResponseCtxConvert(_ context.Context, resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *AliDNSResponseConvert) CreateResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
@@ -81,7 +81,7 @@ func (_this *AliDNSResponseConvert) CreateResponseCtxConvert(_ context.Context, 
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
 		}
-		response := &models.DomainRecordStatusResponse{
+		response := &model.DomainRecordStatusResponse{
 			RecordId:  sourceResponse.RecordId,
 			RequestId: sourceResponse.RequestId,
 		}
@@ -91,7 +91,7 @@ func (_this *AliDNSResponseConvert) CreateResponseCtxConvert(_ context.Context, 
 	}
 }
 
-func (_this *AliDNSResponseConvert) UpdateResponseCtxConvert(_ context.Context, resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *AliDNSResponseConvert) UpdateResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
@@ -107,7 +107,7 @@ func (_this *AliDNSResponseConvert) UpdateResponseCtxConvert(_ context.Context, 
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
 		}
-		response := &models.DomainRecordStatusResponse{
+		response := &model.DomainRecordStatusResponse{
 			RecordId:  sourceResponse.RecordId,
 			RequestId: sourceResponse.RequestId,
 		}
@@ -117,7 +117,7 @@ func (_this *AliDNSResponseConvert) UpdateResponseCtxConvert(_ context.Context, 
 	}
 }
 
-func (_this *AliDNSResponseConvert) DeleteResponseCtxConvert(_ context.Context, resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *AliDNSResponseConvert) DeleteResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
@@ -133,7 +133,7 @@ func (_this *AliDNSResponseConvert) DeleteResponseCtxConvert(_ context.Context, 
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
 		}
-		response := &models.DomainRecordStatusResponse{
+		response := &model.DomainRecordStatusResponse{
 			RecordId:  sourceBody.RecordId,
 			RequestId: sourceBody.RequestId,
 		}
@@ -144,19 +144,19 @@ func (_this *AliDNSResponseConvert) DeleteResponseCtxConvert(_ context.Context, 
 }
 
 //goland:noinspection GoRedundantConversion
-func (_this *AliDNSResponseConvert) DescribeResponseConvert(resp *http.Response) (*models.DomainRecordsResponse, error) {
+func (_this *AliDNSResponseConvert) DescribeResponseConvert(resp *http.Response) (*model.DomainRecordsResponse, error) {
 	return _this.DescribeResponseCtxConvert(nil, resp)
 }
 
-func (_this *AliDNSResponseConvert) CreateResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *AliDNSResponseConvert) CreateResponseConvert(resp *http.Response) (*model.DomainRecordStatusResponse, error) {
 	return _this.CreateResponseCtxConvert(nil, resp)
 }
 
-func (_this *AliDNSResponseConvert) UpdateResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *AliDNSResponseConvert) UpdateResponseConvert(resp *http.Response) (*model.DomainRecordStatusResponse, error) {
 	return _this.UpdateResponseCtxConvert(nil, resp)
 }
 
-func (_this *AliDNSResponseConvert) DeleteResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *AliDNSResponseConvert) DeleteResponseConvert(resp *http.Response) (*model.DomainRecordStatusResponse, error) {
 	return _this.DeleteResponseCtxConvert(nil, resp)
 }
 

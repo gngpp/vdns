@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"vdns/lib/api/action"
 	"vdns/lib/api/errs"
-	"vdns/lib/api/models"
+	"vdns/lib/api/model"
 	"vdns/lib/api/parameter"
 	"vdns/lib/api/rpc"
 	"vdns/lib/auth"
@@ -36,7 +36,7 @@ type AliDNSProvider struct {
 	rpc               rpc.VdnsRpc
 }
 
-func (_this *AliDNSProvider) DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error) {
+func (_this *AliDNSProvider) DescribeRecords(request *model.DescribeDomainRecordsRequest) (*model.DomainRecordsResponse, error) {
 	p, err := _this.parameter.LoadDescribeParameter(request, _this.Describe)
 	if err != nil {
 		return nil, err
@@ -45,7 +45,7 @@ func (_this *AliDNSProvider) DescribeRecords(request *models.DescribeDomainRecor
 	return _this.rpc.DoDescribeRequest(requestUrl)
 }
 
-func (_this *AliDNSProvider) CreateRecord(request *models.CreateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+func (_this *AliDNSProvider) CreateRecord(request *model.CreateDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
 	p, err := _this.parameter.LoadCreateParameter(request, _this.Create)
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func (_this *AliDNSProvider) CreateRecord(request *models.CreateDomainRecordRequ
 	return _this.rpc.DoCreateRequest(requestUrl)
 }
 
-func (_this *AliDNSProvider) UpdateRecord(request *models.UpdateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+func (_this *AliDNSProvider) UpdateRecord(request *model.UpdateDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
 	p, err := _this.parameter.LoadUpdateParameter(request, _this.Update)
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func (_this *AliDNSProvider) UpdateRecord(request *models.UpdateDomainRecordRequ
 	return _this.rpc.DoUpdateRequest(requestUrl)
 }
 
-func (_this *AliDNSProvider) DeleteRecord(request *models.DeleteDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+func (_this *AliDNSProvider) DeleteRecord(request *model.DeleteDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
 	p, err := _this.parameter.LoadDeleteParameter(request, _this.Delete)
 	if err != nil {
 		return nil, err

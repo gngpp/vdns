@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"vdns/lib/api/errs"
-	"vdns/lib/api/models"
-	"vdns/lib/api/models/dnspod_model"
+	"vdns/lib/api/model"
+	"vdns/lib/api/model/dnspod_model"
 	"vdns/lib/api/parameter"
 	"vdns/lib/standard/record"
 	"vdns/lib/util/convert"
@@ -20,13 +20,13 @@ type DNSPodResponseConvert struct {
 }
 
 //goland:noinspection GoRedundantConversion
-func (_this *DNSPodResponseConvert) DescribeResponseCtxConvert(ctx context.Context, resp *http.Response) (*models.DomainRecordsResponse, error) {
+func (_this *DNSPodResponseConvert) DescribeResponseCtxConvert(ctx context.Context, resp *http.Response) (*model.DomainRecordsResponse, error) {
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
-	ctxDescribeRequest := new(models.DescribeDomainRecordsRequest)
+	ctxDescribeRequest := new(model.DescribeDomainRecordsRequest)
 	if ctx != nil {
-		request := ctx.Value(parameter.DNSPOC_PARAMETER_CONTEXT_DESCRIBE_KEY)
+		request := ctx.Value(parameter.DnspocParameterContextDescribeKey)
 		err := vjson.Convert(request, ctxDescribeRequest)
 		if err != nil {
 			return nil, err
@@ -51,10 +51,10 @@ func (_this *DNSPodResponseConvert) DescribeResponseCtxConvert(ctx context.Conte
 			}
 			dnspodRecords := sourceResponse.RecordList
 			if dnspodRecords != nil || len(dnspodRecords) > 0 {
-				records := make([]*models.Record, len(dnspodRecords))
+				records := make([]*model.Record, len(dnspodRecords))
 				for i, dnspodRecord := range dnspodRecords {
 					if dnspodRecord != nil {
-						target := &models.Record{
+						target := &model.Record{
 							ID:         convert.AsString(dnspodRecord.RecordId),
 							RecordType: record.Type(*dnspodRecord.Type),
 							Domain:     ctxDescribeRequest.Domain,
@@ -71,7 +71,7 @@ func (_this *DNSPodResponseConvert) DescribeResponseCtxConvert(ctx context.Conte
 					pageSize = *ctxDescribeRequest.PageSize
 				}
 				listCount := int64(len(records))
-				response := &models.DomainRecordsResponse{
+				response := &model.DomainRecordsResponse{
 					TotalCount: sourceResponse.RecordCountInfo.TotalCount,
 					PageSize:   &pageSize,
 					PageNumber: ctxDescribeRequest.PageNumber,
@@ -81,12 +81,12 @@ func (_this *DNSPodResponseConvert) DescribeResponseCtxConvert(ctx context.Conte
 				return response, nil
 			}
 		}
-		return &models.DomainRecordsResponse{}, nil
+		return &model.DomainRecordsResponse{}, nil
 	}
-	return &models.DomainRecordsResponse{}, nil
+	return &model.DomainRecordsResponse{}, nil
 }
 
-func (_this *DNSPodResponseConvert) CreateResponseCtxConvert(_ context.Context, resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *DNSPodResponseConvert) CreateResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
@@ -106,7 +106,7 @@ func (_this *DNSPodResponseConvert) CreateResponseCtxConvert(_ context.Context, 
 		if sourceResponse.Error != nil {
 			return nil, _this.errorBodyHandler(sourceResponse.Error, sourceResponse.RequestId)
 		}
-		response := &models.DomainRecordStatusResponse{
+		response := &model.DomainRecordStatusResponse{
 			RecordId:  convert.AsString(sourceResponse.RecordId),
 			RequestId: sourceResponse.RequestId,
 		}
@@ -116,7 +116,7 @@ func (_this *DNSPodResponseConvert) CreateResponseCtxConvert(_ context.Context, 
 	}
 }
 
-func (_this *DNSPodResponseConvert) UpdateResponseCtxConvert(_ context.Context, resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *DNSPodResponseConvert) UpdateResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
@@ -136,7 +136,7 @@ func (_this *DNSPodResponseConvert) UpdateResponseCtxConvert(_ context.Context, 
 		if sourceResponse.Error != nil {
 			return nil, _this.errorBodyHandler(sourceResponse.Error, sourceResponse.RequestId)
 		}
-		response := &models.DomainRecordStatusResponse{
+		response := &model.DomainRecordStatusResponse{
 			RecordId:  convert.AsString(sourceResponse.RecordId),
 			RequestId: sourceResponse.RequestId,
 		}
@@ -146,7 +146,7 @@ func (_this *DNSPodResponseConvert) UpdateResponseCtxConvert(_ context.Context, 
 	}
 }
 
-func (_this *DNSPodResponseConvert) DeleteResponseCtxConvert(_ context.Context, resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *DNSPodResponseConvert) DeleteResponseCtxConvert(_ context.Context, resp *http.Response) (*model.DomainRecordStatusResponse, error) {
 	if resp == nil {
 		return nil, errs.NewVdnsError("*http.Response cannot been null.")
 	}
@@ -166,7 +166,7 @@ func (_this *DNSPodResponseConvert) DeleteResponseCtxConvert(_ context.Context, 
 		if sourceResponse.Error != nil {
 			return nil, _this.errorBodyHandler(sourceResponse.Error, sourceResponse.RequestId)
 		}
-		response := &models.DomainRecordStatusResponse{
+		response := &model.DomainRecordStatusResponse{
 			RecordId:  convert.AsString("none"),
 			RequestId: sourceResponse.RequestId,
 		}
@@ -176,19 +176,19 @@ func (_this *DNSPodResponseConvert) DeleteResponseCtxConvert(_ context.Context, 
 	}
 }
 
-func (_this *DNSPodResponseConvert) DescribeResponseConvert(resp *http.Response) (*models.DomainRecordsResponse, error) {
+func (_this *DNSPodResponseConvert) DescribeResponseConvert(resp *http.Response) (*model.DomainRecordsResponse, error) {
 	return _this.DescribeResponseCtxConvert(nil, resp)
 }
 
-func (_this *DNSPodResponseConvert) CreateResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *DNSPodResponseConvert) CreateResponseConvert(resp *http.Response) (*model.DomainRecordStatusResponse, error) {
 	return _this.CreateResponseCtxConvert(nil, resp)
 }
 
-func (_this *DNSPodResponseConvert) UpdateResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *DNSPodResponseConvert) UpdateResponseConvert(resp *http.Response) (*model.DomainRecordStatusResponse, error) {
 	return _this.UpdateResponseCtxConvert(nil, resp)
 }
 
-func (_this *DNSPodResponseConvert) DeleteResponseConvert(resp *http.Response) (*models.DomainRecordStatusResponse, error) {
+func (_this *DNSPodResponseConvert) DeleteResponseConvert(resp *http.Response) (*model.DomainRecordStatusResponse, error) {
 	return _this.DeleteResponseCtxConvert(nil, resp)
 }
 

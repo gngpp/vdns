@@ -6,7 +6,8 @@ import (
 	"net/url"
 	"vdns/lib/api/action"
 	"vdns/lib/api/errs"
-	"vdns/lib/api/models"
+	"vdns/lib/api/model"
+	"vdns/lib/api/model/cloudflare_model"
 	"vdns/lib/api/parameter"
 	"vdns/lib/api/rpc"
 	"vdns/lib/auth"
@@ -42,26 +43,26 @@ type CloudflareProvider struct {
 	rpc                  rpc.VdnsRpc
 }
 
-func (_this *CloudflareProvider) DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error) {
+func (_this *CloudflareProvider) DescribeRecords(request *model.DescribeDomainRecordsRequest) (*model.DomainRecordsResponse, error) {
 	p, err := _this.parameter.LoadDescribeParameter(request, _this.Describe)
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl("", request, p)
+	requestUrl := _this.generateRequestUrl(nil, request, p)
 	return _this.rpc.DoDescribeRequest(requestUrl)
 }
 
-func (_this *CloudflareProvider) CreateRecord(request *models.CreateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+func (_this *CloudflareProvider) CreateRecord(request *model.CreateDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (_this *CloudflareProvider) UpdateRecord(request *models.UpdateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+func (_this *CloudflareProvider) UpdateRecord(request *model.UpdateDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (_this *CloudflareProvider) DeleteRecord(request *models.DeleteDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+func (_this *CloudflareProvider) DeleteRecord(request *model.DeleteDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
@@ -101,10 +102,13 @@ func (_this *CloudflareProvider) getZones() (map[string]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	zones := models.NewCloudflareZones()
+	zones := cloudflare_model.NewCloudflareZones()
 	err = vjson.ByteArrayConvert(all, zones)
 	if err != nil {
 		return nil, err
+	}
+	if len(zones.Errors) > 0 {
+		return nil, errs.NewCloudFlareSDKError(vjson.PrettifyString(zones.Errors))
 	}
 	zonesMap := make(map[string]string)
 	if len(zones.Result) != 0 {
@@ -128,7 +132,7 @@ func (_this *CloudflareProvider) getZoneUrl(domain string) (string, error) {
 	return strs.Concat(_this.api.StringValue(), "/", identifier, "/dns_records"), nil
 }
 
-func (_this *CloudflareProvider) generateRequestUrl(identifier string, domain models.Domain, parameter *url.Values) string {
+func (_this *CloudflareProvider) generateRequestUrl(identifier *string, domain model.Domain, parameter *url.Values) string {
 	queryString := _this.toCanonicalizeStringQueryString(parameter)
 	zoneUrl, err := _this.getZoneUrl(domain.GetDomain())
 	if err != nil {
@@ -136,16 +140,16 @@ func (_this *CloudflareProvider) generateRequestUrl(identifier string, domain mo
 		return ""
 	}
 	if strs.IsEmpty(queryString) {
-		if strs.IsEmpty(identifier) {
+		if identifier == nil || strs.IsEmpty(*identifier) {
 			return zoneUrl
 		} else {
-			return strs.Concat(zoneUrl, "/", identifier, "?")
+			return strs.Concat(zoneUrl, "/", *identifier, "?")
 		}
 	} else {
-		if strs.IsEmpty(identifier) {
+		if identifier == nil || strs.IsEmpty(*identifier) {
 			return strs.Concat(zoneUrl, "?", queryString)
 		} else {
-			return strs.Concat(zoneUrl, "/", identifier, "?", queryString)
+			return strs.Concat(zoneUrl, "/", *identifier, "?", queryString)
 		}
 	}
 }

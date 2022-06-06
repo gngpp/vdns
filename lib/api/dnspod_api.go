@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"vdns/lib/api/action"
 	"vdns/lib/api/errs"
-	"vdns/lib/api/models"
+	"vdns/lib/api/model"
 	"vdns/lib/api/parameter"
 	"vdns/lib/api/rpc"
 	"vdns/lib/auth"
@@ -38,17 +38,17 @@ type DNSPodProvider struct {
 	rpc               rpc.VdnsRpc
 }
 
-func (_this *DNSPodProvider) DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error) {
+func (_this *DNSPodProvider) DescribeRecords(request *model.DescribeDomainRecordsRequest) (*model.DomainRecordsResponse, error) {
 	p, err := _this.parameter.LoadDescribeParameter(request, _this.Describe)
 	if err != nil {
 		return nil, err
 	}
 	requestUrl := _this.generateRequestUrl(p)
-	ctx := context.WithValue(context.Background(), parameter.DNSPOC_PARAMETER_CONTEXT_DESCRIBE_KEY, request)
+	ctx := context.WithValue(context.Background(), parameter.DnspocParameterContextDescribeKey, request)
 	return _this.rpc.DoDescribeCtxRequest(ctx, requestUrl)
 }
 
-func (_this *DNSPodProvider) CreateRecord(request *models.CreateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+func (_this *DNSPodProvider) CreateRecord(request *model.CreateDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
 	p, err := _this.parameter.LoadCreateParameter(request, _this.Create)
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func (_this *DNSPodProvider) CreateRecord(request *models.CreateDomainRecordRequ
 	return _this.rpc.DoCreateRequest(requestUrl)
 }
 
-func (_this *DNSPodProvider) UpdateRecord(request *models.UpdateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+func (_this *DNSPodProvider) UpdateRecord(request *model.UpdateDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
 	p, err := _this.parameter.LoadUpdateParameter(request, _this.Update)
 	if err != nil {
 		return nil, err
@@ -66,7 +66,7 @@ func (_this *DNSPodProvider) UpdateRecord(request *models.UpdateDomainRecordRequ
 	return _this.rpc.DoUpdateRequest(requestUrl)
 }
 
-func (_this *DNSPodProvider) DeleteRecord(request *models.DeleteDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+func (_this *DNSPodProvider) DeleteRecord(request *model.DeleteDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
 	p, err := _this.parameter.LoadDeleteParameter(request, _this.Delete)
 	if err != nil {
 		return nil, err

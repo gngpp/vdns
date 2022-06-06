@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 	"vdns/lib/api/errs"
-	"vdns/lib/api/models"
+	"vdns/lib/api/model"
 	"vdns/lib/auth"
 	"vdns/lib/sign/compose"
 	"vdns/lib/standard"
@@ -31,7 +31,7 @@ func NewDNSPodParameter(credential auth.Credential, signatureComposer compose.Si
 	}
 }
 
-func (_this *DNSPodParameter) LoadDescribeParameter(request *models.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
+func (_this *DNSPodParameter) LoadDescribeParameter(request *model.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
@@ -41,39 +41,39 @@ func (_this *DNSPodParameter) LoadDescribeParameter(request *models.DescribeDoma
 		return nil, errs.NewVdnsFromError(err)
 	}
 	parameter := _this.loadCommonParameter(action)
-	parameter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
+	parameter.Set(DnspodParameterDomain, domain.DomainName)
 
 	// assert record type
 	if !record.Support(request.RecordType) {
 		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
-	parameter.Set(DNSPOD_PARAMETER_RECORD_TYPE, request.RecordType.String())
+	parameter.Set(DnspodParameterRecordType, request.RecordType.String())
 
 	// assert page size
 	if request.PageSize != nil {
-		parameter.Set(DNSPOD_PARAMETER_LIMIT, convert.AsStringValue(request.PageSize))
+		parameter.Set(DnspodParameterLimit, convert.AsStringValue(request.PageSize))
 	}
 
 	// assert offset start from 0
 	if request.PageNumber != nil {
-		parameter.Set(DNSPOD_PARAMETER_OFFSET, convert.AsStringValue(*request.PageNumber-1))
+		parameter.Set(DnspodParameterOffset, convert.AsStringValue(*request.PageNumber-1))
 	}
 
 	// search and parse records by keyword, currently supports searching for host headers and record values
 	if request.ValueKeyWord != nil {
-		parameter.Set(DNSPOD_PARAMETER_KEY_WORD, *request.ValueKeyWord)
+		parameter.Set(DnspodParameterKeyWord, *request.ValueKeyWord)
 	}
 
 	// assert rr key word
 	if request.RRKeyWord != nil {
-		parameter.Set(DNSPOD_PARAMETER_SUBDOMAIN_1, *request.RRKeyWord)
+		parameter.Set(DnspodParameterSubdomain1, *request.RRKeyWord)
 	} else if strs.NotEmpty(domain.SubDomain) {
-		parameter.Set(DNSPOD_PARAMETER_SUBDOMAIN_1, domain.SubDomain)
+		parameter.Set(DnspodParameterSubdomain1, domain.SubDomain)
 	}
 	return parameter, nil
 }
 
-func (_this *DNSPodParameter) LoadCreateParameter(request *models.CreateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *DNSPodParameter) LoadCreateParameter(request *model.CreateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
@@ -94,21 +94,21 @@ func (_this *DNSPodParameter) LoadCreateParameter(request *models.CreateDomainRe
 		return nil, errs.NewVdnsFromError(err)
 	}
 	parameter := _this.loadCommonParameter(action)
-	parameter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
-	parameter.Set(DNSPOD_PARAMETER_RECORD_TYPE, request.RecordType.String())
-	parameter.Set(DNSPOD_PARAMETER_VALUE, strs.StringValue(request.Value))
-	parameter.Set(DNSPOD_PARAMETER_RECORD_LINE, DNSPOD_PARAMETER_DEFAULT)
+	parameter.Set(DnspodParameterDomain, domain.DomainName)
+	parameter.Set(DnspodParameterRecordType, request.RecordType.String())
+	parameter.Set(DnspodParameterValue, strs.StringValue(request.Value))
+	parameter.Set(DnspodParameterRecordLine, DnspodParameterDefault)
 
 	// assert rr
 	if strs.IsEmpty(domain.SubDomain) {
-		parameter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, record.PAN_ANALYSIS_RR_KEY_WORD.String())
+		parameter.Set(DnspodParameterSubdomain2, record.PAN_ANALYSIS_RR_KEY_WORD.String())
 	} else {
-		parameter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, domain.SubDomain)
+		parameter.Set(DnspodParameterSubdomain2, domain.SubDomain)
 	}
 	return parameter, nil
 }
 
-func (_this *DNSPodParameter) LoadUpdateParameter(request *models.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *DNSPodParameter) LoadUpdateParameter(request *model.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
@@ -134,23 +134,23 @@ func (_this *DNSPodParameter) LoadUpdateParameter(request *models.UpdateDomainRe
 		return nil, errs.NewVdnsFromError(err)
 	}
 	parameter := _this.loadCommonParameter(action)
-	parameter.Set(DNSPOD_PARAMETER_RECORD_ID, *request.ID)
-	parameter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
-	parameter.Set(DNSPOD_PARAMETER_RECORD_TYPE, request.RecordType.String())
-	parameter.Set(DNSPOD_PARAMETER_VALUE, strs.StringValue(request.Value))
-	parameter.Set(DNSPOD_PARAMETER_RECORD_LINE, DNSPOD_PARAMETER_DEFAULT)
+	parameter.Set(DnspodParameterRecordId, *request.ID)
+	parameter.Set(DnspodParameterDomain, domain.DomainName)
+	parameter.Set(DnspodParameterRecordType, request.RecordType.String())
+	parameter.Set(DnspodParameterValue, strs.StringValue(request.Value))
+	parameter.Set(DnspodParameterRecordLine, DnspodParameterDefault)
 
 	// assert rr
 	if strs.IsEmpty(domain.SubDomain) {
-		parameter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, record.PAN_ANALYSIS_RR_KEY_WORD.String())
+		parameter.Set(DnspodParameterSubdomain2, record.PAN_ANALYSIS_RR_KEY_WORD.String())
 	} else {
-		parameter.Set(DNSPOD_PARAMETER_SUBDOMAIN_2, domain.SubDomain)
+		parameter.Set(DnspodParameterSubdomain2, domain.SubDomain)
 	}
 
 	return parameter, nil
 }
 
-func (_this *DNSPodParameter) LoadDeleteParameter(request *models.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *DNSPodParameter) LoadDeleteParameter(request *model.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
@@ -166,8 +166,8 @@ func (_this *DNSPodParameter) LoadDeleteParameter(request *models.DeleteDomainRe
 		return nil, errs.NewVdnsFromError(err)
 	}
 	parameter := _this.loadCommonParameter(action)
-	parameter.Set(DNSPOD_PARAMETER_RECORD_ID, *request.ID)
-	parameter.Set(DNSPOD_PARAMETER_DOMAIN, domain.DomainName)
+	parameter.Set(DnspodParameterRecordId, *request.ID)
+	parameter.Set(DnspodParameterDomain, domain.DomainName)
 	return parameter, nil
 }
 
@@ -175,12 +175,12 @@ func (_this *DNSPodParameter) loadCommonParameter(action *string) *url.Values {
 	parameter := make(url.Values, 10)
 	nonce := strconv.FormatInt(rand.Int63()+time.Now().UnixMilli(), 10)
 	timestamp := strconv.FormatInt(time.Now().UnixMilli()/1000, 10)
-	parameter.Set(DNSPOD_PARAMETER_ACTION, strs.StringValue(action))
-	parameter.Set(DNSPOD_PARAMETER_NONCE, nonce)
-	parameter.Set(DNSPOD_PARAMETER_TIMESTAMP, timestamp)
-	parameter.Set(DNSPOD_PARAMETER_SECRET_ID, _this.credential.GetSecretId())
-	parameter.Set(DNSPOD_PARAMETER_SIGNATUREMETHOD, _this.signatureComposer.SignatureMethod())
-	parameter.Set(DNSPOD_PARAMETER_VERSION, _this.version.StringValue())
+	parameter.Set(DnspodParameterAction, strs.StringValue(action))
+	parameter.Set(DnspodParameterNonce, nonce)
+	parameter.Set(DnspodParameterTimestamp, timestamp)
+	parameter.Set(DnspodParameterSecretId, _this.credential.GetSecretId())
+	parameter.Set(DnspodParameterSignaturemethod, _this.signatureComposer.SignatureMethod())
+	parameter.Set(DnspodParameterVersion, _this.version.StringValue())
 
 	return &parameter
 }

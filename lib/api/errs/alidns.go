@@ -6,6 +6,7 @@ import (
 )
 
 // AlidnsSDKError struct is used save error code and msg
+//goland:noinspection ALL
 type AlidnsSDKError struct {
 	RequestId *string `json:"request_id,omitempty"`
 	Recommend *string `json:"recommend,omitempty"`

@@ -1,4 +1,4 @@
-package models
+package model
 
 import (
 	"vdns/lib/standard/record"
@@ -17,6 +17,7 @@ func NewDescribeDomainRecordsRequest() *DescribeDomainRecordsRequest {
 // ValueKeyWord 记录值关键字
 // PageSize 分页大小
 // PageNumber 当前页数
+//goland:noinspection SpellCheckingInspection
 type DescribeDomainRecordsRequest struct {
 	Domain       *string     `json:"domain,omitempty"`
 	RecordType   record.Type `json:"record_type,omitempty"`

@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 	"vdns/lib/api/errs"
-	"vdns/lib/api/models"
+	"vdns/lib/api/model"
 	"vdns/lib/auth"
 	"vdns/lib/sign/compose"
 	"vdns/lib/standard"
@@ -30,7 +30,7 @@ func NewAliDNSParameter(credential auth.Credential, signatureComposer compose.Si
 	}
 }
 
-func (_this *AliDNSParameter) LoadDescribeParameter(request *models.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
+func (_this *AliDNSParameter) LoadDescribeParameter(request *model.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
@@ -41,40 +41,40 @@ func (_this *AliDNSParameter) LoadDescribeParameter(request *models.DescribeDoma
 		return nil, errs.NewVdnsFromError(err)
 	}
 	parameter := _this.loadCommonParameter(action)
-	parameter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain.DomainName)
+	parameter.Set(AlidnsParameterDoaminName, domain.DomainName)
 
 	// assert record type
 	if !record.Support(request.RecordType) {
 		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
-	parameter.Set(ALIDNS_PARAMETER_TYPE_KEY_WORD, request.RecordType.String())
+	parameter.Set(AlidnsParameterTypeKeyWord, request.RecordType.String())
 
 	// assert page size
 	if request.PageSize != nil {
-		parameter.Set(ALIDNS_PARAMETER_PAGE_SIZE, strconv.FormatInt(*request.PageSize, 10))
+		parameter.Set(AlidnsParameterPageSize, strconv.FormatInt(*request.PageSize, 10))
 	}
 
 	// assert page number
 	if request.PageNumber != nil {
-		parameter.Set(ALIDNS_PARAMETER_PAGE_NUMBER, strconv.FormatInt(*request.PageNumber, 10))
+		parameter.Set(AlidnsParameterPageNumber, strconv.FormatInt(*request.PageNumber, 10))
 	}
 
 	// record value keyword (fuzzy match before and after) pattern search, not case-sensitive.
 	if request.ValueKeyWord != nil {
-		parameter.Set(ALIDNS_PARAMETER_VALUE_KEY_WORD, *request.ValueKeyWord)
+		parameter.Set(AlidnsParameterValueKeyWord, *request.ValueKeyWord)
 	}
 
 	// the keywords recorded by the host, (fuzzy matching before and after) pattern search, are not case-sensitive.
 	if request.RRKeyWord != nil {
-		parameter.Set(ALIDNS_PARAMETER_RR_KEY_WORD, *request.RRKeyWord)
+		parameter.Set(AlidnsParameterRrKeyWord, *request.RRKeyWord)
 	} else if strs.NotEmpty(domain.SubDomain) {
-		parameter.Set(ALIDNS_PARAMETER_RR_KEY_WORD, domain.SubDomain)
+		parameter.Set(AlidnsParameterRrKeyWord, domain.SubDomain)
 	}
 
 	return parameter, nil
 }
 
-func (_this *AliDNSParameter) LoadCreateParameter(request *models.CreateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *AliDNSParameter) LoadCreateParameter(request *model.CreateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -95,21 +95,21 @@ func (_this *AliDNSParameter) LoadCreateParameter(request *models.CreateDomainRe
 		return nil, errs.NewVdnsFromError(err)
 	}
 	parameter := _this.loadCommonParameter(action)
-	parameter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain.DomainName)
-	parameter.Set(ALIDNS_PARAMETER_TYPE, request.RecordType.String())
-	parameter.Set(ALIDNS_PARAMETER_VALUE, *request.Value)
+	parameter.Set(AlidnsParameterDoaminName, domain.DomainName)
+	parameter.Set(AlidnsParameterType, request.RecordType.String())
+	parameter.Set(AlidnsParameterValue, *request.Value)
 
 	// assert rr
 	if strs.IsEmpty(domain.SubDomain) {
-		parameter.Set(ALIDNS_PARAMETER_RR, record.PAN_ANALYSIS_RR_KEY_WORD.String())
+		parameter.Set(AlidnsParameterRr, record.PAN_ANALYSIS_RR_KEY_WORD.String())
 	} else {
-		parameter.Set(ALIDNS_PARAMETER_RR, domain.SubDomain)
+		parameter.Set(AlidnsParameterRr, domain.SubDomain)
 	}
 
 	return parameter, nil
 }
 
-func (_this *AliDNSParameter) LoadUpdateParameter(request *models.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *AliDNSParameter) LoadUpdateParameter(request *model.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -136,22 +136,22 @@ func (_this *AliDNSParameter) LoadUpdateParameter(request *models.UpdateDomainRe
 	}
 
 	parameter := _this.loadCommonParameter(action)
-	parameter.Set(ALIDNS_PARAMETER_RECORD_ID, *request.ID)
-	parameter.Set(ALIDNS_PARAMETER_DOAMIN_NAME, domain.DomainName)
-	parameter.Set(ALIDNS_PARAMETER_TYPE, request.RecordType.String())
-	parameter.Set(ALIDNS_PARAMETER_VALUE, *request.Value)
+	parameter.Set(AlidnsParameterRecordId, *request.ID)
+	parameter.Set(AlidnsParameterDoaminName, domain.DomainName)
+	parameter.Set(AlidnsParameterType, request.RecordType.String())
+	parameter.Set(AlidnsParameterValue, *request.Value)
 
 	// assert rr
 	if strs.IsEmpty(domain.SubDomain) {
-		parameter.Set(ALIDNS_PARAMETER_RR, record.PAN_ANALYSIS_RR_KEY_WORD.String())
+		parameter.Set(AlidnsParameterRr, record.PAN_ANALYSIS_RR_KEY_WORD.String())
 	} else {
-		parameter.Set(ALIDNS_PARAMETER_RR, domain.SubDomain)
+		parameter.Set(AlidnsParameterRr, domain.SubDomain)
 	}
 
 	return parameter, nil
 }
 
-func (_this *AliDNSParameter) LoadDeleteParameter(request *models.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *AliDNSParameter) LoadDeleteParameter(request *model.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -162,7 +162,7 @@ func (_this *AliDNSParameter) LoadDeleteParameter(request *models.DeleteDomainRe
 	}
 
 	parameter := _this.loadCommonParameter(action)
-	parameter.Set(ALIDNS_PARAMETER_RECORD_ID, *request.ID)
+	parameter.Set(AlidnsParameterRecordId, *request.ID)
 	return parameter, nil
 }
 
@@ -170,13 +170,13 @@ func (_this *AliDNSParameter) loadCommonParameter(action *string) *url.Values {
 	timestamp := time.Now().UTC().Format(time2.ALIYUN_FORMAT_ISO8601)
 	nonce := strconv.FormatInt(time.Now().UnixNano(), 10)
 	parameter := make(url.Values, 10)
-	parameter.Set(ALIDNS_PARAMETER_ACTION, strs.StringValue(action))
-	parameter.Set(ALIDNS_PARAMETER_ACCESS_KEY_ID, _this.credential.GetSecretId())
-	parameter.Set(ALIDNS_PARAMETER_FORMAT, ALIDNS_PARAMETER_JSON)
-	parameter.Set(ALIDNS_PARAMETER_SIGNATURE_METHOD, _this.signatureComposer.SignatureMethod())
-	parameter.Set(ALIDNS_PARAMETER_SIGNATURE_NONCE, nonce)
-	parameter.Set(ALIDNS_PARAMETER_SIGNATURE_VERSION, _this.signatureComposer.SignerVersion())
-	parameter.Set(ALIDNS_PARAMETER_TIMESTAMP, timestamp)
-	parameter.Set(ALIDNS_PARAMETER_VERSION, _this.version.StringValue())
+	parameter.Set(AlidnsParameterAction, strs.StringValue(action))
+	parameter.Set(AlidnsParameterAccessKeyId, _this.credential.GetSecretId())
+	parameter.Set(AlidnsParameterFormat, AlidnsParameterJson)
+	parameter.Set(AlidnsParameterSignatureMethod, _this.signatureComposer.SignatureMethod())
+	parameter.Set(AlidnsParameterSignatureNonce, nonce)
+	parameter.Set(AlidnsParameterSignatureVersion, _this.signatureComposer.SignerVersion())
+	parameter.Set(AlidnsParameterTimestamp, timestamp)
+	parameter.Set(AlidnsParameterVersion, _this.version.StringValue())
 	return &parameter
 }

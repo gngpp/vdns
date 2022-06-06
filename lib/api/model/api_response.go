@@ -1,4 +1,4 @@
-package models
+package model
 
 import (
 	"vdns/lib/standard/record"
@@ -6,11 +6,16 @@ import (
 )
 
 type DomainRecordsResponse struct {
-	TotalCount *int64    `json:"total_count,omitempty"`
-	PageSize   *int64    `json:"page_size,omitempty"`
-	PageNumber *int64    `json:"page_number,omitempty"`
-	ListCount  *int64    `json:"list_count,omitempty"`
-	Records    []*Record `json:"records,omitempty"`
+	// 总数
+	TotalCount *int64 `json:"total_count,omitempty"`
+	// 页大小
+	PageSize *int64 `json:"page_size,omitempty"`
+	// 当前页
+	PageNumber *int64 `json:"page_number,omitempty"`
+	// 列表总数
+	ListCount *int64 `json:"list_count,omitempty"`
+	// 记录列表
+	Records []*Record `json:"records,omitempty"`
 }
 
 func (_this *DomainRecordsResponse) String() string {

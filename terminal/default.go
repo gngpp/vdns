@@ -51,11 +51,11 @@ func toJsonFile(table *table.Table, path string) error {
 }
 
 // animation waiting
-func spinner(delay time.Duration) {
+func spinner() {
 	for {
 		for _, r := range `-\|/` {
 			fmt.Printf("\r%c", r)
-			time.Sleep(delay)
+			time.Sleep(100 * time.Millisecond)
 		}
 	}
 }

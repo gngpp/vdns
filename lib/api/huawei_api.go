@@ -1,7 +1,7 @@
 package api
 
 import (
-	"vdns/lib/api/models"
+	"vdns/lib/api/model"
 	"vdns/lib/auth"
 	"vdns/lib/standard"
 	"vdns/lib/standard/record"
@@ -19,22 +19,22 @@ type HuaweiProvider struct {
 	credential auth.Credential
 }
 
-func (h HuaweiProvider) DescribeRecords(request *models.DescribeDomainRecordsRequest) (*models.DomainRecordsResponse, error) {
+func (h HuaweiProvider) DescribeRecords(request *model.DescribeDomainRecordsRequest) (*model.DomainRecordsResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (h HuaweiProvider) CreateRecord(request *models.CreateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+func (h HuaweiProvider) CreateRecord(request *model.CreateDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (h HuaweiProvider) UpdateRecord(request *models.UpdateDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+func (h HuaweiProvider) UpdateRecord(request *model.UpdateDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (h HuaweiProvider) DeleteRecord(request *models.DeleteDomainRecordRequest) (*models.DomainRecordStatusResponse, error) {
+func (h HuaweiProvider) DeleteRecord(request *model.DeleteDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }

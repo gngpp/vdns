@@ -2,23 +2,24 @@ package rpc
 
 import (
 	"context"
-	"vdns/lib/api/models"
+	"vdns/lib/api/model"
 )
 
+//goland:noinspection SpellCheckingInspection
 type VdnsRpc interface {
-	DoDescribeRequest(url string) (*models.DomainRecordsResponse, error)
+	DoDescribeRequest(url string) (*model.DomainRecordsResponse, error)
 
-	DoCreateRequest(url string) (*models.DomainRecordStatusResponse, error)
+	DoCreateRequest(url string) (*model.DomainRecordStatusResponse, error)
 
-	DoUpdateRequest(url string) (*models.DomainRecordStatusResponse, error)
+	DoUpdateRequest(url string) (*model.DomainRecordStatusResponse, error)
 
-	DoDeleteRequest(url string) (*models.DomainRecordStatusResponse, error)
+	DoDeleteRequest(url string) (*model.DomainRecordStatusResponse, error)
 
-	DoDescribeCtxRequest(ctx context.Context, url string) (*models.DomainRecordsResponse, error)
+	DoDescribeCtxRequest(ctx context.Context, url string) (*model.DomainRecordsResponse, error)
 
-	DoCreateCtxRequest(ctx context.Context, url string) (*models.DomainRecordStatusResponse, error)
+	DoCreateCtxRequest(ctx context.Context, url string) (*model.DomainRecordStatusResponse, error)
 
-	DoUpdateCtxRequest(ctx context.Context, url string) (*models.DomainRecordStatusResponse, error)
+	DoUpdateCtxRequest(ctx context.Context, url string) (*model.DomainRecordStatusResponse, error)
 
-	DoDeleteCtxRequest(ctx context.Context, url string) (*models.DomainRecordStatusResponse, error)
+	DoDeleteCtxRequest(ctx context.Context, url string) (*model.DomainRecordStatusResponse, error)
 }

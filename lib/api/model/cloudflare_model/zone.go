@@ -59,3 +59,7 @@ type CloudFlareZoneResult struct {
 	Errors   []interface{} `json:"errors,omitempty"`
 	Messages []interface{} `json:"messages,omitempty"`
 }
+
+func NewCloudflareZones() *CloudFlareZoneResult {
+	return &CloudFlareZoneResult{}
+}

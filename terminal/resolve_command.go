@@ -6,63 +6,30 @@ import (
 	"github.com/urfave/cli/v2"
 	"vdns/config"
 	"vdns/lib/api"
-	"vdns/lib/api/models"
+	"vdns/lib/api/model"
 	"vdns/lib/standard/record"
 	"vdns/lib/util/convert"
 )
 
 //goland:noinspection SpellCheckingInspection
 func ResolveRecordList() []*cli.Command {
-	alidnsCommandName := "alidns"
-	dnspodCommandName := "dnspod"
-	huaweidnsCommandName := "huaweidns"
-	cloudflareCommandName := "cloudflare"
-	return []*cli.Command{
-		{
-			Name:    alidnsCommandName,
-			Aliases: []string{convert.AsStringValue(string(alidnsCommandName[0]))},
+	strings := []string{config.AlidnsProvider, config.DnspodProvider, config.CloudflareProvider, config.HuaweiDnsProvider}
+	var commands []*cli.Command
+	for _, commandName := range strings {
+		command := &cli.Command{
+			Name:    commandName,
+			Aliases: []string{convert.AsStringValue(string(commandName[0]))},
 			Usage:   "Resolve " + config.AlidnsProvider + " records",
 			Subcommands: []*cli.Command{
-				describeDNSRecord(config.AlidnsProvider),
-				createDNSRecord(config.AlidnsProvider),
-				updateDNSRecord(config.AlidnsProvider),
-				deleteDNSRecord(config.AlidnsProvider),
+				describeDNSRecord(commandName),
+				createDNSRecord(commandName),
+				updateDNSRecord(commandName),
+				deleteDNSRecord(commandName),
 			},
-		},
-		{
-			Name:    dnspodCommandName,
-			Aliases: []string{convert.AsStringValue(string(dnspodCommandName[0]))},
-			Usage:   "Resolve " + config.DnspodProvider + " records",
-			Subcommands: []*cli.Command{
-				describeDNSRecord(config.DnspodProvider),
-				createDNSRecord(config.DnspodProvider),
-				updateDNSRecord(config.DnspodProvider),
-				deleteDNSRecord(config.DnspodProvider),
-			},
-		},
-		{
-			Name:    huaweidnsCommandName,
-			Aliases: []string{convert.AsStringValue(string(huaweidnsCommandName[0]))},
-			Usage:   "Resolve " + config.HuaweiDnsProvider + " records",
-			Subcommands: []*cli.Command{
-				describeDNSRecord(config.HuaweiDnsProvider),
-				createDNSRecord(config.HuaweiDnsProvider),
-				updateDNSRecord(config.HuaweiDnsProvider),
-				deleteDNSRecord(config.HuaweiDnsProvider),
-			},
-		},
-		{
-			Name:    cloudflareCommandName,
-			Aliases: []string{convert.AsStringValue(string(cloudflareCommandName[0]))},
-			Usage:   "Resolve " + config.CloudflareProvider + " records",
-			Subcommands: []*cli.Command{
-				describeDNSRecord(config.CloudflareProvider),
-				createDNSRecord(config.CloudflareProvider),
-				updateDNSRecord(config.CloudflareProvider),
-				deleteDNSRecord(config.CloudflareProvider),
-			},
-		},
+		}
+		commands = append(commands, command)
 	}
+	return commands
 }
 
 func describeDNSRecord(providerKey string) *cli.Command {
@@ -114,13 +81,14 @@ func describeDNSRecord(providerKey string) *cli.Command {
 			if err != nil {
 				return err
 			}
-			request := models.NewDescribeDomainRecordsRequest()
+			request := model.NewDescribeDomainRecordsRequest()
 			request.Domain = &domain
 			request.PageSize = &pageSize
 			request.PageNumber = &pageNumber
 			request.ValueKeyWord = &valueKeyWork
 			request.RRKeyWord = &rrKeyWork
 			request.RecordType = record.Type(recordType)
+			go spinner()
 			describeRecords, err := provider.DescribeRecords(request)
 			if err != nil {
 				return err
@@ -180,7 +148,7 @@ func createDNSRecord(providerKey string) *cli.Command {
 			if err != nil {
 				return err
 			}
-			request := models.NewCreateDomainRecordRequest()
+			request := model.NewCreateDomainRecordRequest()
 			request.Domain = &domain
 			request.Value = &value
 			request.RecordType = record.Type(recordType)
@@ -236,7 +204,7 @@ func updateDNSRecord(providerKey string) *cli.Command {
 			if err != nil {
 				return err
 			}
-			request := models.NewUpdateDomainRecordRequest()
+			request := model.NewUpdateDomainRecordRequest()
 			request.ID = &id
 			request.Domain = &domain
 			request.Value = &value
@@ -281,7 +249,7 @@ func deleteDNSRecord(providerKey string) *cli.Command {
 			if err != nil {
 				return err
 			}
-			request := models.NewDeleteDomainRecordRequest()
+			request := model.NewDeleteDomainRecordRequest()
 			request.Domain = &domain
 			request.ID = &id
 			deleteRecord, err := provider.DeleteRecord(request)

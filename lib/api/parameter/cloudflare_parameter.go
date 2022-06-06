@@ -2,8 +2,9 @@ package parameter
 
 import (
 	"net/url"
+	"strconv"
 	"vdns/lib/api/errs"
-	"vdns/lib/api/models"
+	"vdns/lib/api/model"
 	"vdns/lib/standard"
 	"vdns/lib/standard/msg"
 	"vdns/lib/standard/record"
@@ -21,7 +22,7 @@ type CloudflareParameter struct {
 	version *standard.Standard
 }
 
-func (_this *CloudflareParameter) LoadDescribeParameter(request *models.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
+func (_this *CloudflareParameter) LoadDescribeParameter(request *model.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -32,10 +33,26 @@ func (_this *CloudflareParameter) LoadDescribeParameter(request *models.Describe
 	}
 
 	parameter := _this.loadCommonParameter(request.RecordType)
+
+	// assert page number
+	if request.PageNumber != nil {
+		parameter.Set(CfParameterPage, strconv.FormatInt(*request.PageNumber, 10))
+	}
+
+	// assert page size
+	if request.PageSize != nil {
+		parameter.Set(CfParameterPerPage, strconv.FormatInt(*request.PageSize, 10))
+	}
+
+	// record value content
+	if request.ValueKeyWord != nil {
+		parameter.Set(CfParameterContent, *request.ValueKeyWord)
+	}
+
 	return parameter, nil
 }
 
-func (_this *CloudflareParameter) LoadCreateParameter(request *models.CreateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *CloudflareParameter) LoadCreateParameter(request *model.CreateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -62,7 +79,7 @@ func (_this *CloudflareParameter) LoadCreateParameter(request *models.CreateDoma
 	return parameter, nil
 }
 
-func (_this *CloudflareParameter) LoadUpdateParameter(request *models.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *CloudflareParameter) LoadUpdateParameter(request *model.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -82,7 +99,7 @@ func (_this *CloudflareParameter) LoadUpdateParameter(request *models.UpdateDoma
 	return parameter, nil
 }
 
-func (_this *CloudflareParameter) LoadDeleteParameter(request *models.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *CloudflareParameter) LoadDeleteParameter(request *model.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -94,6 +111,5 @@ func (_this *CloudflareParameter) loadCommonParameter(record record.Type) *url.V
 	parameter := make(url.Values, 10)
 	parameter.Set("match", "all")
 	parameter.Set("type", record.String())
-	parameter.Set("per_page", "100")
 	return &parameter
 }

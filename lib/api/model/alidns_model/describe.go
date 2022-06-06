@@ -10,7 +10,7 @@ type DescribeDomainRecordsResponse struct {
 	PageSize      *int64                                      `json:"PageSize,omitempty" xml:"PageSize,omitempty"`
 	RequestId     *string                                     `json:"RequestId,omitempty" xml:"RequestId,omitempty"`
 	DomainRecords *DescribeDomainRecordsResponseDomainRecords `json:"DomainRecords,omitempty" xml:"DomainRecords,omitempty" type:"Struct"`
-	PageNumber    *int64                                      `json:"PageNumber,omitempty" xml:"PageNumber,omitempty"`
+	PageNumber    *int64                                      `json:"PageNumber,omitempty" xml:"CurrentPage,omitempty"`
 }
 
 func (s *DescribeDomainRecordsResponse) String() string {
