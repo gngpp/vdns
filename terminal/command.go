@@ -101,22 +101,22 @@ func requestCommand() *cli.Command {
 func recordAction() cli.ActionFunc {
 	return func(ctx *cli.Context) error {
 		fmt.Println("Supports record types: A、AAAA、NS、MX、CNAME、TXT、SRV、CA、REDIRECT_URL、FORWARD_URL")
-		table, err := gotable.Create("type", "value", "description")
+		t, err := gotable.Create("type", "value", "description")
 		if err != nil {
 			return err
 		}
-		_ = table.AddRow([]string{"A", "A", "将域名指向一个IPV4地址"})
-		_ = table.AddRow([]string{"AAAA", "AAAA", "将域名指向一个IPV6地址"})
-		_ = table.AddRow([]string{"NS", "NS", "将子域名指定其他DNS服务器解析"})
-		_ = table.AddRow([]string{"MX", "MX", "将域名指向邮件服务器地址"})
-		_ = table.AddRow([]string{"CNAME", "CNAME", "将域名指向另外一个域名"})
-		_ = table.AddRow([]string{"TXT", "TXT", "文本长度限制512，通常做SPF记录（反垃圾邮件）"})
-		_ = table.AddRow([]string{"SRV", "SRV", "记录提供特定的服务的服务器"})
-		_ = table.AddRow([]string{"CA", "CA", "CA证书颁发机构授权校验"})
-		_ = table.AddRow([]string{"REDIRECT_URL", "REDIRECT_URL", "将域名重定向到另外一个地址"})
-		_ = table.AddRow([]string{"FORWARD_URL", "FORWARD_URL", "显性URL类似，但是会隐藏真实目标地址"})
+		_ = t.AddRow([]string{"A", "A", "将域名指向一个IPV4地址"})
+		_ = t.AddRow([]string{"AAAA", "AAAA", "将域名指向一个IPV6地址"})
+		_ = t.AddRow([]string{"NS", "NS", "将子域名指定其他DNS服务器解析"})
+		_ = t.AddRow([]string{"MX", "MX", "将域名指向邮件服务器地址"})
+		_ = t.AddRow([]string{"CNAME", "CNAME", "将域名指向另外一个域名"})
+		_ = t.AddRow([]string{"TXT", "TXT", "文本长度限制512，通常做SPF记录（反垃圾邮件）"})
+		_ = t.AddRow([]string{"SRV", "SRV", "记录提供特定的服务的服务器"})
+		_ = t.AddRow([]string{"CA", "CA", "CA证书颁发机构授权校验"})
+		_ = t.AddRow([]string{"REDIRECT_URL", "REDIRECT_URL", "将域名重定向到另外一个地址"})
+		_ = t.AddRow([]string{"FORWARD_URL", "FORWARD_URL", "显性URL类似，但是会隐藏真实目标地址"})
 
-		err = printTableAndSavaToCSVFile(table, ctx)
+		err = printTableAndSavaToCSVFile(t, ctx)
 		if err != nil {
 			return err
 		}
@@ -127,18 +127,18 @@ func recordAction() cli.ActionFunc {
 
 func providerAction() cli.ActionFunc {
 	return func(ctx *cli.Context) error {
-		table, err := gotable.Create("provider", "DNS API Document")
+		t, err := gotable.Create("provider", "DNS API Document")
 		if err != nil {
 			return err
 		}
-		_ = table.AddRow([]string{config.AlidnsProvider, "https://help.aliyun.com/document_detail/39863.html"})
-		_ = table.AddRow([]string{config.DnspodProvider, "https://cloud.tencent.com/document/product/1427"})
-		_ = table.AddRow([]string{config.CloudflareProvider, "https://api.cloudflare.com/#dns-records-for-a-zone-properties"})
-		_ = table.AddRow([]string{config.HuaweiDnsProvider, "https://support.huaweicloud.com/function-dns/index.html"})
+		_ = t.AddRow([]string{config.AlidnsProvider, "https://help.aliyun.com/document_detail/39863.html"})
+		_ = t.AddRow([]string{config.DnspodProvider, "https://cloud.tencent.com/document/product/1427"})
+		_ = t.AddRow([]string{config.CloudflareProvider, "https://api.cloudflare.com/#dns-records-for-a-zone-properties"})
+		_ = t.AddRow([]string{config.HuaweiDnsProvider, "https://support.huaweicloud.com/function-dns/index.html"})
 
-		fmt.Print(table)
+		fmt.Print(t)
 		path := ctx.String("path")
-		err = toCSVFile(table, path)
+		err = toCSVFile(t, path)
 		if err != nil {
 			return err
 		}
@@ -148,7 +148,7 @@ func providerAction() cli.ActionFunc {
 
 func printIpApiAction() cli.ActionFunc {
 	return func(ctx *cli.Context) error {
-		table, err := gotable.Create("Ipv4 Request API", "Ipv6 Request API")
+		t, err := gotable.Create("Ipv4 Request API", "Ipv6 Request API")
 		if err != nil {
 			return err
 		}
@@ -166,10 +166,10 @@ func printIpApiAction() cli.ActionFunc {
 			}
 		}
 		for i := 0; i < max; i++ {
-			_ = table.AddRow([]string{ipv4ApiList[i], ipv6ApiList[i]})
+			_ = t.AddRow([]string{ipv4ApiList[i], ipv6ApiList[i]})
 		}
 
-		return printTableAndSavaToCSVFile(table, ctx)
+		return printTableAndSavaToCSVFile(t, ctx)
 	}
 }
 
