@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/liushuochen/gotable/table"
 	"github.com/urfave/cli/v2"
+	"time"
 	"vdns/lib/util/strs"
 )
 
@@ -47,4 +48,14 @@ func toJsonFile(table *table.Table, path string) error {
 		fmt.Printf("\nsava to: %s\n", path)
 	}
 	return nil
+}
+
+// animation waiting
+func spinner(delay time.Duration) {
+	for {
+		for _, r := range `-\|/` {
+			fmt.Printf("\r%c", r)
+			time.Sleep(delay)
+		}
+	}
 }

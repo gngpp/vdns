@@ -8,7 +8,7 @@ import (
 
 func NewClient() *http.Client {
 	dialer := &net.Dialer{
-		Timeout:   10 * time.Second,
+		Timeout:   20 * time.Second,
 		KeepAlive: 30 * time.Second,
 	}
 	return &http.Client{
