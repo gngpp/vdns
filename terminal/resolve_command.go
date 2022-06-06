@@ -120,11 +120,7 @@ func describeDNSRecord(providerKey string) *cli.Command {
 			request.PageNumber = &pageNumber
 			request.ValueKeyWord = &valueKeyWork
 			request.RRKeyWord = &rrKeyWork
-			//goland:noinspection GoRedundantConversion
-			ofType, b := record.OfType(record.Type(recordType))
-			if b {
-				request.RecordType = ofType
-			}
+			request.RecordType = record.Type(recordType)
 			describeRecords, err := provider.DescribeRecords(request)
 			if err != nil {
 				return err
@@ -134,8 +130,8 @@ func describeDNSRecord(providerKey string) *cli.Command {
 				if err != nil {
 					return err
 				}
-				for _, record := range describeRecords.Records {
-					_ = table.AddRow([]string{*record.ID, record.RecordType.String(), *record.RR, *record.Domain, *record.Value, *record.Status, convert.AsStringValue(*record.TTL)})
+				for _, r := range describeRecords.Records {
+					_ = table.AddRow([]string{*r.ID, r.RecordType.String(), *r.RR, *r.Domain, *r.Value, *r.Status, convert.AsStringValue(*r.TTL)})
 				}
 				fmt.Print(table)
 				table, err = gotable.Create("Total", "PageSize", "PageNumber")
@@ -187,11 +183,8 @@ func createDNSRecord(providerKey string) *cli.Command {
 			request := models.NewCreateDomainRecordRequest()
 			request.Domain = &domain
 			request.Value = &value
-			//goland:noinspection GoRedundantConversion
-			ofType, b := record.OfType(record.Type(recordType))
-			if b {
-				request.RecordType = ofType
-			}
+			request.RecordType = record.Type(recordType)
+
 			createRecord, err := provider.CreateRecord(request)
 			if err != nil {
 				return err
@@ -247,11 +240,8 @@ func updateDNSRecord(providerKey string) *cli.Command {
 			request.ID = &id
 			request.Domain = &domain
 			request.Value = &value
-			//goland:noinspection GoRedundantConversion
-			ofType, b := record.OfType(record.Type(recordType))
-			if b {
-				request.RecordType = ofType
-			}
+			request.RecordType = record.Type(recordType)
+
 			updateRecord, err := provider.UpdateRecord(request)
 			if err != nil {
 				return err
