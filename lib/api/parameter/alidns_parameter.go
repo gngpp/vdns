@@ -30,7 +30,7 @@ func NewAliDNSParameter(credential auth.Credential, signatureComposer compose.Si
 	}
 }
 
-func (_this *AliDNSParameter) LoadDescribeParameter(request *model.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
+func (_this *AliDNSParameter) LoadDescribeParameter(request *model.DescribeDomainRecordsRequest, action *string) (*Value, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
@@ -71,10 +71,10 @@ func (_this *AliDNSParameter) LoadDescribeParameter(request *model.DescribeDomai
 		parameter.Set(AlidnsParameterRrKeyWord, domain.SubDomain)
 	}
 
-	return parameter, nil
+	return NewValue(parameter, nil), nil
 }
 
-func (_this *AliDNSParameter) LoadCreateParameter(request *model.CreateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *AliDNSParameter) LoadCreateParameter(request *model.CreateDomainRecordRequest, action *string) (*Value, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -106,10 +106,10 @@ func (_this *AliDNSParameter) LoadCreateParameter(request *model.CreateDomainRec
 		parameter.Set(AlidnsParameterRr, domain.SubDomain)
 	}
 
-	return parameter, nil
+	return NewValue(parameter, nil), nil
 }
 
-func (_this *AliDNSParameter) LoadUpdateParameter(request *model.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *AliDNSParameter) LoadUpdateParameter(request *model.UpdateDomainRecordRequest, action *string) (*Value, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -148,10 +148,10 @@ func (_this *AliDNSParameter) LoadUpdateParameter(request *model.UpdateDomainRec
 		parameter.Set(AlidnsParameterRr, domain.SubDomain)
 	}
 
-	return parameter, nil
+	return NewValue(parameter, nil), nil
 }
 
-func (_this *AliDNSParameter) LoadDeleteParameter(request *model.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *AliDNSParameter) LoadDeleteParameter(request *model.DeleteDomainRecordRequest, action *string) (*Value, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -163,7 +163,7 @@ func (_this *AliDNSParameter) LoadDeleteParameter(request *model.DeleteDomainRec
 
 	parameter := _this.loadCommonParameter(action)
 	parameter.Set(AlidnsParameterRecordId, *request.ID)
-	return parameter, nil
+	return NewValue(parameter, nil), nil
 }
 
 func (_this *AliDNSParameter) loadCommonParameter(action *string) *url.Values {

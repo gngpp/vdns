@@ -80,7 +80,7 @@ func requestCommand() *cli.Command {
 		},
 		Action: func(ctx *cli.Context) error {
 			url := strings.TrimSpace(ctx.String("url"))
-			req, err := vhttp.Get(url, nil)
+			req, err := vhttp.Get(url, "")
 			if err != nil {
 				return err
 			}

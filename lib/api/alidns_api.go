@@ -41,7 +41,7 @@ func (_this *AliDNSProvider) DescribeRecords(request *model.DescribeDomainRecord
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(p)
+	requestUrl := _this.generateRequestUrl(p.UrlValues)
 	return _this.rpc.DoDescribeRequest(requestUrl)
 }
 
@@ -50,7 +50,7 @@ func (_this *AliDNSProvider) CreateRecord(request *model.CreateDomainRecordReque
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(p)
+	requestUrl := _this.generateRequestUrl(p.UrlValues)
 	return _this.rpc.DoCreateRequest(requestUrl)
 }
 
@@ -59,7 +59,7 @@ func (_this *AliDNSProvider) UpdateRecord(request *model.UpdateDomainRecordReque
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(p)
+	requestUrl := _this.generateRequestUrl(p.UrlValues)
 	return _this.rpc.DoUpdateRequest(requestUrl)
 }
 
@@ -68,7 +68,7 @@ func (_this *AliDNSProvider) DeleteRecord(request *model.DeleteDomainRecordReque
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(p)
+	requestUrl := _this.generateRequestUrl(p.UrlValues)
 	return _this.rpc.DoDeleteRequest(requestUrl)
 }
 

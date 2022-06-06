@@ -31,7 +31,7 @@ func NewDNSPodParameter(credential auth.Credential, signatureComposer compose.Si
 	}
 }
 
-func (_this *DNSPodParameter) LoadDescribeParameter(request *model.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
+func (_this *DNSPodParameter) LoadDescribeParameter(request *model.DescribeDomainRecordsRequest, action *string) (*Value, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
@@ -70,10 +70,10 @@ func (_this *DNSPodParameter) LoadDescribeParameter(request *model.DescribeDomai
 	} else if strs.NotEmpty(domain.SubDomain) {
 		parameter.Set(DnspodParameterSubdomain1, domain.SubDomain)
 	}
-	return parameter, nil
+	return NewValue(parameter, nil), nil
 }
 
-func (_this *DNSPodParameter) LoadCreateParameter(request *model.CreateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *DNSPodParameter) LoadCreateParameter(request *model.CreateDomainRecordRequest, action *string) (*Value, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
@@ -105,10 +105,10 @@ func (_this *DNSPodParameter) LoadCreateParameter(request *model.CreateDomainRec
 	} else {
 		parameter.Set(DnspodParameterSubdomain2, domain.SubDomain)
 	}
-	return parameter, nil
+	return NewValue(parameter, nil), nil
 }
 
-func (_this *DNSPodParameter) LoadUpdateParameter(request *model.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *DNSPodParameter) LoadUpdateParameter(request *model.UpdateDomainRecordRequest, action *string) (*Value, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
@@ -147,10 +147,10 @@ func (_this *DNSPodParameter) LoadUpdateParameter(request *model.UpdateDomainRec
 		parameter.Set(DnspodParameterSubdomain2, domain.SubDomain)
 	}
 
-	return parameter, nil
+	return NewValue(parameter, nil), nil
 }
 
-func (_this *DNSPodParameter) LoadDeleteParameter(request *model.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *DNSPodParameter) LoadDeleteParameter(request *model.DeleteDomainRecordRequest, action *string) (*Value, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.DESCRIBE_REQUEST_NOT_NIL)
 	}
@@ -168,7 +168,7 @@ func (_this *DNSPodParameter) LoadDeleteParameter(request *model.DeleteDomainRec
 	parameter := _this.loadCommonParameter(action)
 	parameter.Set(DnspodParameterRecordId, *request.ID)
 	parameter.Set(DnspodParameterDomain, domain.DomainName)
-	return parameter, nil
+	return NewValue(parameter, nil), nil
 }
 
 func (_this *DNSPodParameter) loadCommonParameter(action *string) *url.Values {

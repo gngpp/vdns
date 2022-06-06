@@ -44,7 +44,7 @@ func Post(url string, contentType string, data any, token string) (resp *http.Re
 		}
 	}
 	req.Header.Set("User-Agent", UserAgent)
-	if !strs.IsEmpty(contentType) {
+	if strs.NotEmpty(contentType) {
 		req.Header.Set("Content-type", contentType)
 	}
 	if strs.NotEmpty(token) {
@@ -77,7 +77,7 @@ func Put(url string, contentType string, data any, token string) (resp *http.Res
 		}
 	}
 	req.Header.Set("User-Agent", UserAgent)
-	if !strs.IsEmpty(contentType) {
+	if strs.NotEmpty(contentType) {
 		req.Header.Set("Content-type", contentType)
 	}
 	if strs.NotEmpty(token) {
@@ -110,7 +110,7 @@ func Delete(url string, contentType string, data any, token string) (resp *http.
 		}
 	}
 	req.Header.Set("User-Agent", UserAgent)
-	if !strs.IsEmpty(contentType) {
+	if strs.NotEmpty(contentType) {
 		req.Header.Set("Content-type", contentType)
 	}
 	if strs.NotEmpty(token) {

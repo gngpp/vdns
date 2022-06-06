@@ -43,7 +43,7 @@ func (_this *DNSPodProvider) DescribeRecords(request *model.DescribeDomainRecord
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(p)
+	requestUrl := _this.generateRequestUrl(p.UrlValues)
 	ctx := context.WithValue(context.Background(), parameter.DnspocParameterContextDescribeKey, request)
 	return _this.rpc.DoDescribeCtxRequest(ctx, requestUrl)
 }
@@ -53,7 +53,7 @@ func (_this *DNSPodProvider) CreateRecord(request *model.CreateDomainRecordReque
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(p)
+	requestUrl := _this.generateRequestUrl(p.UrlValues)
 	return _this.rpc.DoCreateRequest(requestUrl)
 }
 
@@ -62,7 +62,7 @@ func (_this *DNSPodProvider) UpdateRecord(request *model.UpdateDomainRecordReque
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(p)
+	requestUrl := _this.generateRequestUrl(p.UrlValues)
 	return _this.rpc.DoUpdateRequest(requestUrl)
 }
 
@@ -71,7 +71,7 @@ func (_this *DNSPodProvider) DeleteRecord(request *model.DeleteDomainRecordReque
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(p)
+	requestUrl := _this.generateRequestUrl(p.UrlValues)
 	return _this.rpc.DoDeleteRequest(requestUrl)
 }
 

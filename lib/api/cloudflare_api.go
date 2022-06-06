@@ -49,7 +49,7 @@ func (_this *CloudflareProvider) DescribeRecords(request *model.DescribeDomainRe
 	if err != nil {
 		return nil, err
 	}
-	requestUrl := _this.generateRequestUrl(nil, model.Domain(request), p)
+	requestUrl := _this.generateRequestUrl(nil, model.Domain(request), p.UrlValues)
 	return _this.rpc.DoDescribeRequest(requestUrl)
 }
 

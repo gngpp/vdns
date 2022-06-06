@@ -22,7 +22,7 @@ type CloudflareParameter struct {
 	version *standard.Standard
 }
 
-func (_this *CloudflareParameter) LoadDescribeParameter(request *model.DescribeDomainRecordsRequest, action *string) (*url.Values, error) {
+func (_this *CloudflareParameter) LoadDescribeParameter(request *model.DescribeDomainRecordsRequest, _ *string) (*Value, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -48,11 +48,10 @@ func (_this *CloudflareParameter) LoadDescribeParameter(request *model.DescribeD
 	if request.ValueKeyWord != nil {
 		parameter.Set(CfParameterContent, *request.ValueKeyWord)
 	}
-
-	return parameter, nil
+	return NewValue(parameter, nil), nil
 }
 
-func (_this *CloudflareParameter) LoadCreateParameter(request *model.CreateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *CloudflareParameter) LoadCreateParameter(request *model.CreateDomainRecordRequest, _ *string) (*Value, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -76,10 +75,10 @@ func (_this *CloudflareParameter) LoadCreateParameter(request *model.CreateDomai
 	parameter.Set(CfParameterName, domain.DomainName)
 	parameter.Set(CfParameterContent, *request.Value)
 	parameter.Set(CfParameterTTL, "120")
-	return parameter, nil
+	return NewValue(parameter, nil), nil
 }
 
-func (_this *CloudflareParameter) LoadUpdateParameter(request *model.UpdateDomainRecordRequest, action *string) (*url.Values, error) {
+func (_this *CloudflareParameter) LoadUpdateParameter(request *model.UpdateDomainRecordRequest, _ *string) (*Value, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
@@ -96,11 +95,11 @@ func (_this *CloudflareParameter) LoadUpdateParameter(request *model.UpdateDomai
 	parameter.Set(CfParameterName, domain.DomainName)
 	parameter.Set(CfParameterContent, *request.Value)
 	parameter.Set(CfParameterTTL, "120")
-	return parameter, nil
+	return NewValue(parameter, nil), nil
 }
 
-func (_this *CloudflareParameter) LoadDeleteParameter(request *model.DeleteDomainRecordRequest, action *string) (*url.Values, error) {
-	return nil, nil
+func (_this *CloudflareParameter) LoadDeleteParameter(_ *model.DeleteDomainRecordRequest, _ *string) (*Value, error) {
+	return NewValue(nil, nil), nil
 }
 
 func (_this *CloudflareParameter) loadCommonParameter(record record.Type) *url.Values {

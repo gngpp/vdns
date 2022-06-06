@@ -7,7 +7,7 @@ import (
 	"vdns/lib/vlog"
 )
 
-func PrettifyString(i interface{}) string {
+func PrettifyString(i any) string {
 	resp, _ := json.MarshalIndent(i, "", "   ")
 	return string(resp)
 }
