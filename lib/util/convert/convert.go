@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/gob"
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"time"
 )
@@ -47,7 +46,6 @@ func AsStringValue(src interface{}) string {
 			return string(b)
 		}
 	}
-	return fmt.Sprintf("%v", src)
 }
 
 func AsString(src interface{}) *string {
