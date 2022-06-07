@@ -26,13 +26,13 @@ func (_this *CloudflareParameter) LoadDescribeParameter(request *model.DescribeD
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
-
+	parameter := make(url.Values)
+	parameter.Set(CfParameterMatch, "all")
 	// assert record type
 	if !record.Support(request.RecordType) {
 		return nil, errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
 	}
-
-	parameter := _this.loadCommonParameter(request.RecordType)
+	parameter.Set(CfParameterType, request.RecordType.String())
 
 	// assert page number
 	if request.PageNumber != nil {
@@ -48,14 +48,13 @@ func (_this *CloudflareParameter) LoadDescribeParameter(request *model.DescribeD
 	if request.ValueKeyWord != nil {
 		parameter.Set(CfParameterContent, *request.ValueKeyWord)
 	}
-	return NewValue(parameter, nil), nil
+	return NewValue(&parameter, nil), nil
 }
 
 func (_this *CloudflareParameter) LoadCreateParameter(request *model.CreateDomainRecordRequest, _ *string) (*Value, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
-	parameter := _this.loadCommonParameter(request.RecordType)
 	// assert domain
 	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
@@ -71,18 +70,18 @@ func (_this *CloudflareParameter) LoadCreateParameter(request *model.CreateDomai
 	if request.Value == nil {
 		return nil, errs.NewVdnsError(msg.RECORD_VALUE_NOT_SUPPORT)
 	}
-
-	parameter.Set(CfParameterName, domain.DomainName)
-	parameter.Set(CfParameterContent, *request.Value)
-	parameter.Set(CfParameterTTL, "120")
-	return NewValue(parameter, nil), nil
+	jsonMap := make(map[string]string)
+	jsonMap[CfParameterType] = request.RecordType.String()
+	jsonMap[CfParameterName] = domain.DomainName
+	jsonMap[CfParameterContent] = *request.Value
+	jsonMap[CfParameterTTL] = "120"
+	return NewValue(nil, jsonMap), nil
 }
 
 func (_this *CloudflareParameter) LoadUpdateParameter(request *model.UpdateDomainRecordRequest, _ *string) (*Value, error) {
 	if request == nil {
 		return nil, errs.NewVdnsError(msg.CREATE_REQUEST_NOT_NIL)
 	}
-	parameter := _this.loadCommonParameter(request.RecordType)
 	// assert domain
 	domain, err := vhttp.CheckExtractDomain(strs.StringValue(request.Domain))
 	if err != nil {
@@ -91,20 +90,14 @@ func (_this *CloudflareParameter) LoadUpdateParameter(request *model.UpdateDomai
 	if request.Value == nil {
 		return nil, errs.NewVdnsError(msg.RECORD_VALUE_NOT_SUPPORT)
 	}
-
+	parameter := make(url.Values)
+	parameter.Set(CfParameterType, request.RecordType.String())
 	parameter.Set(CfParameterName, domain.DomainName)
 	parameter.Set(CfParameterContent, *request.Value)
 	parameter.Set(CfParameterTTL, "120")
-	return NewValue(parameter, nil), nil
+	return NewValue(&parameter, nil), nil
 }
 
 func (_this *CloudflareParameter) LoadDeleteParameter(_ *model.DeleteDomainRecordRequest, _ *string) (*Value, error) {
 	return NewValue(nil, nil), nil
-}
-
-func (_this *CloudflareParameter) loadCommonParameter(record record.Type) *url.Values {
-	parameter := make(url.Values, 10)
-	parameter.Set(CfParameterMatch, "all")
-	parameter.Set(CfParameterType, record.String())
-	return &parameter
 }

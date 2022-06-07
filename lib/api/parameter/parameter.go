@@ -21,10 +21,10 @@ type Parameter interface {
 
 type Value struct {
 	UrlValues  *url.Values
-	JsonString *string
+	JsonString any
 }
 
-func NewValue(values *url.Values, json *string) *Value {
+func NewValue(values *url.Values, json any) *Value {
 	return &Value{
 		UrlValues:  values,
 		JsonString: json,
