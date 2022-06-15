@@ -5,7 +5,6 @@ import (
 	"github.com/liushuochen/gotable"
 	"github.com/urfave/cli/v2"
 	"vdns/config"
-	"vdns/lib/util/convert"
 	"vdns/lib/util/strs"
 )
 
@@ -13,7 +12,7 @@ import (
 func ConfigCommand() *cli.Command {
 	return &cli.Command{
 		Name:  "config",
-		Usage: "Configure dns service provider access key pair",
+		Usage: "Configure DNS service provider access key pair",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  "path",
@@ -21,13 +20,10 @@ func ConfigCommand() *cli.Command {
 			},
 		},
 		Subcommands: []*cli.Command{
-			configCommand(config.AlidnsProvider),
-			configCommand(config.DnspodProvider),
-			configCommand(config.HuaweiDnsProvider),
-			configCommand(config.CloudflareProvider),
+			configCommand(),
 			{
-				Name:  "print",
-				Usage: "Print all dns configuration",
+				Name:  "cat",
+				Usage: "Print all DNS configuration",
 				Flags: []cli.Flag{
 					&cli.StringFlag{
 						Name:  "path",
@@ -38,7 +34,7 @@ func ConfigCommand() *cli.Command {
 			},
 			{
 				Name:   "import",
-				Usage:  "Import all dns configuration",
+				Usage:  "Import all DNS configuration",
 				Action: importConfigAction(),
 			},
 		},
@@ -46,56 +42,61 @@ func ConfigCommand() *cli.Command {
 }
 
 //goland:noinspection SpellCheckingInspection
-func configCommand(commandName string) *cli.Command {
+func configCommand() *cli.Command {
+	var provider string
 	var ak string
 	var sk string
 	var token string
 	return &cli.Command{
-		Name:                   commandName,
-		Aliases:                []string{convert.AsStringValue(string(commandName[0]))},
-		Usage:                  "Configure " + commandName + " access key pair",
+		Name:                   "set",
+		Usage:                  "Configure DNS provider access key pair",
 		UseShortOptionHandling: true,
-		Subcommands: []*cli.Command{
-			{
-				Name:    "print",
-				Aliases: []string{"p"},
-				Usage:   "Print dns provider configuration",
-				Action: func(_ *cli.Context) error {
-					readConfig, err := config.ReadConfig()
-					if err != nil {
-						return err
-					}
-					dnsConfig := readConfig.ConfigsMap.Get(commandName)
-					table, err := gotable.CreateByStruct(dnsConfig)
-					if err != nil {
-						return err
-					}
-					_ = table.AddRow([]string{*dnsConfig.Provider, *dnsConfig.Ak, *dnsConfig.Sk, *dnsConfig.Token})
-					fmt.Println(table)
-					return nil
-				},
-			},
-		},
+		//Subcommands: []*cli.Command{
+		//	{
+		//		Name:  "cat",
+		//		Usage: "Print dns provider configuration",
+		//		Action: func(_ *cli.Context) error {
+		//			readConfig, err := config.ReadConfig()
+		//			if err != nil {
+		//				return err
+		//			}
+		//			dnsConfig := readConfig.ConfigsMap.Get(provider)
+		//			table, err := gotable.CreateByStruct(dnsConfig)
+		//			if err != nil {
+		//				return err
+		//			}
+		//			_ = table.AddRow([]string{*dnsConfig.Provider, *dnsConfig.Ak, *dnsConfig.Sk, *dnsConfig.Token})
+		//			fmt.Println(table)
+		//			return nil
+		//		},
+		//	},
+		//},
 		Flags: []cli.Flag{
 			&cli.StringFlag{
+				Name:        "provider",
+				Usage:       "DNS provider name",
+				Destination: &provider,
+				Required:    true,
+			},
+			&cli.StringFlag{
 				Name:        "ak",
-				Usage:       "api access key",
+				Usage:       "API Access key",
 				Destination: &ak,
 			},
 			&cli.StringFlag{
 				Name:        "sk",
-				Usage:       "api secret key",
+				Usage:       "API Secret key",
 				Destination: &sk,
 			},
 			&cli.StringFlag{
 				Name:        "token",
-				Usage:       "api token",
+				Usage:       "API Token",
 				Destination: &token,
 			},
 		},
 		Action: func(ctx *cli.Context) error {
 			readConfig, err := config.ReadConfig()
-			dnsConfig := readConfig.ConfigsMap.Get(commandName)
+			dnsConfig := readConfig.ConfigsMap.Get(provider)
 			if err != nil {
 				return err
 			}

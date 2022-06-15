@@ -12,27 +12,21 @@ import (
 )
 
 //goland:noinspection SpellCheckingInspection
-func ResolveRecordList() []*cli.Command {
-	strings := []string{config.AlidnsProvider, config.DnspodProvider, config.CloudflareProvider, config.HuaweiDnsProvider}
-	var commands []*cli.Command
-	for _, commandName := range strings {
-		command := &cli.Command{
-			Name:    commandName,
-			Aliases: []string{convert.AsStringValue(string(commandName[0]))},
-			Usage:   "Resolve " + config.AlidnsProvider + " records",
-			Subcommands: []*cli.Command{
-				describeDNSRecord(commandName),
-				createDNSRecord(commandName),
-				updateDNSRecord(commandName),
-				deleteDNSRecord(commandName),
-			},
-		}
-		commands = append(commands, command)
+func ResolveRecordCommand() *cli.Command {
+	return &cli.Command{
+		Name:  "resolve",
+		Usage: "Resolve DNS records",
+		Subcommands: []*cli.Command{
+			describeDNSRecord(),
+			createDNSRecord(),
+			updateDNSRecord(),
+			deleteDNSRecord(),
+		},
 	}
-	return commands
 }
 
-func describeDNSRecord(providerKey string) *cli.Command {
+func describeDNSRecord() *cli.Command {
+	var provider string
 	var pageSize int64
 	var pageNumber int64
 	var domain string
@@ -41,8 +35,15 @@ func describeDNSRecord(providerKey string) *cli.Command {
 	var valueKeyWork string
 	return &cli.Command{
 		Name:  "describe",
-		Usage: "Describe " + providerKey + " records",
+		Usage: "Describe DNS records",
 		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:        "provider",
+				Aliases:     []string{"p"},
+				Usage:       "provider name",
+				Destination: &provider,
+				Required:    true,
+			},
 			&cli.Int64Flag{
 				Name:        "ps",
 				Usage:       "page size",
@@ -77,7 +78,7 @@ func describeDNSRecord(providerKey string) *cli.Command {
 			},
 		},
 		Action: func(_ *cli.Context) error {
-			provider, err := getProvider(providerKey)
+			provider, err := getProvider(provider)
 			if err != nil {
 				return err
 			}
@@ -119,15 +120,23 @@ func describeDNSRecord(providerKey string) *cli.Command {
 	}
 }
 
-func createDNSRecord(providerKey string) *cli.Command {
+func createDNSRecord() *cli.Command {
+	var provider string
 	var domain string
 	var recordType string
 	var value string
 	return &cli.Command{
 		Name:    "create",
 		Aliases: []string{"c"},
-		Usage:   "Create " + providerKey + " record",
+		Usage:   "Create DNS record",
 		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:        "provider",
+				Aliases:     []string{"p"},
+				Usage:       "provider name",
+				Destination: &provider,
+				Required:    true,
+			},
 			&cli.StringFlag{
 				Name:        "domain",
 				Usage:       "domain record",
@@ -145,7 +154,7 @@ func createDNSRecord(providerKey string) *cli.Command {
 			},
 		},
 		Action: func(_ *cli.Context) error {
-			provider, err := getProvider(providerKey)
+			provider, err := getProvider(provider)
 			if err != nil {
 				return err
 			}
@@ -173,7 +182,8 @@ func createDNSRecord(providerKey string) *cli.Command {
 	}
 }
 
-func updateDNSRecord(providerKey string) *cli.Command {
+func updateDNSRecord() *cli.Command {
+	var provider string
 	var id string
 	var domain string
 	var recordType string
@@ -181,8 +191,15 @@ func updateDNSRecord(providerKey string) *cli.Command {
 	return &cli.Command{
 		Name:    "update",
 		Aliases: []string{"u"},
-		Usage:   "Update " + providerKey + " record",
+		Usage:   "Update DNS record",
 		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:        "provider",
+				Aliases:     []string{"p"},
+				Usage:       "provider name",
+				Destination: &provider,
+				Required:    true,
+			},
 			&cli.StringFlag{
 				Name:        "id",
 				Usage:       "domain record identifier",
@@ -205,7 +222,7 @@ func updateDNSRecord(providerKey string) *cli.Command {
 			},
 		},
 		Action: func(_ *cli.Context) error {
-			provider, err := getProvider(providerKey)
+			provider, err := getProvider(provider)
 			if err != nil {
 				return err
 			}
@@ -234,14 +251,22 @@ func updateDNSRecord(providerKey string) *cli.Command {
 	}
 }
 
-func deleteDNSRecord(providerKey string) *cli.Command {
+func deleteDNSRecord() *cli.Command {
+	var provider string
 	var id string
 	var domain string
 	return &cli.Command{
 		Name:    "delete",
 		Aliases: []string{"d"},
-		Usage:   "Delete " + providerKey + " record",
+		Usage:   "Delete DNS record",
 		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:        "provider",
+				Aliases:     []string{"p"},
+				Usage:       "provider name",
+				Destination: &provider,
+				Required:    true,
+			},
 			&cli.StringFlag{
 				Name:        "id",
 				Usage:       "record identifier",
@@ -254,7 +279,7 @@ func deleteDNSRecord(providerKey string) *cli.Command {
 			},
 		},
 		Action: func(_ *cli.Context) error {
-			provider, err := getProvider(providerKey)
+			provider, err := getProvider(provider)
 			if err != nil {
 				return err
 			}
