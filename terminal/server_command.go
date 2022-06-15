@@ -1,6 +1,7 @@
 package terminal
 
 import (
+	"fmt"
 	"github.com/kardianos/service"
 	"github.com/liushuochen/gotable"
 	"github.com/urfave/cli/v2"
@@ -14,16 +15,25 @@ import (
 var vdns = server.Vdns{}
 
 func ServerCommand() *cli.Command {
-	var controlAction = [6]string{"exec", "start", "stop", "restart", "install", "uninstall"}
+	var controlAction = [6]string{"run", "start", "stop", "restart", "install", "uninstall"}
 	var subCommand = make([]*cli.Command, 6)
 	for index, c := range controlAction {
-		subCommand[index] = &cli.Command{
-			Name:  c,
-			Usage: strFirstToUpper(c) + " vdns service",
-			Action: func(_ *cli.Context) error {
-				handleServer()
-				return nil
-			},
+		if c == "run" {
+			subCommand[index] = &cli.Command{
+				Name:  c,
+				Usage: "Run vdns server",
+				Action: func(_ *cli.Context) error {
+					return handleServer()
+				},
+			}
+		} else {
+			subCommand[index] = &cli.Command{
+				Name:  c,
+				Usage: strFirstToUpper(c) + " vdns service",
+				Action: func(_ *cli.Context) error {
+					return handleServer()
+				},
+			}
 		}
 	}
 
@@ -41,35 +51,31 @@ func ServerCommand() *cli.Command {
 	}
 }
 
-func handleServer() {
+func handleServer() error {
 	cfg := &service.Config{
 		Name:        "vdns",
 		DisplayName: "vdns server",
 		Description: "This is an vdns Go service.",
-		Arguments:   []string{"server", "exec"},
 	}
-	s, err := service.New(&vdns, cfg)
+	vdnsService, err := service.New(&vdns, cfg)
 	if err != nil {
-		vlog.Fatal(err)
+		return err
 	}
-	logger, err := s.Logger(nil)
-	if err != nil {
-		vlog.Fatal(err)
-	}
-	if len(os.Args) == 3 && os.Args[2] != "exec" {
-		err = service.Control(s, os.Args[2])
+
+	fmt.Println(os.Args)
+	if len(os.Args) == 3 && os.Args[2] != "run" {
+		err = service.Control(vdnsService, os.Args[2])
 		if err != nil {
-			_ = logger.Error(err)
+			return err
 		}
 	} else {
-		err = s.Run()
+		err = vdnsService.Run()
 		if err != nil {
-			_ = logger.Error(err)
+			return err
 		}
 	}
-	if err != nil {
-		_ = logger.Error(err)
-	}
+
+	return err
 }
 
 func strFirstToUpper(str string) string {
