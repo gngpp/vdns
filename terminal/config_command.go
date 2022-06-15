@@ -10,32 +10,42 @@ import (
 
 //goland:noinspection SpellCheckingInspection
 func ConfigCommand() *cli.Command {
+	var path string
 	return &cli.Command{
 		Name:  "config",
 		Usage: "Configure DNS service provider access key pair",
-		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:  "path",
-				Usage: "sava data table to csv filepath",
-			},
-		},
 		Subcommands: []*cli.Command{
 			configCommand(),
 			{
-				Name:  "cat",
-				Usage: "Print all DNS configuration",
-				Flags: []cli.Flag{
-					&cli.StringFlag{
-						Name:  "path",
-						Usage: "sava table to csv filepath",
-					},
-				},
+				Name:   "cat",
+				Usage:  "Print all DNS configuration",
 				Action: printConfigAction(),
 			},
 			{
-				Name:   "import",
-				Usage:  "Import all DNS configuration",
+				Name:  "import",
+				Usage: "Import DNS configuration",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:        "path",
+						Usage:       "sava table to csv filepath",
+						Destination: &path,
+						Required:    true,
+					},
+				},
 				Action: importConfigAction(),
+			},
+			{
+				Name:  "export",
+				Usage: "Export DNS configuration",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:        "path",
+						Usage:       "sava data table to csv filepath",
+						Destination: &path,
+						Required:    true,
+					},
+				},
+				Action: exportConfigAction(),
 			},
 		},
 	}
@@ -51,26 +61,6 @@ func configCommand() *cli.Command {
 		Name:                   "set",
 		Usage:                  "Configure DNS provider access key pair",
 		UseShortOptionHandling: true,
-		//Subcommands: []*cli.Command{
-		//	{
-		//		Name:  "cat",
-		//		Usage: "Print dns provider configuration",
-		//		Action: func(_ *cli.Context) error {
-		//			readConfig, err := config.ReadConfig()
-		//			if err != nil {
-		//				return err
-		//			}
-		//			dnsConfig := readConfig.ConfigsMap.Get(provider)
-		//			table, err := gotable.CreateByStruct(dnsConfig)
-		//			if err != nil {
-		//				return err
-		//			}
-		//			_ = table.AddRow([]string{*dnsConfig.Provider, *dnsConfig.Ak, *dnsConfig.Sk, *dnsConfig.Token})
-		//			fmt.Println(table)
-		//			return nil
-		//		},
-		//	},
-		//},
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:        "provider",
@@ -155,17 +145,19 @@ func printConfigAction() cli.ActionFunc {
 				}
 			}
 		}
-		return printTableAndSavaToJSONFile(table, ctx)
+		fmt.Print(table)
+		return nil
 	}
 }
 
 func importConfigAction() cli.ActionFunc {
 	return func(context *cli.Context) error {
-		//readConfig, iotool := config.ReadConfig()
-		//if iotool != nil {
-		//	return iotool
-		//}
-		//
+		return nil
+	}
+}
+
+func exportConfigAction() cli.ActionFunc {
+	return func(context *cli.Context) error {
 		return nil
 	}
 }
