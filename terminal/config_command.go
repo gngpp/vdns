@@ -135,13 +135,13 @@ func configCommand(commandName string) *cli.Command {
 
 func printConfigAction() cli.ActionFunc {
 	return func(ctx *cli.Context) error {
-		config, err := config.ReadConfig()
+		readConfig, err := config.ReadConfig()
 		if err != nil {
 			return err
 		}
 		table, err := gotable.Create("provider", "ak", "sk", "token")
-		for key := range config.ConfigsMap {
-			dnsConfig := config.ConfigsMap.Get(key)
+		for key := range readConfig.ConfigsMap {
+			dnsConfig := readConfig.ConfigsMap.Get(key)
 			if dnsConfig != nil {
 				err := table.AddRow([]string{*dnsConfig.Provider, *dnsConfig.Ak, *dnsConfig.Sk, *dnsConfig.Token})
 				if err != nil {

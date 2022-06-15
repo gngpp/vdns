@@ -89,10 +89,11 @@ func describeDNSRecord(providerKey string) *cli.Command {
 			request.RRKeyWord = &rrKeyWork
 			request.RecordType = record.Type(recordType)
 			go spinner()
-			describeRecords, err := provider.DescribeRecords(request)
+			err = provider.Support(record.Type(recordType))
 			if err != nil {
 				return err
 			}
+			describeRecords, err := provider.DescribeRecords(request)
 			if *describeRecords.ListCount > 0 {
 				table, err := gotable.CreateByStruct(describeRecords.Records[0])
 				if err != nil {
@@ -153,6 +154,10 @@ func createDNSRecord(providerKey string) *cli.Command {
 			request.Value = &value
 			request.RecordType = record.Type(recordType)
 
+			err = provider.Support(record.Type(recordType))
+			if err != nil {
+				return err
+			}
 			createRecord, err := provider.CreateRecord(request)
 			if err != nil {
 				return err
@@ -210,6 +215,10 @@ func updateDNSRecord(providerKey string) *cli.Command {
 			request.Value = &value
 			request.RecordType = record.Type(recordType)
 
+			err = provider.Support(record.Type(recordType))
+			if err != nil {
+				return err
+			}
 			updateRecord, err := provider.UpdateRecord(request)
 			if err != nil {
 				return err
@@ -252,6 +261,10 @@ func deleteDNSRecord(providerKey string) *cli.Command {
 			request := model.NewDeleteDomainRecordRequest()
 			request.Domain = &domain
 			request.ID = &id
+
+			if err != nil {
+				return err
+			}
 			deleteRecord, err := provider.DeleteRecord(request)
 			if err != nil {
 				return err

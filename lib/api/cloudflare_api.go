@@ -74,12 +74,28 @@ func (_this *CloudflareProvider) UpdateRecord(request *model.UpdateDomainRecordR
 }
 
 func (_this *CloudflareProvider) DeleteRecord(request *model.DeleteDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
+	err := _this.initZoneMap()
+	if err != nil {
+		return nil, err
+	}
 	_, _ = _this.parameter.LoadDeleteParameter(request, _this.Update)
 	requestUrl := _this.generateRequestUrl(request.ID, model.Domain(request), nil)
 	return _this.rpc.DoDeleteRequest(requestUrl)
 }
 
 func (_this *CloudflareProvider) Support(recordType record.Type) error {
+	err := _this.initZoneMap()
+	if err != nil {
+		return err
+	}
+	support := record.Support(recordType)
+	if !support {
+		return errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
+	}
+	return nil
+}
+
+func (_this *CloudflareProvider) initZoneMap() error {
 	// The zones may be updated, and the API will be initialized every 5 times.
 	if len(_this.zonesMap) == 0 || (_this.zonesMapUpdatedCount > 5) {
 		zonesMap, err := _this.getZones()
@@ -94,12 +110,7 @@ func (_this *CloudflareProvider) Support(recordType record.Type) error {
 		_this.zonesMapUpdatedCount += 1
 		_this.zonesMap = zonesMap
 	}
-
-	support := record.Support(recordType)
-	if support {
-		return nil
-	}
-	return errs.NewVdnsError(msg.RECORD_TYPE_NOT_SUPPORT)
+	return nil
 }
 
 // 获得域名区域列表
