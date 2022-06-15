@@ -12,6 +12,7 @@ import (
 	"strings"
 	"vdns/config"
 	"vdns/lib/util/vhttp"
+	"vdns/lib/util/vnet"
 	"vdns/lib/vlog"
 )
 
@@ -198,7 +199,7 @@ func testIpApiAction() cli.ActionFunc {
 		}
 		go spinner()
 		for _, api := range ipApiList {
-			_ = t.AddRow([]string{api, vhttp.GetIpv4AddrForUrl(api)})
+			_ = t.AddRow([]string{api, vnet.GetIpv4AddrForUrl(api)})
 		}
 		fmt.Println(t)
 		return err

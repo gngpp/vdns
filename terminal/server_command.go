@@ -1,7 +1,6 @@
 package terminal
 
 import (
-	"fmt"
 	"github.com/kardianos/service"
 	"github.com/liushuochen/gotable"
 	"github.com/urfave/cli/v2"
@@ -61,8 +60,7 @@ func handleServer() error {
 	if err != nil {
 		return err
 	}
-
-	fmt.Println(os.Args)
+	vlog.Debugf("run args: %v", os.Args)
 	if len(os.Args) == 3 && os.Args[2] != "run" {
 		err = service.Control(vdnsService, os.Args[2])
 		if err != nil {
