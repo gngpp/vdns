@@ -34,6 +34,7 @@ COMMANDS:
    resolve            Resolve DNS records
    provider           Support providers
    record             Support record types
+   card               Print available network card information
    print-ip-api, pia  Print search ip request api list
    test-ip-api, tia   Test the API for requesting query ip
    request            Request Api (only support get method)
@@ -42,7 +43,6 @@ COMMANDS:
 GLOBAL OPTIONS:
    --help, -h     show help (default: false)
    --version, -v  print the version (default: false)
-
 ```
 
 ### License
