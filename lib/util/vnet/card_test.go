@@ -1,6 +1,8 @@
-package net
+package vnet
 
 import (
+	"fmt"
+	"net"
 	"testing"
 )
 
@@ -32,17 +34,17 @@ func TestGetNetInterface(t *testing.T) {
 	}
 	t.Log(ipv4NetInterfaces, ipv6NetInterfaces)
 
-	//interfaces, iotool := net.Interfaces()
-	//if iotool != nil {
-	//	return
-	//}
-	//for i := range interfaces {
-	//	inter := interfaces[i]
-	//	addrs, iotool := inter.Addrs()
-	//	if iotool != nil {
-	//		return
-	//	}
-	//	fmt.Print(inter.Name + ":")
-	//	fmt.Println(addrs)
-	//}
+	interfaces, iotool := net.Interfaces()
+	if iotool != nil {
+		return
+	}
+	for i := range interfaces {
+		inter := interfaces[i]
+		addrs, iotool := inter.Addrs()
+		if iotool != nil {
+			return
+		}
+		fmt.Print(inter.Name + ":")
+		fmt.Println(addrs)
+	}
 }
