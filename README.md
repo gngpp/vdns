@@ -29,12 +29,9 @@ VERSION:
    v1.0
 
 COMMANDS:
-   config             Configure dns service provider access key pair
+   config             Configure DNS service provider access key pair
    server             Use vdns server (support DDNS)
-   alidns, a          Resolve alidns records
-   dnspod, d          Resolve dnspod records
-   huaweidns, h       Resolve huaweidns records
-   cloudflare, c      Resolve cloudflare records
+   resolve            Resolve DNS records
    provider           Support providers
    record             Support record types
    print-ip-api, pia  Print search ip request api list
@@ -45,6 +42,7 @@ COMMANDS:
 GLOBAL OPTIONS:
    --help, -h     show help (default: false)
    --version, -v  print the version (default: false)
+
 ```
 
 ### License
