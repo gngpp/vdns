@@ -22,8 +22,8 @@ func (_this *Interface) Ipv6() bool {
 	return _this.ipv6 && !_this.ipv4
 }
 
-// GetInterface 获得网卡地址
-func GetInterface() (ipv4NetInterfaces []Interface, ipv6NetInterfaces []Interface, err error) {
+// GetCardInterface 获得网卡地址
+func GetCardInterface() (ipv4NetInterfaces []Interface, ipv6NetInterfaces []Interface, err error) {
 	allNetInterfaces, err := net.Interfaces()
 	if err != nil {
 		fmt.Println("net.Interfaces failed, iotool:", err.Error())

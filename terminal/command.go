@@ -11,6 +11,7 @@ import (
 	"math"
 	"strings"
 	"vdns/config"
+	"vdns/lib/util/convert"
 	"vdns/lib/util/vhttp"
 	"vdns/lib/util/vnet"
 	"vdns/lib/vlog"
@@ -40,6 +41,11 @@ func Command() []*cli.Command {
 				},
 			},
 			Action: recordAction(),
+		},
+		{
+			Name:   "card",
+			Usage:  "Print available network card information",
+			Action: printCardAction(),
 		},
 		{
 			Name:    "print-ip-api",
@@ -171,6 +177,33 @@ func printIpApiAction() cli.ActionFunc {
 		}
 
 		return printTableAndSavaToCSVFile(t, ctx)
+	}
+}
+
+func printCardAction() cli.ActionFunc {
+	return func(ctx *cli.Context) error {
+		v4Card, v6Card, err := vnet.GetCardInterface()
+		if err != nil {
+			return nil
+		}
+		v4Table, err := gotable.CreateByStruct(new(vnet.Interface))
+		if err != nil {
+			return err
+		}
+		for _, v := range v4Card {
+			err := v4Table.AddRow([]string{v.Name, strings.Join(v.Address, ","), convert.AsStringValue(v.Ipv4()), convert.AsStringValue(v.Ipv6())})
+			if err != nil {
+				return err
+			}
+		}
+		for _, v := range v6Card {
+			err := v4Table.AddRow([]string{v.Name, strings.Join(v.Address, ","), convert.AsStringValue(v.Ipv4()), convert.AsStringValue(v.Ipv6())})
+			if err != nil {
+				return err
+			}
+		}
+		fmt.Print(v4Table)
+		return nil
 	}
 }
 

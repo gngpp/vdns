@@ -28,7 +28,7 @@ func Test(t *testing.T) {
 }
 
 func TestGetNetInterface(t *testing.T) {
-	ipv4NetInterfaces, ipv6NetInterfaces, err := GetInterface()
+	ipv4NetInterfaces, ipv6NetInterfaces, err := GetCardInterface()
 	if err != nil {
 		t.Error(err)
 	}
