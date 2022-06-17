@@ -13,13 +13,13 @@ import (
 
 var configPath string
 
-type Configs map[string]*ProviderConfig
+type VdnsConfigProviderMap map[string]*VdnsConfigProvider
 
 // Get gets the first value associated with the given key.
 // If there are no values associated with the key, Get returns
 // the empty string. To access multiple values, use the map
 // directly.
-func (v Configs) Get(key string) *ProviderConfig {
+func (v VdnsConfigProviderMap) Get(key string) *VdnsConfigProvider {
 	if v == nil {
 		return nil
 	}
@@ -29,13 +29,13 @@ func (v Configs) Get(key string) *ProviderConfig {
 
 // Set sets the key to value. It replaces any existing
 // values.
-func (v Configs) Set(key string, value *ProviderConfig) {
+func (v VdnsConfigProviderMap) Set(key string, value *VdnsConfigProvider) {
 	v[key] = value
 }
 
 // Add adds the value to key. It appends to any existing
 // values associated with key.
-func (v Configs) Add(key string, value *ProviderConfig) {
+func (v VdnsConfigProviderMap) Add(key string, value *VdnsConfigProvider) {
 	config := v.Get(key)
 	if config != nil {
 		return
@@ -44,23 +44,23 @@ func (v Configs) Add(key string, value *ProviderConfig) {
 }
 
 // Del deletes the values associated with key.
-func (v Configs) Del(key string) {
+func (v VdnsConfigProviderMap) Del(key string) {
 	delete(v, key)
 }
 
 // Has checks whether a given key is set.
-func (v Configs) Has(key string) bool {
+func (v VdnsConfigProviderMap) Has(key string) bool {
 	_, ok := v[key]
 	return ok
 }
 
-type Config struct {
-	ConfigsMap Configs
+type VdnsConfig struct {
+	ConfigsMap VdnsConfigProviderMap
 }
 
-func NewConfig() *Config {
-	config := Config{
-		ConfigsMap: Configs{},
+func NewVdnsConfig() *VdnsConfig {
+	config := VdnsConfig{
+		ConfigsMap: VdnsConfigProviderMap{},
 	}
 	config.ConfigsMap.Add(AlidnsProvider, NewProviderConfig(AlidnsProvider))
 	config.ConfigsMap.Add(DnspodProvider, NewProviderConfig(DnspodProvider))
@@ -85,15 +85,15 @@ func ReadCredentials(key string) (auth.Credential, error) {
 	}
 }
 
-type ProviderConfig struct {
+type VdnsConfigProvider struct {
 	Provider *string `json:"provider"`
 	Ak       *string `json:"ak,omitempty"`
 	Sk       *string `json:"sk,omitempty"`
 	Token    *string `json:"token,omitempty"`
 }
 
-func NewProviderConfig(name string) *ProviderConfig {
-	return &ProviderConfig{
+func NewProviderConfig(name string) *VdnsConfigProvider {
+	return &VdnsConfigProvider{
 		Provider: &name,
 		Ak:       strs.String(""),
 		Sk:       strs.String(""),
@@ -104,13 +104,13 @@ func NewProviderConfig(name string) *ProviderConfig {
 type DDNSConfig struct {
 }
 
-func ReadConfig() (*Config, error) {
+func ReadConfig() (*VdnsConfig, error) {
 	read, err := file.Read(configPath)
 	if err != nil {
 		panic(err)
 	}
 	vlog.Debugf("read config:\n%v", read)
-	var entity Config
+	var entity VdnsConfig
 	err = vjson.ByteArrayConvert([]byte(read), &entity)
 	if err != nil {
 		vlog.Fatalf("read config error: %v", err)
@@ -118,7 +118,7 @@ func ReadConfig() (*Config, error) {
 	return &entity, err
 }
 
-func WriteConfig(config *Config) error {
+func WriteConfig(config *VdnsConfig) error {
 	open, err := os.Create(configPath)
 	defer func(open *os.File) {
 		err := open.Close()
@@ -140,7 +140,7 @@ func init() {
 
 	dir, err := homedir.Dir()
 	if err != nil {
-		panic("system error")
+		panic("[Error] system error")
 	}
 
 	//goland:noinspection SpellCheckingInspection
@@ -148,8 +148,9 @@ func init() {
 	if !file.Exist(WorkingDir) {
 		err = file.MakeDir(WorkingDir)
 		if err != nil {
-			panic("creating working " + WorkingDir + " directory error: " + err.Error())
+			panic("[Error] creating working " + WorkingDir + " directory error: " + err.Error())
 		}
+		vlog.Infof("[Init] working directory: %s\n", WorkingDir)
 	}
 
 	configPath = strs.Concat(WorkingDir, "/config.json")
@@ -158,16 +159,17 @@ func init() {
 		defer func(file *os.File) {
 			err := file.Close()
 			if err != nil {
-				vlog.Error(err)
+				println(err)
 			}
 		}(create)
 		if err != nil {
-			panic("creating " + configPath + " config create error: " + err.Error())
+			panic("[Error] creating " + configPath + " config create error: " + err.Error())
 		}
-		config := NewConfig()
+		config := NewVdnsConfig()
 		_, err = create.WriteString(vjson.PrettifyString(config))
 		if err != nil {
-			panic("initializing " + configPath + " config create error: " + err.Error())
+			panic("[Error] initializing " + configPath + " config create error: " + err.Error())
 		}
+		vlog.Infof("[Init] config file: %s\n", configPath)
 	}
 }

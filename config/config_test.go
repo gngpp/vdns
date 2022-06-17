@@ -6,6 +6,6 @@ import (
 )
 
 func TestName(t *testing.T) {
-	config := NewConfig()
+	config := NewVdnsConfig()
 	println(vjson.PrettifyString(config))
 }
