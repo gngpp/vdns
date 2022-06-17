@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"testing"
 	"vdns/lib/util/vjson"
 )
@@ -11,9 +12,9 @@ func TestCreate(t *testing.T) {
 }
 
 func TestReadConfig(t *testing.T) {
-	config, err := ReadConfig()
+	config, err := LoadVdnsConfig()
 	if err != nil {
 		t.Error(err)
 	}
-	println(vjson.PrettifyString(config))
+	fmt.Println(vjson.PrettifyString(config))
 }

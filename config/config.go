@@ -1,7 +1,8 @@
 package config
 
 import (
-	"errors"
+	"github.com/liushuochen/gotable"
+	"github.com/liushuochen/gotable/table"
 	"os"
 	"vdns/lib/auth"
 	"vdns/lib/homedir"
@@ -13,13 +14,13 @@ import (
 
 var configPath string
 
-type VdnsConfigProviderMap map[string]*VdnsConfigProvider
+type VdnsProviderConfigMap map[string]*VdnsProviderConfig
 
 // Get gets the first value associated with the given key.
 // If there are no values associated with the key, Get returns
 // the empty string. To access multiple values, use the map
 // directly.
-func (v VdnsConfigProviderMap) Get(key string) *VdnsConfigProvider {
+func (v VdnsProviderConfigMap) Get(key string) *VdnsProviderConfig {
 	if v == nil {
 		return nil
 	}
@@ -29,13 +30,13 @@ func (v VdnsConfigProviderMap) Get(key string) *VdnsConfigProvider {
 
 // Set sets the key to value. It replaces any existing
 // values.
-func (v VdnsConfigProviderMap) Set(key string, value *VdnsConfigProvider) {
+func (v VdnsProviderConfigMap) Set(key string, value *VdnsProviderConfig) {
 	v[key] = value
 }
 
 // Add adds the value to key. It appends to any existing
 // values associated with key.
-func (v VdnsConfigProviderMap) Add(key string, value *VdnsConfigProvider) {
+func (v VdnsProviderConfigMap) Add(key string, value *VdnsProviderConfig) {
 	config := v.Get(key)
 	if config != nil {
 		return
@@ -44,96 +45,87 @@ func (v VdnsConfigProviderMap) Add(key string, value *VdnsConfigProvider) {
 }
 
 // Del deletes the values associated with key.
-func (v VdnsConfigProviderMap) Del(key string) {
+func (v VdnsProviderConfigMap) Del(key string) {
 	delete(v, key)
 }
 
 // Has checks whether a given key is set.
-func (v VdnsConfigProviderMap) Has(key string) bool {
+func (v VdnsProviderConfigMap) Has(key string) bool {
 	_, ok := v[key]
 	return ok
 }
 
 type VdnsConfig struct {
-	ConfigsMap VdnsConfigProviderMap
+	ProviderMap VdnsProviderConfigMap
+}
+
+func (_this *VdnsConfig) ToTable() (*table.Table, error) {
+	t, err := gotable.CreateByStruct(new(VdnsProviderConfig))
+	if err != nil {
+		return nil, err
+	}
+	for key, p := range _this.ProviderMap {
+		dnsConfig := p
+		if dnsConfig != nil {
+			err := t.AddRow([]string{*dnsConfig.Provider, *dnsConfig.Ak, *dnsConfig.Sk, *dnsConfig.Token})
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			err := t.AddRow([]string{key})
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	return t, err
 }
 
 func NewVdnsConfig() *VdnsConfig {
 	config := VdnsConfig{
-		ConfigsMap: VdnsConfigProviderMap{},
+		ProviderMap: VdnsProviderConfigMap{},
 	}
-	config.ConfigsMap.Add(AlidnsProvider, NewProviderConfig(AlidnsProvider))
-	config.ConfigsMap.Add(DnspodProvider, NewProviderConfig(DnspodProvider))
-	config.ConfigsMap.Add(HuaweiDnsProvider, NewProviderConfig(HuaweiDnsProvider))
-	config.ConfigsMap.Add(CloudflareProvider, NewProviderConfig(CloudflareProvider))
+	config.ProviderMap.Add(AlidnsProvider, NewProviderConfig(AlidnsProvider))
+	config.ProviderMap.Add(DnspodProvider, NewProviderConfig(DnspodProvider))
+	config.ProviderMap.Add(HuaweiDnsProvider, NewProviderConfig(HuaweiDnsProvider))
+	config.ProviderMap.Add(CloudflareProvider, NewProviderConfig(CloudflareProvider))
 	return &config
 }
 
-func ReadCredentials(key string) (auth.Credential, error) {
-	config, err := ReadConfig()
-	if err != nil {
-		return nil, err
-	}
-	get := config.ConfigsMap.Get(key)
-	if get == nil {
-		return nil, errors.New("init credentials not found")
-	}
-	if key != CloudflareProvider {
-		return auth.NewBasicCredential(*get.Ak, *get.Sk), nil
-	} else {
-		return auth.NewTokenCredential(*get.Token), nil
-	}
-}
-
-type VdnsConfigProvider struct {
+type VdnsProviderConfig struct {
 	Provider *string `json:"provider"`
 	Ak       *string `json:"ak,omitempty"`
 	Sk       *string `json:"sk,omitempty"`
 	Token    *string `json:"token,omitempty"`
 }
 
-func NewProviderConfig(name string) *VdnsConfigProvider {
-	return &VdnsConfigProvider{
+func (_this *VdnsProviderConfig) loadCredential() (auth.Credential, error) {
+	if *_this.Provider != CloudflareProvider {
+		return auth.NewBasicCredential(*_this.Ak, *_this.Sk), nil
+	} else {
+		return auth.NewTokenCredential(*_this.Token), nil
+	}
+}
+
+func (_this *VdnsProviderConfig) ToTable() (*table.Table, error) {
+	t, err := gotable.CreateByStruct(new(VdnsProviderConfig))
+	if err != nil {
+		return nil, err
+	}
+	err = t.AddRow([]string{*_this.Provider, *_this.Ak, *_this.Sk, *_this.Token})
+	if err != nil {
+		return nil, err
+	}
+	return t, nil
+}
+
+func NewProviderConfig(name string) *VdnsProviderConfig {
+	return &VdnsProviderConfig{
 		Provider: &name,
 		Ak:       strs.String(""),
 		Sk:       strs.String(""),
 		Token:    strs.String(""),
 	}
-}
-
-type DDNSConfig struct {
-}
-
-func ReadConfig() (*VdnsConfig, error) {
-	read, err := file.Read(configPath)
-	if err != nil {
-		panic(err)
-	}
-	vlog.Debugf("read config:\n%v", read)
-	var entity VdnsConfig
-	err = vjson.ByteArrayConvert([]byte(read), &entity)
-	if err != nil {
-		vlog.Fatalf("read config error: %v", err)
-	}
-	return &entity, err
-}
-
-func WriteConfig(config *VdnsConfig) error {
-	open, err := os.Create(configPath)
-	defer func(open *os.File) {
-		err := open.Close()
-		if err != nil {
-			vlog.Error(err)
-		}
-	}(open)
-	if err != nil {
-		return err
-	}
-	_, err = open.WriteString(vjson.PrettifyString(config))
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 func init() {
