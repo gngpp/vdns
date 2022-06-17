@@ -15,6 +15,7 @@ func ConfigCommand() *cli.Command {
 		Subcommands: []*cli.Command{
 			setConfigCommand(),
 			catConfigCommand(),
+			resetConfigCommand(),
 			importConfigCommand(),
 			exportConfigCommand(),
 		},
@@ -99,6 +100,30 @@ func catConfigCommand() *cli.Command {
 				return err
 			}
 			t, err := loadConfig.ToTable()
+			if err != nil {
+				return err
+			}
+			fmt.Print(t)
+			return nil
+		},
+	}
+}
+
+func resetConfigCommand() *cli.Command {
+	return &cli.Command{
+		Name:  "reset",
+		Usage: "Reset initial configuration",
+		Action: func(context *cli.Context) error {
+			vdnsConfig := config.NewVdnsConfig()
+			err := config.WriteVdnsConfig(vdnsConfig)
+			if err != nil {
+				return err
+			}
+			loadVdnsConfig, err := config.LoadVdnsConfig()
+			if err != nil {
+				return err
+			}
+			t, err := loadVdnsConfig.ToTable()
 			if err != nil {
 				return err
 			}

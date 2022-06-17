@@ -10,9 +10,11 @@ import (
 	"vdns/lib/util/strs"
 	"vdns/lib/util/vjson"
 	"vdns/lib/vlog"
+	"vdns/lib/vlog/timewriter"
 )
 
 var configPath string
+var workspacePath string
 
 type VdnsProviderConfigMap map[string]*VdnsProviderConfig
 
@@ -56,7 +58,20 @@ func (v VdnsProviderConfigMap) Has(key string) bool {
 }
 
 type VdnsConfig struct {
-	ProviderMap VdnsProviderConfigMap
+	Dir           string
+	Compress      bool
+	ReserveDay    int
+	LogFilePrefix string
+	ProviderMap   VdnsProviderConfigMap
+}
+
+func (_this *VdnsConfig) ToVlogTimeWriter() *timewriter.TimeWriter {
+	return &timewriter.TimeWriter{
+		Dir:           _this.Dir,
+		Compress:      _this.Compress,
+		ReserveDay:    _this.ReserveDay,
+		LogFilePrefix: _this.LogFilePrefix,
+	}
 }
 
 func (_this *VdnsConfig) ToTable() (*table.Table, error) {
@@ -83,7 +98,11 @@ func (_this *VdnsConfig) ToTable() (*table.Table, error) {
 
 func NewVdnsConfig() *VdnsConfig {
 	config := VdnsConfig{
-		ProviderMap: VdnsProviderConfigMap{},
+		Dir:           strs.Concat(workspacePath, "/logs"),
+		Compress:      true,
+		LogFilePrefix: "vdns",
+		ReserveDay:    30,
+		ProviderMap:   VdnsProviderConfigMap{},
 	}
 	config.ProviderMap.Add(AlidnsProvider, NewProviderConfig(AlidnsProvider))
 	config.ProviderMap.Add(DnspodProvider, NewProviderConfig(DnspodProvider))
@@ -136,16 +155,16 @@ func init() {
 	}
 
 	//goland:noinspection SpellCheckingInspection
-	WorkingDir := strs.Concat(dir, "/.vdns")
-	if !file.Exist(WorkingDir) {
-		err = file.MakeDir(WorkingDir)
+	workspacePath = strs.Concat(dir, "/.vdns")
+	if !file.Exist(workspacePath) {
+		err = file.MakeDir(workspacePath)
 		if err != nil {
-			panic("[Error] creating working " + WorkingDir + " directory error: " + err.Error())
+			panic("[Error] creating workspace " + workspacePath + " directory error: " + err.Error())
 		}
-		vlog.Infof("[Init] working directory: %s\n", WorkingDir)
+		vlog.Infof("[Init] workspace directory: %s\n", workspacePath)
 	}
 
-	configPath = strs.Concat(WorkingDir, "/config.json")
+	configPath = strs.Concat(workspacePath, "/config.json")
 	if !file.Exist(configPath) {
 		create, err := os.Create(configPath)
 		defer func(file *os.File) {
