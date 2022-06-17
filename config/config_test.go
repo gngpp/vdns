@@ -5,7 +5,15 @@ import (
 	"vdns/lib/util/vjson"
 )
 
-func TestName(t *testing.T) {
+func TestCreate(t *testing.T) {
 	config := NewVdnsConfig()
+	println(vjson.PrettifyString(config))
+}
+
+func TestReadConfig(t *testing.T) {
+	config, err := ReadConfig()
+	if err != nil {
+		t.Error(err)
+	}
 	println(vjson.PrettifyString(config))
 }
