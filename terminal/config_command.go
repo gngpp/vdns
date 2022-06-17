@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/urfave/cli/v2"
 	"vdns/config"
+	"vdns/lib/util/file"
 	"vdns/lib/util/strs"
 )
 
@@ -14,6 +15,7 @@ func ConfigCommand() *cli.Command {
 		Usage: "Configure DNS service provider access key pair",
 		Subcommands: []*cli.Command{
 			setConfigCommand(),
+			setLogConfigCommand(),
 			catConfigCommand(),
 			resetConfigCommand(),
 			importConfigCommand(),
@@ -56,36 +58,94 @@ func setConfigCommand() *cli.Command {
 			},
 		},
 		Action: func(ctx *cli.Context) error {
-			vdnsProviderConfig, err := config.LoadVdnsProviderConfig(provider)
+			vdnsConfig, err := config.LoadVdnsConfig()
 			if err != nil {
 				return err
 			}
+			providerConfig := vdnsConfig.ProviderMap.Get(provider)
 			isModify := false
 			if !strs.IsEmpty(ak) {
-				vdnsProviderConfig.Ak = &ak
+				providerConfig.Ak = &ak
 				isModify = true
 			}
 			if !strs.IsEmpty(sk) {
-				vdnsProviderConfig.Sk = &sk
+				providerConfig.Sk = &sk
 				isModify = true
 			}
 			if !strs.IsEmpty(token) {
-				vdnsProviderConfig.Token = &token
+				providerConfig.Token = &token
 				isModify = true
 			}
 
 			if isModify {
-				err = config.WriteVdnsProviderConfig(provider, vdnsProviderConfig)
+				err = config.WriteVdnsConfig(vdnsConfig)
 				if err != nil {
 					return err
 				}
-				table, err := vdnsProviderConfig.PrintTable()
-				if err != nil {
-					return err
-				}
-				fmt.Print(table)
+				return vdnsConfig.PrintTable()
 			}
 			return nil
+		},
+	}
+}
+
+func setLogConfigCommand() *cli.Command {
+	var dir string
+	var reserveDay int
+	var filePrefix string
+	return &cli.Command{
+		Name:  "set-log",
+		Usage: "Set log configuration",
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:        "dir",
+				Usage:       "Log storage directory",
+				Destination: &dir,
+			},
+			&cli.IntFlag{
+				Name:        "reserve-day",
+				Usage:       "log retention date",
+				Destination: &reserveDay,
+			},
+			&cli.StringFlag{
+				Name:        "file-prefix",
+				Usage:       "Log file prefix",
+				Destination: &filePrefix,
+			},
+		},
+		Action: func(context *cli.Context) error {
+			vdnsConfig, err := config.LoadVdnsConfig()
+			if err != nil {
+				return err
+			}
+
+			isModify := false
+			if !strs.IsEmpty(dir) {
+				if !file.IsDir(dir) {
+					return fmt.Errorf("system does not exist path or not is dir: %v", dir)
+				}
+				vdnsConfig.Dir = dir
+				isModify = true
+			}
+
+			if !strs.IsEmpty(filePrefix) {
+				vdnsConfig.LogFilePrefix = filePrefix
+				isModify = true
+			}
+
+			if reserveDay > 0 {
+				vdnsConfig.ReserveDay = reserveDay
+				isModify = true
+			}
+
+			if isModify {
+				err = config.WriteVdnsConfig(vdnsConfig)
+				if err != nil {
+					return err
+				}
+			}
+
+			return vdnsConfig.PrintTable()
 		},
 	}
 }

@@ -17,6 +17,7 @@ import (
 
 var configPath string
 var workspacePath string
+var defaultLogDir string
 
 type VdnsProviderConfigMap map[string]*VdnsProviderConfig
 
@@ -110,7 +111,7 @@ func (_this *VdnsConfig) PrintTable() error {
 
 func NewVdnsConfig() *VdnsConfig {
 	config := VdnsConfig{
-		Dir:           strs.Concat(workspacePath, "/logs"),
+		Dir:           defaultLogDir,
 		Compress:      true,
 		LogFilePrefix: "vdns",
 		ReserveDay:    30,
@@ -177,6 +178,7 @@ func init() {
 	}
 
 	configPath = strs.Concat(workspacePath, "/config.json")
+	defaultLogDir = strs.Concat(workspacePath, "/logs")
 	if !file.Exist(configPath) {
 		create, err := os.Create(configPath)
 		defer func(file *os.File) {
@@ -193,6 +195,13 @@ func init() {
 		if err != nil {
 			panic("[Error] initializing " + configPath + " config create error: " + err.Error())
 		}
+		defaultLogDir = config.Dir
 		vlog.Infof("[Init] config file: %s\n", configPath)
+	}
+	if !file.Exist(defaultLogDir) {
+		err = file.MakeDir(defaultLogDir)
+		if err != nil {
+			panic("[Error] creating log dir: " + defaultLogDir + " error: " + err.Error())
+		}
 	}
 }
