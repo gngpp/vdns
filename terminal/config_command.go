@@ -79,7 +79,7 @@ func setConfigCommand() *cli.Command {
 				if err != nil {
 					return err
 				}
-				table, err := vdnsProviderConfig.ToTable()
+				table, err := vdnsProviderConfig.PrintTable()
 				if err != nil {
 					return err
 				}
@@ -99,12 +99,7 @@ func catConfigCommand() *cli.Command {
 			if err != nil {
 				return err
 			}
-			t, err := loadConfig.ToTable()
-			if err != nil {
-				return err
-			}
-			fmt.Print(t)
-			return nil
+			return loadConfig.PrintTable()
 		},
 	}
 }
@@ -123,12 +118,7 @@ func resetConfigCommand() *cli.Command {
 			if err != nil {
 				return err
 			}
-			t, err := loadVdnsConfig.ToTable()
-			if err != nil {
-				return err
-			}
-			fmt.Print(t)
-			return nil
+			return loadVdnsConfig.PrintTable()
 		},
 	}
 }

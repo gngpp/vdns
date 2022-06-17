@@ -1,11 +1,13 @@
 package config
 
 import (
+	"fmt"
 	"github.com/liushuochen/gotable"
 	"github.com/liushuochen/gotable/table"
 	"os"
 	"vdns/lib/auth"
 	"vdns/lib/homedir"
+	"vdns/lib/util/convert"
 	"vdns/lib/util/file"
 	"vdns/lib/util/strs"
 	"vdns/lib/util/vjson"
@@ -74,26 +76,36 @@ func (_this *VdnsConfig) ToVlogTimeWriter() *timewriter.TimeWriter {
 	}
 }
 
-func (_this *VdnsConfig) ToTable() (*table.Table, error) {
-	t, err := gotable.CreateByStruct(new(VdnsProviderConfig))
+func (_this *VdnsConfig) PrintTable() error {
+	t1, err := gotable.Create("Log Path", "Log Comporess", "Log ReserveDay", "Log File Prefix")
 	if err != nil {
-		return nil, err
+		return err
+	}
+	err = t1.AddRow([]string{_this.Dir, convert.AsStringValue(_this.Compress), convert.AsStringValue(_this.ReserveDay), _this.LogFilePrefix})
+
+	t2, err := gotable.CreateByStruct(new(VdnsProviderConfig))
+	if err != nil {
+		return err
 	}
 	for key, p := range _this.ProviderMap {
-		dnsConfig := p
-		if dnsConfig != nil {
-			err := t.AddRow([]string{*dnsConfig.Provider, *dnsConfig.Ak, *dnsConfig.Sk, *dnsConfig.Token})
+		if p != nil {
+			err := t2.AddRow([]string{*p.Provider, *p.Ak, *p.Sk, *p.Token})
 			if err != nil {
-				return nil, err
+				return err
 			}
 		} else {
-			err := t.AddRow([]string{key})
+			err := t1.AddRow([]string{key})
 			if err != nil {
-				return nil, err
+				return err
 			}
 		}
 	}
-	return t, err
+	if err != nil {
+		return err
+	}
+	fmt.Println(t1)
+	fmt.Print(t2)
+	return err
 }
 
 func NewVdnsConfig() *VdnsConfig {
@@ -126,7 +138,7 @@ func (_this *VdnsProviderConfig) loadCredential() (auth.Credential, error) {
 	}
 }
 
-func (_this *VdnsProviderConfig) ToTable() (*table.Table, error) {
+func (_this *VdnsProviderConfig) PrintTable() (*table.Table, error) {
 	t, err := gotable.CreateByStruct(new(VdnsProviderConfig))
 	if err != nil {
 		return nil, err

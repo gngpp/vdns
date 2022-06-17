@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"github.com/liushuochen/gotable/table"
 	"os"
 	"sync"
 	"vdns/lib/api"
@@ -15,7 +14,7 @@ var vdnsConfig *VdnsConfig
 var rw sync.RWMutex
 
 type Table interface {
-	ToTable() (*table.Table, error)
+	PrintTable() error
 }
 
 func WriteVdnsConfig(config *VdnsConfig) error {
