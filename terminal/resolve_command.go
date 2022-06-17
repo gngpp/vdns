@@ -5,7 +5,6 @@ import (
 	"github.com/liushuochen/gotable"
 	"github.com/urfave/cli/v2"
 	"vdns/config"
-	"vdns/lib/api"
 	"vdns/lib/api/model"
 	"vdns/lib/standard/record"
 	"vdns/lib/util/convert"
@@ -78,7 +77,7 @@ func describeDNSRecord() *cli.Command {
 			},
 		},
 		Action: func(_ *cli.Context) error {
-			provider, err := getProvider(provider)
+			provider, err := config.LoadVdnsProvider(provider)
 			if err != nil {
 				return err
 			}
@@ -154,7 +153,7 @@ func createDNSRecord() *cli.Command {
 			},
 		},
 		Action: func(_ *cli.Context) error {
-			provider, err := getProvider(provider)
+			provider, err := config.LoadVdnsProvider(provider)
 			if err != nil {
 				return err
 			}
@@ -222,7 +221,7 @@ func updateDNSRecord() *cli.Command {
 			},
 		},
 		Action: func(_ *cli.Context) error {
-			provider, err := getProvider(provider)
+			provider, err := config.LoadVdnsProvider(provider)
 			if err != nil {
 				return err
 			}
@@ -279,7 +278,7 @@ func deleteDNSRecord() *cli.Command {
 			},
 		},
 		Action: func(_ *cli.Context) error {
-			provider, err := getProvider(provider)
+			provider, err := config.LoadVdnsProvider(provider)
 			if err != nil {
 				return err
 			}
@@ -303,25 +302,4 @@ func deleteDNSRecord() *cli.Command {
 			return nil
 		},
 	}
-}
-
-func getProvider(providerKey string) (api.VdnsProvider, error) {
-	credentials, err := config.ReadCredentials(providerKey)
-	if err != nil {
-		return nil, err
-	}
-	var provider api.VdnsProvider
-	if providerKey == config.AlidnsProvider {
-		provider = api.NewAliDNSProvider(credentials)
-	}
-	if providerKey == config.DnspodProvider {
-		provider = api.NewDNSPodProvider(credentials)
-	}
-	if providerKey == config.CloudflareProvider {
-		provider = api.NewCloudflareProvider(credentials)
-	}
-	if providerKey == config.HuaweiDnsProvider {
-		provider = api.NewHuaweiProvider(credentials)
-	}
-	return provider, nil
 }
