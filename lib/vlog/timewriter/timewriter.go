@@ -41,14 +41,17 @@ func (l *TimeWriter) Write(p []byte) (n int, err error) {
 	defer l.mu.Unlock()
 
 	if l.file == nil {
-		if err = l.openExistingOrNew(len(p)); err != nil {
+		if err = l.openExistingOrNew(); err != nil {
 			fmt.Printf("write fail, msg(%s)\n", err)
 			return 0, err
 		}
 	}
 
 	if l.curFilename != l.filename() {
-		l.rotate()
+		err := l.rotate()
+		if err != nil {
+			return 0, err
+		}
 	}
 
 	n, err = l.file.Write(p)
@@ -94,7 +97,7 @@ func (l *TimeWriter) oldLogFiles() ([]logInfo, error) {
 	if err != nil {
 		return nil, fmt.Errorf("can't read log file directory: %s", err)
 	}
-	logFiles := []logInfo{}
+	var logFiles []logInfo
 
 	prefix, ext := l.prefixAndExt()
 
@@ -215,7 +218,7 @@ func (l *TimeWriter) millRunOnce() error {
 }
 
 func (l *TimeWriter) millRun() {
-	for _ = range l.millCh {
+	for range l.millCh {
 		_ = l.millRunOnce()
 	}
 }
@@ -249,7 +252,7 @@ func (l *TimeWriter) openNew() error {
 	return nil
 }
 
-func (l *TimeWriter) openExistingOrNew(writeLen int) error {
+func (l *TimeWriter) openExistingOrNew() error {
 
 	filename := l.filename()
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
@@ -280,12 +283,18 @@ func (l *TimeWriter) filename() string {
 	return filepath.Join(os.TempDir(), name)
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func compressLogFile(src, dst string) (err error) {
 	f, err := os.Open(src)
 	if err != nil {
 		return fmt.Errorf("failed to open log file: %v", err)
 	}
-	defer f.Close()
+	defer func(f *os.File) {
+		err := f.Close()
+		if err != nil {
+			fmt.Printf("compress log file error: %v\n", err)
+		}
+	}(f)
 
 	fi, err := os.Stat(src)
 	if err != nil {
