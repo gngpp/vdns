@@ -61,18 +61,18 @@ func (v VdnsProviderConfigMap) Has(key string) bool {
 }
 
 type VdnsConfig struct {
-	Dir           string
-	Compress      bool
-	ReserveDay    int
+	LogDir        string
+	LogCompress   bool
+	LogReserveDay int
 	LogFilePrefix string
 	ProviderMap   VdnsProviderConfigMap
 }
 
 func (_this *VdnsConfig) ToVlogTimeWriter() *timewriter.TimeWriter {
 	return &timewriter.TimeWriter{
-		Dir:           _this.Dir,
-		Compress:      _this.Compress,
-		ReserveDay:    _this.ReserveDay,
+		Dir:           _this.LogDir,
+		Compress:      _this.LogCompress,
+		ReserveDay:    _this.LogReserveDay,
 		LogFilePrefix: _this.LogFilePrefix,
 	}
 }
@@ -82,7 +82,7 @@ func (_this *VdnsConfig) PrintTable() error {
 	if err != nil {
 		return err
 	}
-	err = t1.AddRow([]string{_this.Dir, convert.AsStringValue(_this.Compress), convert.AsStringValue(_this.ReserveDay), _this.LogFilePrefix})
+	err = t1.AddRow([]string{_this.LogDir, convert.AsStringValue(_this.LogCompress), convert.AsStringValue(_this.LogReserveDay), _this.LogFilePrefix})
 
 	t2, err := gotable.CreateByStruct(new(VdnsProviderConfig))
 	if err != nil {
@@ -111,10 +111,10 @@ func (_this *VdnsConfig) PrintTable() error {
 
 func NewVdnsConfig() *VdnsConfig {
 	config := VdnsConfig{
-		Dir:           defaultLogDir,
-		Compress:      true,
+		LogDir:        defaultLogDir,
+		LogCompress:   true,
 		LogFilePrefix: "vdns",
-		ReserveDay:    30,
+		LogReserveDay: 30,
 		ProviderMap:   VdnsProviderConfigMap{},
 	}
 	config.ProviderMap.Add(AlidnsProvider, NewProviderConfig(AlidnsProvider))
@@ -195,7 +195,7 @@ func init() {
 		if err != nil {
 			panic("[Error] initializing " + configPath + " config create error: " + err.Error())
 		}
-		defaultLogDir = config.Dir
+		defaultLogDir = config.LogDir
 		vlog.Infof("[Init] config file: %s\n", configPath)
 	}
 	if !file.Exist(defaultLogDir) {

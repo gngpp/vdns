@@ -124,7 +124,7 @@ func setLogConfigCommand() *cli.Command {
 				if !file.IsDir(dir) {
 					return fmt.Errorf("system does not exist path or not is dir: %v", dir)
 				}
-				vdnsConfig.Dir = dir
+				vdnsConfig.LogDir = dir
 				isModify = true
 			}
 
@@ -134,7 +134,7 @@ func setLogConfigCommand() *cli.Command {
 			}
 
 			if reserveDay > 0 {
-				vdnsConfig.ReserveDay = reserveDay
+				vdnsConfig.LogReserveDay = reserveDay
 				isModify = true
 			}
 
