@@ -7,6 +7,7 @@ import (
 	"vdns/lib/api"
 	"vdns/lib/auth"
 	"vdns/lib/util/file"
+	"vdns/lib/util/strs"
 	"vdns/lib/util/vjson"
 	"vdns/lib/vlog"
 )
@@ -24,7 +25,7 @@ type IP struct {
 	Card       string
 	OnCard     bool
 	Api        string
-	domainList []string
+	DomainList []string
 }
 
 func WriteVdnsConfig(config *VdnsConfig) error {
@@ -47,9 +48,12 @@ func WriteVdnsConfig(config *VdnsConfig) error {
 	return nil
 }
 
-func WriteVdnsProviderConfig(provierKey string, config *VdnsProviderConfig) error {
+func WriteVdnsProviderConfig(config *VdnsProviderConfig) error {
 	rw.Lock()
-	vdnsConfig.ProviderMap.Set(provierKey, config)
+	if strs.IsEmpty(config.Provider) {
+		return fmt.Errorf("provider key cnanot been empty: %v", config.Provider)
+	}
+	vdnsConfig.ProviderMap.Set(config.Provider, config)
 	rw.Unlock()
 	err := WriteVdnsConfig(vdnsConfig)
 	if err != nil {

@@ -119,11 +119,11 @@ func (_this *VdnsConfig) PrintTable() error {
 			if err != nil {
 				return err
 			}
-			err = t3.AddRow([]string{p.Provider, p.V4.Type, convert.AsStringValue(p.V4.Enabled), convert.AsStringValue(p.V4.OnCard), p.V4.Card, p.V4.Api, strings.Join(p.V4.domainList, ",")})
+			err = t3.AddRow([]string{p.Provider, p.V4.Type, convert.AsStringValue(p.V4.Enabled), convert.AsStringValue(p.V4.OnCard), p.V4.Card, p.V4.Api, strings.Join(p.V4.DomainList, ",")})
 			if err != nil {
 				return err
 			}
-			err = t3.AddRow([]string{p.Provider, p.V6.Type, convert.AsStringValue(p.V6.Enabled), convert.AsStringValue(p.V6.OnCard), p.V6.Card, p.V6.Api, strings.Join(p.V6.domainList, ",")})
+			err = t3.AddRow([]string{p.Provider, p.V6.Type, convert.AsStringValue(p.V6.Enabled), convert.AsStringValue(p.V6.OnCard), p.V6.Card, p.V6.Api, strings.Join(p.V6.DomainList, ",")})
 			if err != nil {
 				return err
 			}
@@ -190,11 +190,11 @@ func (_this *VdnsProviderConfig) PrintTable() error {
 	if err != nil {
 		return err
 	}
-	err = t2.AddRow([]string{_this.Provider, _this.V4.Type, convert.AsStringValue(_this.V4.Enabled), convert.AsStringValue(_this.V4.OnCard), _this.V4.Card, _this.V4.Api, strings.Join(_this.V4.domainList, ",")})
+	err = t2.AddRow([]string{_this.Provider, _this.V4.Type, convert.AsStringValue(_this.V4.Enabled), convert.AsStringValue(_this.V4.OnCard), _this.V4.Card, _this.V4.Api, strings.Join(_this.V4.DomainList, ",")})
 	if err != nil {
 		return err
 	}
-	err = t2.AddRow([]string{_this.Provider, _this.V6.Type, convert.AsStringValue(_this.V6.Enabled), convert.AsStringValue(_this.V6.OnCard), _this.V6.Card, _this.V6.Api, strings.Join(_this.V6.domainList, ",")})
+	err = t2.AddRow([]string{_this.Provider, _this.V6.Type, convert.AsStringValue(_this.V6.Enabled), convert.AsStringValue(_this.V6.OnCard), _this.V6.Card, _this.V6.Api, strings.Join(_this.V6.DomainList, ",")})
 	if err != nil {
 		return err
 	}
@@ -217,14 +217,14 @@ func NewProviderConfig(name string) *VdnsProviderConfig {
 			Enabled:    false,
 			OnCard:     true,
 			Api:        "",
-			domainList: []string{},
+			DomainList: []string{},
 		},
 		V6: IP{
 			Type:       "ipv6",
 			Enabled:    false,
 			OnCard:     true,
 			Api:        "",
-			domainList: []string{},
+			DomainList: []string{},
 		},
 	}
 }

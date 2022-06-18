@@ -4,10 +4,10 @@ import (
 	"net/url"
 )
 
-func IsURL(rawUrl string) bool {
+func IsURL(rawUrl string) error {
 	_, err := url.ParseRequestURI(rawUrl)
 	if err != nil {
-		return false
+		return err
 	}
-	return true
+	return nil
 }

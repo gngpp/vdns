@@ -42,3 +42,8 @@ func CheckExtractDomain(domain string) (*Domain, error) {
 
 	return targetDomain, nil
 }
+
+func CheckDomain(domain string) error {
+	_, err := CheckExtractDomain(domain)
+	return err
+}

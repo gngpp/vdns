@@ -1,11 +1,13 @@
 package terminal
 
 import (
+	"errors"
 	"fmt"
 	"github.com/urfave/cli/v2"
 	"vdns/config"
 	"vdns/lib/util/file"
 	"vdns/lib/util/strs"
+	"vdns/lib/util/vhttp"
 )
 
 //goland:noinspection SpellCheckingInspection
@@ -93,6 +95,7 @@ func setConfigCommand() *cli.Command {
 
 func setIpConfigCommand() *cli.Command {
 	var provider string
+	var ipType string
 	var oncard bool
 	var enable bool
 	var card string
@@ -105,7 +108,15 @@ func setIpConfigCommand() *cli.Command {
 			&cli.StringFlag{
 				Name:        "provider",
 				Aliases:     []string{"p"},
+				Usage:       "provider name",
 				Destination: &provider,
+				Required:    true,
+			},
+			&cli.StringFlag{
+				Name:        "type",
+				Aliases:     []string{"t"},
+				Usage:       "Ip type",
+				Destination: &ipType,
 				Required:    true,
 			},
 			&cli.BoolFlag{
@@ -136,12 +147,76 @@ func setIpConfigCommand() *cli.Command {
 			},
 		},
 		Action: func(ctx *cli.Context) error {
-			fmt.Println(enable)
-			fmt.Println(oncard)
-			fmt.Println(card)
-			fmt.Println(api)
-			fmt.Println(domainList)
-			return nil
+			vdnsProviderConfig, err := config.LoadVdnsProviderConfig(provider)
+			if err != nil {
+				return err
+			}
+
+			if (ipType != "ipv4") && (ipType != "ipv6") {
+				return errors.New("ip type must be: ipv4 or ipv6.\nfor example: --type=ipv4 or --type=ipv6")
+			}
+
+			if ipType == "ipv4" {
+				vdnsProviderConfig.V4.Type = ipType
+				vdnsProviderConfig.V4.Enabled = enable
+				vdnsProviderConfig.V4.OnCard = oncard
+				if !strs.IsEmpty(card) {
+					vdnsProviderConfig.V4.Card = card
+				}
+
+				if !strs.IsEmpty(api) {
+					err := vhttp.IsURL(api)
+					if err != nil {
+						return err
+					}
+					vdnsProviderConfig.V4.Api = api
+				}
+
+				if len(domainList.Value()) > 0 {
+					l := domainList.Value()
+					for _, domain := range l {
+						err := vhttp.CheckDomain(domain)
+						if err != nil {
+							return err
+						}
+					}
+					vdnsProviderConfig.V4.DomainList = l
+				}
+			}
+
+			if ipType == "ipv6" {
+				vdnsProviderConfig.V6.Type = ipType
+				vdnsProviderConfig.V6.Enabled = enable
+				vdnsProviderConfig.V6.OnCard = oncard
+				if !strs.IsEmpty(card) {
+					vdnsProviderConfig.V6.Card = card
+				}
+
+				if !strs.IsEmpty(api) {
+					err := vhttp.IsURL(api)
+					if err != nil {
+						return err
+					}
+					vdnsProviderConfig.V6.Api = api
+				}
+
+				if len(domainList.Value()) > 0 {
+					l := domainList.Value()
+					for _, domain := range l {
+						err := vhttp.CheckDomain(domain)
+						if err != nil {
+							return err
+						}
+					}
+					vdnsProviderConfig.V6.DomainList = l
+				}
+			}
+
+			err = config.WriteVdnsProviderConfig(vdnsProviderConfig)
+			if err != nil {
+				return err
+			}
+			return vdnsProviderConfig.PrintTable()
 		},
 	}
 }
