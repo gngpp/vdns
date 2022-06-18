@@ -142,14 +142,10 @@ func providerAction() cli.ActionFunc {
 		_ = t.AddRow([]string{config.DnspodProvider, "https://cloud.tencent.com/document/product/1427"})
 		_ = t.AddRow([]string{config.CloudflareProvider, "https://api.cloudflare.com/#dns-records-for-a-zone-properties"})
 		_ = t.AddRow([]string{config.HuaweiDnsProvider, "https://support.huaweicloud.com/function-dns/index.html"})
-
-		fmt.Print(t)
+		go spinner()
+		fmt.Printf("\r%v", t)
 		path := ctx.String("path")
-		err = toCSVFile(t, path)
-		if err != nil {
-			return err
-		}
-		return nil
+		return toCSVFile(t, path)
 	}
 }
 
@@ -186,23 +182,24 @@ func printCardAction() cli.ActionFunc {
 		if err != nil {
 			return nil
 		}
-		v4Table, err := gotable.CreateByStruct(new(vnet.Interface))
+		t, err := gotable.CreateByStruct(new(vnet.Interface))
 		if err != nil {
 			return err
 		}
 		for _, v := range v4Card {
-			err := v4Table.AddRow([]string{v.Name, strings.Join(v.Address, ","), convert.AsStringValue(v.Ipv4()), convert.AsStringValue(v.Ipv6())})
+			err := t.AddRow([]string{v.Name, strings.Join(v.Address, ","), convert.AsStringValue(v.Ipv4()), convert.AsStringValue(v.Ipv6())})
 			if err != nil {
 				return err
 			}
 		}
 		for _, v := range v6Card {
-			err := v4Table.AddRow([]string{v.Name, strings.Join(v.Address, ","), convert.AsStringValue(v.Ipv4()), convert.AsStringValue(v.Ipv6())})
+			err := t.AddRow([]string{v.Name, strings.Join(v.Address, ","), convert.AsStringValue(v.Ipv4()), convert.AsStringValue(v.Ipv6())})
 			if err != nil {
 				return err
 			}
 		}
-		fmt.Print(v4Table)
+		go spinner()
+		fmt.Printf("\r%v", t)
 		return nil
 	}
 }
@@ -222,7 +219,6 @@ func testIpApiAction() cli.ActionFunc {
 				return err
 			}
 			go spinner()
-			fmt.Println()
 			for _, api := range config.GetIpv4ApiList() {
 				_ = t.AddRow([]string{api, vnet.GetIpv4AddrForUrl(api)})
 			}
@@ -233,12 +229,11 @@ func testIpApiAction() cli.ActionFunc {
 				return err
 			}
 			go spinner()
-			fmt.Println()
 			for _, api := range config.GetIpv6ApiList() {
 				_ = t.AddRow([]string{api, vnet.GetIpv6AddrForUrl(api)})
 			}
 		}
-		fmt.Println(t)
-		return err
+		fmt.Printf("\r%v", t)
+		return nil
 	}
 }

@@ -8,24 +8,18 @@ import (
 	"vdns/lib/util/strs"
 )
 
-func printTableAndSavaToJSONFile(table *table.Table, ctx *cli.Context) error {
-	fmt.Print(table)
+func printTableAndSavaToJSONFile(t *table.Table, ctx *cli.Context) error {
+	go spinner()
+	fmt.Printf("\r%v", t)
 	path := ctx.String("path")
-	err := toJsonFile(table, path)
-	if err != nil {
-		return err
-	}
-	return nil
+	return toJsonFile(t, path)
 }
 
-func printTableAndSavaToCSVFile(table *table.Table, ctx *cli.Context) error {
-	fmt.Print(table)
+func printTableAndSavaToCSVFile(t *table.Table, ctx *cli.Context) error {
+	go spinner()
+	fmt.Printf("\r%v", t)
 	path := ctx.String("path")
-	err := toCSVFile(table, path)
-	if err != nil {
-		return err
-	}
-	return nil
+	return toCSVFile(t, path)
 }
 
 func toCSVFile(table *table.Table, path string) error {

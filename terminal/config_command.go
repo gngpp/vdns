@@ -15,6 +15,7 @@ func ConfigCommand() *cli.Command {
 		Usage: "Configure DNS service provider access key pair",
 		Subcommands: []*cli.Command{
 			setConfigCommand(),
+			setIpConfigCommand(),
 			setLogConfigCommand(),
 			catConfigCommand(),
 			resetConfigCommand(),
@@ -37,6 +38,7 @@ func setConfigCommand() *cli.Command {
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:        "provider",
+				Aliases:     []string{"p"},
 				Usage:       "DNS provider name",
 				Destination: &provider,
 				Required:    true,
@@ -84,6 +86,61 @@ func setConfigCommand() *cli.Command {
 				}
 				return vdnsConfig.PrintTable()
 			}
+			return nil
+		},
+	}
+}
+
+func setIpConfigCommand() *cli.Command {
+	var provider string
+	var oncard bool
+	var enable bool
+	var card string
+	var api string
+	var domainList cli.StringSlice
+	return &cli.Command{
+		Name:  "set-ip",
+		Usage: "Set the configuration for the provider to get the IP",
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:        "provider",
+				Aliases:     []string{"p"},
+				Destination: &provider,
+				Required:    true,
+			},
+			&cli.BoolFlag{
+				Name:        "enable",
+				Aliases:     []string{"e"},
+				Usage:       "Enable configuration",
+				Destination: &enable,
+			},
+			&cli.BoolFlag{
+				Name:        "on-card",
+				Usage:       "Get IP from network card",
+				Destination: &oncard,
+			},
+			&cli.StringFlag{
+				Name:        "card",
+				Usage:       "Set the network card to obtain IP",
+				Destination: &card,
+			},
+			&cli.StringFlag{
+				Name:        "api",
+				Usage:       "Set up the API to get the egress IP from the network",
+				Destination: &api,
+			},
+			&cli.StringSliceFlag{
+				Name:        "domain-list",
+				Usage:       "Set the domain name resolution list",
+				Destination: &domainList,
+			},
+		},
+		Action: func(ctx *cli.Context) error {
+			fmt.Println(enable)
+			fmt.Println(oncard)
+			fmt.Println(card)
+			fmt.Println(api)
+			fmt.Println(domainList)
 			return nil
 		},
 	}

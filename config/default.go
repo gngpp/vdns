@@ -22,7 +22,7 @@ type IP struct {
 	Type       string
 	Enabled    bool
 	Card       string
-	GetCardIp  bool
+	OnCard     bool
 	Api        string
 	domainList []string
 }

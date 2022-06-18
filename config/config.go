@@ -109,7 +109,7 @@ func (_this *VdnsConfig) PrintTable() error {
 		return err
 	}
 
-	t3, err := gotable.Create("Provider", "Type", "Enabled", "GetCardIp", "Card", "Api", "DomainList")
+	t3, err := gotable.Create("Provider", "Type", "Enabled", "OnCard", "Card", "Api", "DomainList")
 	if err != nil {
 		return err
 	}
@@ -120,11 +120,11 @@ func (_this *VdnsConfig) PrintTable() error {
 			if err != nil {
 				return err
 			}
-			err = t3.AddRow([]string{p.Provider, p.V4.Type, convert.AsStringValue(p.V4.Enabled), convert.AsStringValue(p.V4.GetCardIp), p.V4.Card, p.V4.Api, strings.Join(p.V4.domainList, ",")})
+			err = t3.AddRow([]string{p.Provider, p.V4.Type, convert.AsStringValue(p.V4.Enabled), convert.AsStringValue(p.V4.OnCard), p.V4.Card, p.V4.Api, strings.Join(p.V4.domainList, ",")})
 			if err != nil {
 				return err
 			}
-			err = t3.AddRow([]string{p.Provider, p.V6.Type, convert.AsStringValue(p.V6.Enabled), convert.AsStringValue(p.V6.GetCardIp), p.V6.Card, p.V6.Api, strings.Join(p.V6.domainList, ",")})
+			err = t3.AddRow([]string{p.Provider, p.V6.Type, convert.AsStringValue(p.V6.Enabled), convert.AsStringValue(p.V6.OnCard), p.V6.Card, p.V6.Api, strings.Join(p.V6.domainList, ",")})
 			if err != nil {
 				return err
 			}
@@ -170,11 +170,11 @@ func (_this *VdnsProviderConfig) SetAk(ak *string) {
 }
 
 func (_this *VdnsProviderConfig) SetSK(sk *string) {
-	_this.Ak = *sk
+	_this.Sk = *sk
 }
 
 func (_this *VdnsProviderConfig) SetToken(token *string) {
-	_this.Ak = *token
+	_this.Token = *token
 }
 
 func (_this *VdnsProviderConfig) PrintTable() (*table.Table, error) {
@@ -198,14 +198,14 @@ func NewProviderConfig(name string) *VdnsProviderConfig {
 		V4: IP{
 			Type:       "ipv4",
 			Enabled:    false,
-			GetCardIp:  true,
+			OnCard:     true,
 			Api:        "",
 			domainList: []string{},
 		},
 		V6: IP{
 			Type:       "ipv6",
 			Enabled:    false,
-			GetCardIp:  true,
+			OnCard:     true,
 			Api:        "",
 			domainList: []string{},
 		},

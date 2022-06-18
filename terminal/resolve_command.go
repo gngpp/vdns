@@ -88,31 +88,31 @@ func describeDNSRecord() *cli.Command {
 			request.ValueKeyWord = &valueKeyWork
 			request.RRKeyWord = &rrKeyWork
 			request.RecordType = record.Type(recordType)
-			go spinner()
+			//go spinner()
 			err = provider.Support(record.Type(recordType))
 			if err != nil {
 				return err
 			}
 			describeRecords, err := provider.DescribeRecords(request)
 			if *describeRecords.ListCount > 0 {
-				table, err := gotable.CreateByStruct(describeRecords.Records[0])
+				t, err := gotable.CreateByStruct(describeRecords.Records[0])
 				if err != nil {
 					return err
 				}
 				for _, r := range describeRecords.Records {
-					_ = table.AddRow([]string{*r.ID, r.RecordType.String(), *r.RR, *r.Domain, *r.Value, *r.Status, convert.AsStringValue(*r.TTL)})
+					_ = t.AddRow([]string{*r.ID, r.RecordType.String(), *r.RR, *r.Domain, *r.Value, *r.Status, convert.AsStringValue(*r.TTL)})
 				}
-				fmt.Print(table)
-				table, err = gotable.Create("Total", "PageSize", "PageNumber")
+				fmt.Print(t)
+				t, err = gotable.Create("Total", "PageSize", "PageNumber")
 				if err != nil {
 					return err
 				}
-				_ = table.AddRow([]string{
+				_ = t.AddRow([]string{
 					convert.AsStringValue(*describeRecords.TotalCount),
 					convert.AsStringValue(*describeRecords.PageSize),
 					convert.AsStringValue(*describeRecords.PageNumber),
 				})
-				fmt.Println(table)
+				fmt.Printf("\r%v", t)
 			}
 			return nil
 		},
@@ -170,12 +170,12 @@ func createDNSRecord() *cli.Command {
 			if err != nil {
 				return err
 			}
-			table, err := gotable.CreateByStruct(createRecord)
+			t, err := gotable.CreateByStruct(createRecord)
 			if err != nil {
 				return err
 			}
-			_ = table.AddRow([]string{*createRecord.RequestId, *createRecord.RecordId})
-			fmt.Println(table)
+			_ = t.AddRow([]string{*createRecord.RequestId, *createRecord.RecordId})
+			fmt.Printf("\r%v", t)
 			return nil
 		},
 	}
@@ -239,12 +239,12 @@ func updateDNSRecord() *cli.Command {
 			if err != nil {
 				return err
 			}
-			table, err := gotable.CreateByStruct(updateRecord)
+			t, err := gotable.CreateByStruct(updateRecord)
 			if err != nil {
 				return err
 			}
-			_ = table.AddRow([]string{*updateRecord.RequestId, *updateRecord.RecordId})
-			fmt.Println(table)
+			_ = t.AddRow([]string{*updateRecord.RequestId, *updateRecord.RecordId})
+			fmt.Printf("\r%v", t)
 			return nil
 		},
 	}
@@ -293,12 +293,12 @@ func deleteDNSRecord() *cli.Command {
 			if err != nil {
 				return err
 			}
-			table, err := gotable.CreateByStruct(deleteRecord)
+			t, err := gotable.CreateByStruct(deleteRecord)
 			if err != nil {
 				return err
 			}
-			_ = table.AddRow([]string{*deleteRecord.RequestId, *deleteRecord.RecordId})
-			fmt.Println(table)
+			_ = t.AddRow([]string{*deleteRecord.RequestId, *deleteRecord.RecordId})
+			fmt.Printf("\r%v", t)
 			return nil
 		},
 	}
