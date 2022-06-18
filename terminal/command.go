@@ -215,24 +215,28 @@ func testIpApiAction() cli.ActionFunc {
 		}
 		var t *table.Table
 		var err error
-		var ipApiList []string
+
 		if ipType == "ipv4" {
 			t, err = gotable.Create("Ipv4 Request API", "Status")
 			if err != nil {
 				return err
 			}
-			ipApiList = config.GetIpv4ApiList()
+			go spinner()
+			fmt.Println()
+			for _, api := range config.GetIpv4ApiList() {
+				_ = t.AddRow([]string{api, vnet.GetIpv4AddrForUrl(api)})
+			}
 		}
 		if ipType == "ipv6" {
 			t, err = gotable.Create("Ipv6 Request API", "Status")
 			if err != nil {
 				return err
 			}
-			ipApiList = config.GetIpv6ApiList()
-		}
-		go spinner()
-		for _, api := range ipApiList {
-			_ = t.AddRow([]string{api, vnet.GetIpv4AddrForUrl(api)})
+			go spinner()
+			fmt.Println()
+			for _, api := range config.GetIpv6ApiList() {
+				_ = t.AddRow([]string{api, vnet.GetIpv6AddrForUrl(api)})
+			}
 		}
 		fmt.Println(t)
 		return err
