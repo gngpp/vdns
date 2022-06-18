@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 	"github.com/liushuochen/gotable"
-	"github.com/liushuochen/gotable/table"
 	"os"
 	"strings"
 	"vdns/lib/homedir"
@@ -177,16 +176,34 @@ func (_this *VdnsProviderConfig) SetToken(token *string) {
 	_this.Token = *token
 }
 
-func (_this *VdnsProviderConfig) PrintTable() (*table.Table, error) {
-	t, err := gotable.CreateByStruct(new(VdnsProviderConfig))
+func (_this *VdnsProviderConfig) PrintTable() error {
+	t1, err := gotable.Create("Provider", "Ak", "Sk", "Token")
 	if err != nil {
-		return nil, err
+		return err
 	}
-	err = t.AddRow([]string{_this.Provider, _this.Ak, _this.Sk, _this.Token})
+
+	t2, err := gotable.Create("Provider", "Type", "Enabled", "OnCard", "Card", "Api", "DomainList")
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return t, nil
+	err = t1.AddRow([]string{_this.Provider, _this.Ak, _this.Sk, _this.Token})
+	if err != nil {
+		return err
+	}
+	err = t2.AddRow([]string{_this.Provider, _this.V4.Type, convert.AsStringValue(_this.V4.Enabled), convert.AsStringValue(_this.V4.OnCard), _this.V4.Card, _this.V4.Api, strings.Join(_this.V4.domainList, ",")})
+	if err != nil {
+		return err
+	}
+	err = t2.AddRow([]string{_this.Provider, _this.V6.Type, convert.AsStringValue(_this.V6.Enabled), convert.AsStringValue(_this.V6.OnCard), _this.V6.Card, _this.V6.Api, strings.Join(_this.V6.domainList, ",")})
+	if err != nil {
+		return err
+	}
+	if err != nil {
+		return err
+	}
+	fmt.Printf("---Provider Config---\n%v", t1)
+	fmt.Printf("---Get Ip Config---\n%v", t2)
+	return nil
 }
 
 func NewProviderConfig(name string) *VdnsProviderConfig {
