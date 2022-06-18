@@ -5,6 +5,7 @@ import (
 	"os"
 	"sync"
 	"vdns/lib/api"
+	"vdns/lib/auth"
 	"vdns/lib/util/file"
 	"vdns/lib/util/vjson"
 	"vdns/lib/vlog"
@@ -15,6 +16,15 @@ var rw sync.RWMutex
 
 type Table interface {
 	PrintTable() error
+}
+
+type IP struct {
+	Type       string
+	Enabled    bool
+	Card       string
+	GetCardIp  bool
+	Api        string
+	domainList []string
 }
 
 func WriteVdnsConfig(config *VdnsConfig) error {
@@ -94,21 +104,26 @@ func LoadVdnsProvider(providerKey string) (api.VdnsProvider, error) {
 	defer rw.RUnlock()
 	for key, c := range vdnsConfig.ProviderMap {
 		if key == providerKey {
-			credentials, err := c.loadCredential()
+			var credential auth.Credential
+			if c.Provider != CloudflareProvider {
+				credential = auth.NewBasicCredential(c.Ak, c.Sk)
+			} else {
+				credential = auth.NewTokenCredential(c.Token)
+			}
 			if err != nil {
 				return nil, err
 			}
 			if providerKey == AlidnsProvider {
-				return api.NewAliDNSProvider(credentials), nil
+				return api.NewAliDNSProvider(credential), nil
 			}
 			if providerKey == DnspodProvider {
-				return api.NewDNSPodProvider(credentials), nil
+				return api.NewDNSPodProvider(credential), nil
 			}
 			if providerKey == CloudflareProvider {
-				return api.NewCloudflareProvider(credentials), nil
+				return api.NewCloudflareProvider(credential), nil
 			}
 			if providerKey == HuaweiDnsProvider {
-				return api.NewHuaweiProvider(credentials), nil
+				return api.NewHuaweiProvider(credential), nil
 			}
 		}
 	}

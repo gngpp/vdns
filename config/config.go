@@ -5,7 +5,7 @@ import (
 	"github.com/liushuochen/gotable"
 	"github.com/liushuochen/gotable/table"
 	"os"
-	"vdns/lib/auth"
+	"strings"
 	"vdns/lib/homedir"
 	"vdns/lib/util/convert"
 	"vdns/lib/util/file"
@@ -84,13 +84,27 @@ func (_this *VdnsConfig) PrintTable() error {
 	}
 	err = t1.AddRow([]string{_this.LogDir, convert.AsStringValue(_this.LogCompress), convert.AsStringValue(_this.LogReserveDay), _this.LogFilePrefix})
 
-	t2, err := gotable.CreateByStruct(new(VdnsProviderConfig))
+	t2, err := gotable.Create("Provider", "Ak", "Sk", "Token")
 	if err != nil {
 		return err
 	}
+
+	t3, err := gotable.Create("Provider", "Type", "Enabled", "GetCardIp", "Card", "Api", "DomainList")
+	if err != nil {
+		return err
+	}
+
 	for key, p := range _this.ProviderMap {
 		if p != nil {
-			err := t2.AddRow([]string{*p.Provider, *p.Ak, *p.Sk, *p.Token})
+			err := t2.AddRow([]string{p.Provider, p.Ak, p.Sk, p.Token})
+			if err != nil {
+				return err
+			}
+			err = t3.AddRow([]string{p.Provider, p.V4.Type, convert.AsStringValue(p.V4.Enabled), convert.AsStringValue(p.V4.GetCardIp), p.V4.Card, p.V4.Api, strings.Join(p.V4.domainList, ",")})
+			if err != nil {
+				return err
+			}
+			err = t3.AddRow([]string{p.Provider, p.V6.Type, convert.AsStringValue(p.V6.Enabled), convert.AsStringValue(p.V6.GetCardIp), p.V6.Card, p.V6.Api, strings.Join(p.V6.domainList, ",")})
 			if err != nil {
 				return err
 			}
@@ -104,8 +118,9 @@ func (_this *VdnsConfig) PrintTable() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(t1)
-	fmt.Print(t2)
+	fmt.Printf("---Log Config---\n%v", t1)
+	fmt.Printf("---Provider Config---\n%v", t2)
+	fmt.Printf("---Get Ip Config---\n%v", t3)
 	return err
 }
 
@@ -125,18 +140,24 @@ func NewVdnsConfig() *VdnsConfig {
 }
 
 type VdnsProviderConfig struct {
-	Provider *string `json:"provider"`
-	Ak       *string `json:"ak,omitempty"`
-	Sk       *string `json:"sk,omitempty"`
-	Token    *string `json:"token,omitempty"`
+	Provider string `json:"provider"`
+	Ak       string `json:"ak,omitempty"`
+	Sk       string `json:"sk,omitempty"`
+	Token    string `json:"token,omitempty"`
+	V4       IP
+	V6       IP
 }
 
-func (_this *VdnsProviderConfig) loadCredential() (auth.Credential, error) {
-	if *_this.Provider != CloudflareProvider {
-		return auth.NewBasicCredential(*_this.Ak, *_this.Sk), nil
-	} else {
-		return auth.NewTokenCredential(*_this.Token), nil
-	}
+func (_this *VdnsProviderConfig) SetAk(ak *string) {
+	_this.Ak = *ak
+}
+
+func (_this *VdnsProviderConfig) SetSK(sk *string) {
+	_this.Ak = *sk
+}
+
+func (_this *VdnsProviderConfig) SetToken(token *string) {
+	_this.Ak = *token
 }
 
 func (_this *VdnsProviderConfig) PrintTable() (*table.Table, error) {
@@ -144,7 +165,7 @@ func (_this *VdnsProviderConfig) PrintTable() (*table.Table, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = t.AddRow([]string{*_this.Provider, *_this.Ak, *_this.Sk, *_this.Token})
+	err = t.AddRow([]string{_this.Provider, _this.Ak, _this.Sk, _this.Token})
 	if err != nil {
 		return nil, err
 	}
@@ -153,10 +174,24 @@ func (_this *VdnsProviderConfig) PrintTable() (*table.Table, error) {
 
 func NewProviderConfig(name string) *VdnsProviderConfig {
 	return &VdnsProviderConfig{
-		Provider: &name,
-		Ak:       strs.String(""),
-		Sk:       strs.String(""),
-		Token:    strs.String(""),
+		Provider: name,
+		Ak:       "",
+		Sk:       "",
+		Token:    "",
+		V4: IP{
+			Type:       "ipv4",
+			Enabled:    false,
+			GetCardIp:  true,
+			Api:        "",
+			domainList: []string{},
+		},
+		V6: IP{
+			Type:       "ipv6",
+			Enabled:    false,
+			GetCardIp:  true,
+			Api:        "",
+			domainList: []string{},
+		},
 	}
 }
 
@@ -195,7 +230,6 @@ func init() {
 		if err != nil {
 			panic("[Error] initializing " + configPath + " config create error: " + err.Error())
 		}
-		defaultLogDir = config.LogDir
 		vlog.Infof("[Init] config file: %s\n", configPath)
 	}
 	if !file.Exist(defaultLogDir) {

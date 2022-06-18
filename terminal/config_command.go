@@ -65,15 +65,15 @@ func setConfigCommand() *cli.Command {
 			providerConfig := vdnsConfig.ProviderMap.Get(provider)
 			isModify := false
 			if !strs.IsEmpty(ak) {
-				providerConfig.Ak = &ak
+				providerConfig.SetAk(&ak)
 				isModify = true
 			}
 			if !strs.IsEmpty(sk) {
-				providerConfig.Sk = &sk
+				providerConfig.SetSK(&sk)
 				isModify = true
 			}
 			if !strs.IsEmpty(token) {
-				providerConfig.Token = &token
+				providerConfig.SetToken(&token)
 				isModify = true
 			}
 
