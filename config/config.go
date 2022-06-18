@@ -68,6 +68,22 @@ type VdnsConfig struct {
 	ProviderMap   VdnsProviderConfigMap
 }
 
+func (_this *VdnsConfig) SetLogDir(dir *string) {
+	_this.LogDir = *dir
+}
+
+func (_this *VdnsConfig) SetLogComporess(comporess bool) {
+	_this.LogCompress = comporess
+}
+
+func (_this *VdnsConfig) SetReserveDay(i int) {
+	_this.LogReserveDay = i
+}
+
+func (_this *VdnsConfig) SetLogFilePrefix(prefix *string) {
+	_this.LogDir = *prefix
+}
+
 func (_this *VdnsConfig) ToVlogTimeWriter() *timewriter.TimeWriter {
 	return &timewriter.TimeWriter{
 		Dir:           _this.LogDir,
@@ -82,7 +98,11 @@ func (_this *VdnsConfig) PrintTable() error {
 	if err != nil {
 		return err
 	}
+
 	err = t1.AddRow([]string{_this.LogDir, convert.AsStringValue(_this.LogCompress), convert.AsStringValue(_this.LogReserveDay), _this.LogFilePrefix})
+	if err != nil {
+		return err
+	}
 
 	t2, err := gotable.Create("Provider", "Ak", "Sk", "Token")
 	if err != nil {
@@ -115,13 +135,10 @@ func (_this *VdnsConfig) PrintTable() error {
 			}
 		}
 	}
-	if err != nil {
-		return err
-	}
 	fmt.Printf("---Log Config---\n%v", t1)
 	fmt.Printf("---Provider Config---\n%v", t2)
 	fmt.Printf("---Get Ip Config---\n%v", t3)
-	return err
+	return nil
 }
 
 func NewVdnsConfig() *VdnsConfig {

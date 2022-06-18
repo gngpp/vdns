@@ -16,15 +16,6 @@ const (
 )
 
 func main() {
-	app := initCLI()
-	err := app.Run(os.Args)
-	if err != nil {
-		vlog.Fatalf("running fatal: %v", err)
-		return
-	}
-}
-
-func initCLI() *cli.App {
 	var app = cli.NewApp()
 	app.Name = CliName
 	app.HelpName = CliName
@@ -40,5 +31,9 @@ func initCLI() *cli.App {
 	app.Commands = append(app.Commands, terminal.ResolveRecordCommand())
 	// common cli
 	app.Commands = append(app.Commands, terminal.Command()...)
-	return app
+	err := app.Run(os.Args)
+	if err != nil {
+		vlog.Fatalf("running fatal: %v", err)
+		return
+	}
 }

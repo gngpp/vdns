@@ -102,6 +102,11 @@ func setLogConfigCommand() *cli.Command {
 				Usage:       "Log storage directory",
 				Destination: &dir,
 			},
+			&cli.BoolFlag{
+				Name:    "comporess",
+				Aliases: []string{"c"},
+				Usage:   "Comporess Log file",
+			},
 			&cli.IntFlag{
 				Name:        "reserve-day",
 				Usage:       "log retention date",
@@ -119,30 +124,26 @@ func setLogConfigCommand() *cli.Command {
 				return err
 			}
 
-			isModify := false
 			if !strs.IsEmpty(dir) {
 				if !file.IsDir(dir) {
 					return fmt.Errorf("system does not exist path or not is dir: %v", dir)
 				}
-				vdnsConfig.LogDir = dir
-				isModify = true
+				vdnsConfig.SetLogDir(&dir)
 			}
 
 			if !strs.IsEmpty(filePrefix) {
-				vdnsConfig.LogFilePrefix = filePrefix
-				isModify = true
+				vdnsConfig.SetLogFilePrefix(&filePrefix)
 			}
 
 			if reserveDay > 0 {
-				vdnsConfig.LogReserveDay = reserveDay
-				isModify = true
+				vdnsConfig.SetReserveDay(reserveDay)
 			}
 
-			if isModify {
-				err = config.WriteVdnsConfig(vdnsConfig)
-				if err != nil {
-					return err
-				}
+			vdnsConfig.SetLogComporess(context.Bool("comporess"))
+
+			err = config.WriteVdnsConfig(vdnsConfig)
+			if err != nil {
+				return err
 			}
 
 			return vdnsConfig.PrintTable()
