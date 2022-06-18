@@ -14,7 +14,9 @@
 </p>
 
 # vdns
-`vdns`支持多平台`DNS`解析操作, 同时以服务方式支持`DDNS`，支持多种解析记录类型：A、AAAA、NS、MX、CNAME、TXT、SRV、CA、REDIRECT_URL、FORWARD_URL
+`vdns`支持多平台`DNS`解析操作, 同时以服务方式支持`DDNS`，
+- 支持阿里云、腾讯云、华为云、Cloudflare等平台的DNS记录解析
+- 支持多种解析记录类型：A、AAAA、NS、MX、CNAME、TXT、SRV、CA、REDIRECT_URL、FORWARD_URL
 
 
 ### Terminal CLI
