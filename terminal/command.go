@@ -119,7 +119,7 @@ func recordAction() cli.ActionFunc {
 		_ = t.AddRow([]string{"CNAME", "CNAME", "将域名指向另外一个域名"})
 		_ = t.AddRow([]string{"TXT", "TXT", "文本长度限制512，通常做SPF记录（反垃圾邮件）"})
 		_ = t.AddRow([]string{"SRV", "SRV", "记录提供特定的服务的服务器"})
-		_ = t.AddRow([]string{"CA", "CA", "CA证书颁发机构授权校验"})
+		_ = t.AddRow([]string{"CAA", "CAA", "CA证书颁发机构授权校验"})
 		_ = t.AddRow([]string{"REDIRECT_URL", "REDIRECT_URL", "将域名重定向到另外一个地址"})
 		_ = t.AddRow([]string{"FORWARD_URL", "FORWARD_URL", "显性URL类似，但是会隐藏真实目标地址"})
 
