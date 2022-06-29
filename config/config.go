@@ -243,7 +243,7 @@ func init() {
 		if err != nil {
 			panic("[Error] creating workspace " + workspacePath + " directory error: " + err.Error())
 		}
-		vlog.Infof("[Init] workspace directory: %s\n", workspacePath)
+		vlog.Debugf("[Init] workspace directory: %s\n", workspacePath)
 	}
 
 	configPath = strs.Concat(workspacePath, "/config.json")
@@ -264,7 +264,7 @@ func init() {
 		if err != nil {
 			panic("[Error] initializing " + configPath + " config create error: " + err.Error())
 		}
-		vlog.Infof("[Init] config file: %s\n", configPath)
+		vlog.Debugf("[Init] config file: %s\n", configPath)
 	}
 	if !file.Exist(defaultLogDir) {
 		err = file.MakeDir(defaultLogDir)
