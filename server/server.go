@@ -12,7 +12,7 @@ type Vdns struct {
 	interval int
 }
 
-func NewVdns(interval int) Vdns {
+func NewVdns(interval int, debug bool) Vdns {
 	if interval <= 0 {
 		return Vdns{
 			interval: 5,
@@ -21,6 +21,10 @@ func NewVdns(interval int) Vdns {
 	return Vdns{
 		interval: interval,
 	}
+}
+
+func (p *Vdns) initConfig() {
+
 }
 
 func (p *Vdns) Start(s service.Service) error {

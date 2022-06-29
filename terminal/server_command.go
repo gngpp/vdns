@@ -1,11 +1,14 @@
 package terminal
 
 import (
+	"errors"
 	"fmt"
 	"github.com/kardianos/service"
 	"github.com/liushuochen/gotable"
 	"github.com/urfave/cli/v2"
+	"io/ioutil"
 	"os"
+	"os/exec"
 	"strings"
 	"vdns/lib/util/convert"
 	"vdns/lib/util/strs"
@@ -13,25 +16,49 @@ import (
 	"vdns/server"
 )
 
+var shellPathList = []string{os.Getenv("SHELL"), "bash", "sh"}
+
+func findPath(paths []string) (path string, err error) {
+	for _, p := range paths {
+		path, err = exec.LookPath(p)
+		if err == nil {
+			break
+		}
+	}
+
+	return
+}
+
 func ServerCommand() *cli.Command {
-	var controlAction = [6]string{"exec", "start", "stop", "restart", "install", "uninstall"}
-	var subCommandList = make([]*cli.Command, 6)
+	var controlAction = []string{"exec", "start", "stop", "restart", "install", "uninstall", "status"}
+	var subCommandList = make([]*cli.Command, len(controlAction))
+	commandFlags := []cli.Flag{
+		&cli.IntFlag{
+			Name:    "interval",
+			Aliases: []string{"i"},
+			Usage:   "interval execution time",
+			Value:   5,
+		},
+		&cli.BoolFlag{
+			Name:    "debug",
+			Aliases: []string{"d"},
+			Usage:   "enable debug mode",
+		},
+	}
+
 	for index, c := range controlAction {
+		if index == len(controlAction)-1 {
+			break
+		}
 		if c == "exec" {
 			subCommandList[index] = &cli.Command{
 				Name:  c,
 				Usage: "Exec vdns server",
-				Flags: []cli.Flag{
-					&cli.IntFlag{
-						Name:    "interval",
-						Aliases: []string{"i"},
-						Usage:   "Interval execution time",
-						Value:   5,
-					},
-				},
+				Flags: commandFlags,
 				Action: func(ctx *cli.Context) error {
 					i := ctx.Int("interval")
-					return handleServer(i)
+					d := ctx.Bool("debug")
+					return handleServer(i, d)
 				},
 			}
 		} else {
@@ -39,18 +66,7 @@ func ServerCommand() *cli.Command {
 				subCommandList[index] = &cli.Command{
 					Name:  c,
 					Usage: strFirstToUpper(c) + " vdns service",
-					Flags: []cli.Flag{
-						&cli.IntFlag{
-							Name:    "interval",
-							Aliases: []string{"i"},
-							Usage:   "Interval execution time",
-							Value:   5,
-						},
-					},
-					Action: func(ctx *cli.Context) error {
-						i := ctx.Int("interval")
-						return handleServer(i)
-					},
+					Flags: commandFlags,
 				}
 			} else {
 				subCommandList[index] = &cli.Command{
@@ -58,11 +74,54 @@ func ServerCommand() *cli.Command {
 					Usage: strFirstToUpper(c) + " vdns service",
 					Action: func(_ *cli.Context) error {
 						// default time interval
-						return handleServer(-1)
+						return handleServer(-1, false)
 					},
 				}
 			}
 		}
+	}
+
+	subCommandList[len(controlAction)-1] = &cli.Command{
+		Name:  "status",
+		Usage: " Show vdns service status (Windows is not supported)",
+		Action: func(_ *cli.Context) error {
+			// try to find shell binary
+			if shellPath, err := findPath(shellPathList); err == nil {
+				cmd := exec.Command(shellPath, "-c", "ps -ef | grep vdns | grep -v grep | awk '{print $2}'")
+
+				stdout, err := cmd.StdoutPipe()
+				if err != nil {
+					fmt.Println(err)
+				}
+				if err := cmd.Start(); err != nil {
+					return err
+				}
+
+				bytes, err := ioutil.ReadAll(stdout)
+				if err != nil {
+					return err
+				}
+
+				if stdout.Close() != nil {
+					return err
+				}
+
+				pid := strings.TrimSpace(string(bytes))
+
+				if strs.IsEmpty(pid) {
+					fmt.Println("vdns is stop...")
+					return nil
+				}
+				fmt.Printf("vdns (pid %v) is running...\n", pid)
+
+				if err := cmd.Wait(); err != nil {
+					return err
+				}
+
+				return nil
+			}
+			return errors.New("shell not found")
+		},
 	}
 
 	table, err := gotable.Create("Usage")
@@ -79,15 +138,16 @@ func ServerCommand() *cli.Command {
 	}
 }
 
-func handleServer(interval int) error {
+func handleServer(interval int, debug bool) error {
+	vlog.SetLevel(vlog.Level.DEBUG)
 	cfg := &service.Config{
 		Name:        "vdns",
 		DisplayName: "vdns server",
 		Description: "This is an vdns Go service.",
-		Arguments:   []string{"server", "exec", "-i", convert.AsStringValue(interval)},
+		Arguments:   []string{"server", "exec", "-i", convert.AsStringValue(interval), "-d", convert.AsStringValue(debug)},
 	}
 
-	vdns := server.NewVdns(interval)
+	vdns := server.NewVdns(interval, debug)
 	vdnsService, err := service.New(&vdns, cfg)
 	if err != nil {
 		return err
