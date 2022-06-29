@@ -6,6 +6,7 @@ import (
 	"vdns/lib/api/errs"
 	"vdns/lib/api/model"
 	"vdns/lib/api/rpc/conv"
+	"vdns/lib/vlog"
 )
 
 func NewAliDNSRpc() VdnsRpc {
@@ -19,6 +20,7 @@ type AliDNSRpc struct {
 }
 
 func (_this *AliDNSRpc) DoDescribeCtxRequest(_ context.Context, url string) (*model.DomainRecordsResponse, error) {
+	vlog.Debugf("[AliDNSRpc] request url: %v", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		return &model.DomainRecordsResponse{}, errs.NewVdnsFromError(err)
@@ -27,6 +29,7 @@ func (_this *AliDNSRpc) DoDescribeCtxRequest(_ context.Context, url string) (*mo
 }
 
 func (_this *AliDNSRpc) DoCreateCtxRequest(_ context.Context, url string) (*model.DomainRecordStatusResponse, error) {
+	vlog.Debugf("[AliDNSRpc] request url: %v", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		return &model.DomainRecordStatusResponse{}, errs.NewVdnsFromError(err)
@@ -35,6 +38,7 @@ func (_this *AliDNSRpc) DoCreateCtxRequest(_ context.Context, url string) (*mode
 }
 
 func (_this *AliDNSRpc) DoUpdateCtxRequest(_ context.Context, url string) (*model.DomainRecordStatusResponse, error) {
+	vlog.Debugf("[AliDNSRpc] request url: %v", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		return &model.DomainRecordStatusResponse{}, errs.NewVdnsFromError(err)
@@ -43,6 +47,7 @@ func (_this *AliDNSRpc) DoUpdateCtxRequest(_ context.Context, url string) (*mode
 }
 
 func (_this *AliDNSRpc) DoDeleteCtxRequest(_ context.Context, url string) (*model.DomainRecordStatusResponse, error) {
+	vlog.Debugf("[AliDNSRpc] request url: %v", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		return &model.DomainRecordStatusResponse{}, errs.NewVdnsFromError(err)
