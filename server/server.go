@@ -12,7 +12,7 @@ type Vdns struct {
 	interval int
 }
 
-func NewVdns(interval int, debug bool) Vdns {
+func NewVdns(interval int) Vdns {
 	if interval <= 0 {
 		return Vdns{
 			interval: 5,

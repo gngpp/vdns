@@ -67,6 +67,11 @@ func ServerCommand() *cli.Command {
 					Name:  c,
 					Usage: strFirstToUpper(c) + " vdns service",
 					Flags: commandFlags,
+					Action: func(ctx *cli.Context) error {
+						i := ctx.Int("interval")
+						d := ctx.Bool("debug")
+						return handleServer(i, d)
+					},
 				}
 			} else {
 				subCommandList[index] = &cli.Command{
@@ -87,7 +92,7 @@ func ServerCommand() *cli.Command {
 		Action: func(_ *cli.Context) error {
 			// try to find shell binary
 			if shellPath, err := findPath(shellPathList); err == nil {
-				cmd := exec.Command(shellPath, "-c", "ps -ef | grep vdns | grep -v grep | awk '{print $2}'")
+				cmd := exec.Command(shellPath, "-c", "ps -ef | grep vdns | grep -v grep | awk '{print $2}' | grep -v "+convert.AsStringValue(os.Getpid()))
 
 				stdout, err := cmd.StdoutPipe()
 				if err != nil {
@@ -139,7 +144,9 @@ func ServerCommand() *cli.Command {
 }
 
 func handleServer(interval int, debug bool) error {
-	vlog.SetLevel(vlog.Level.DEBUG)
+	if debug {
+		vlog.SetLevel(vlog.Level.DEBUG)
+	}
 	cfg := &service.Config{
 		Name:        "vdns",
 		DisplayName: "vdns server",
@@ -147,14 +154,13 @@ func handleServer(interval int, debug bool) error {
 		Arguments:   []string{"server", "exec", "-i", convert.AsStringValue(interval), "-d", convert.AsStringValue(debug)},
 	}
 
-	vdns := server.NewVdns(interval, debug)
+	vdns := server.NewVdns(interval)
 	vdnsService, err := service.New(&vdns, cfg)
 	if err != nil {
 		return err
 	}
 	vlog.Debugf("running args: %v", os.Args)
 	if len(os.Args) >= 3 && os.Args[2] != "exec" {
-		fmt.Println(os.Args[2])
 		err = service.Control(vdnsService, os.Args[2])
 		if err != nil {
 			return err
