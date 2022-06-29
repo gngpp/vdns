@@ -4,7 +4,6 @@ import (
 	"github.com/urfave/cli/v2"
 	"os"
 	"time"
-	"vdns/lib/api"
 	"vdns/lib/vlog"
 	"vdns/terminal"
 )
@@ -20,8 +19,28 @@ func main() {
 	app.Name = CliName
 	app.HelpName = CliName
 	app.Usage = Usage
-	app.Version = api.Version
+	//app.Version = api.Version
 	app.Compiled = time.Now()
+	app.EnableBashCompletion = true
+
+	// debug mode
+	var debug bool
+	app.Flags = []cli.Flag{
+		&cli.BoolFlag{
+			Name:        "debug",
+			Aliases:     []string{"d"},
+			Usage:       "Enable debug mode",
+			Destination: &debug,
+		},
+	}
+
+	app.Before = func(ctx *cli.Context) error {
+		if debug {
+			vlog.SetLevel(vlog.Level.DEBUG)
+		}
+		return nil
+	}
+
 	// provider config and ddns server cli
 	app.Commands = []*cli.Command{
 		terminal.ConfigCommand(),

@@ -60,7 +60,7 @@ func handleServer() error {
 	if err != nil {
 		return err
 	}
-	vlog.Debugf("run args: %v", os.Args)
+	vlog.Debugf("running args: %v", os.Args)
 	if len(os.Args) == 3 && os.Args[2] != "run" {
 		err = service.Control(vdnsService, os.Args[2])
 		if err != nil {
