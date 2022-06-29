@@ -29,7 +29,7 @@ func main() {
 		&cli.BoolFlag{
 			Name:        "debug",
 			Aliases:     []string{"d"},
-			Usage:       "Enable debug mode",
+			Usage:       "enable debug mode",
 			Destination: &debug,
 		},
 	}
