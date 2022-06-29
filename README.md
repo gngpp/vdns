@@ -43,8 +43,8 @@ COMMANDS:
    help, h            Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
+   --debug, -d  Enable debug mode (default: false)
    --help, -h     show help (default: false)
-   --version, -v  print the version (default: false)
 ```
 
 ### License
