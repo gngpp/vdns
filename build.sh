@@ -8,16 +8,19 @@ CGO_ENABLED=0 GOOS=linux GOARCH=386 go build -ldflags="-s -w" -o linux_386_vdns 
 mv ./linux_386_vdns ./vdns && upx ./vdns
 tar -czvf linux_386_vdns.tar.gz ./vdns && rm ./vdns
 
+# not upx
 CGO_ENABLED=0 GOOS=freebsd GOARCH=386 go build -ldflags="-s -w" -o freebsd_386_vdns ./main.go
-mv ./freebsd_386_vdns ./vdns && upx ./vdns
+mv ./freebsd_386_vdns ./vdns
 tar -czvf freebsd_386_vdns.tar.gz ./vdns && rm ./vdns
 
+# not upx
 CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -ldflags="-s -w" -o freebsd_amd64_vdns ./main.go
-mv ./freebsd_amd64_vdns ./vdns && upx ./vdns
+mv ./freebsd_amd64_vdns ./vdns
 tar -czvf freebsd_amd64_vdns.tar.gz ./vdns && rm ./vdns
 
+# not upx
 CGO_ENABLED=0 GOOS=freebsd GOARCH=arm go build -ldflags="-s -w" -o freebsd_arm64_vdns ./main.go
-mv ./freebsd_arm64_vdns ./vdns && upx ./vdns
+mv ./freebsd_arm64_vdns ./vdns
 tar -czvf freebsd_arm64_vdns.tar.gz ./vdns && rm ./vdns
 
 CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -ldflags="-s -w" -o linux_armv7_vdns ./main.go
@@ -36,12 +39,14 @@ CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o linux_arm64_v
 mv ./linux_arm64_vdns ./vdns && upx ./vdns
 tar -czvf linux_arm64_vdns.tar.gz ./vdns && rm ./vdns
 
+# not upx
 CGO_ENABLED=0 GOOS=linux GOARCH=mips64 go build -ldflags="-s -w" -o linux_mips64_vdns ./main.go
-mv ./linux_mips64_vdns ./vdns && upx ./vdns
+mv ./linux_mips64_vdns ./vdns
 tar -czvf linux_mips64_vdns.tar.gz ./vdns && rm ./vdns
 
+# not upx
 CGO_ENABLED=0 GOOS=linux GOARCH=mips64le go build -ldflags="-s -w" -o linux_mips64le_vdns ./main.go
-mv ./linux_mips64le_vdns ./vdns && upx ./vdns
+mv ./linux_mips64le_vdns ./vdns
 tar -czvf linux_mips64le_vdns.tar.gz ./vdns && rm ./vdns
 
 CGO_ENABLED=0 GOOS=linux GOARCH=mipsle go build -ldflags="-s -w" -o linux_mipsle_vdns ./main.go
