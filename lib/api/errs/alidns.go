@@ -14,6 +14,7 @@ type AlidnsSDKError struct {
 	Message   *string `json:"message,omitempty"`
 	Stack     *string `json:"stack,omitempty"`
 	errMsg    *string `json:"err_msg,omitempty"`
+	HostId    *string `json:"HostId,omitempty"`
 }
 
 func (_this *AlidnsSDKError) Error() string {

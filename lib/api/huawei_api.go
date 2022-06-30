@@ -19,27 +19,27 @@ type HuaweiProvider struct {
 	credential auth.Credential
 }
 
-func (h HuaweiProvider) DescribeRecords(request *model.DescribeDomainRecordsRequest) (*model.DomainRecordsResponse, error) {
+func (_this *HuaweiProvider) DescribeRecords(request *model.DescribeDomainRecordsRequest) (*model.DomainRecordsResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (h HuaweiProvider) CreateRecord(request *model.CreateDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
+func (_this *HuaweiProvider) CreateRecord(request *model.CreateDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (h HuaweiProvider) UpdateRecord(request *model.UpdateDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
+func (_this *HuaweiProvider) UpdateRecord(request *model.UpdateDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (h HuaweiProvider) DeleteRecord(request *model.DeleteDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
+func (_this *HuaweiProvider) DeleteRecord(request *model.DeleteDomainRecordRequest) (*model.DomainRecordStatusResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (h HuaweiProvider) Support(recordType record.Type) error {
+func (_this *HuaweiProvider) Support(recordType record.Type) error {
 	//TODO implement me
 	panic("implement me")
 }

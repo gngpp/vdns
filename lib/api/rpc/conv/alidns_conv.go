@@ -12,6 +12,7 @@ import (
 	"vdns/lib/util/iotool"
 	"vdns/lib/util/vhttp"
 	"vdns/lib/util/vjson"
+	"vdns/lib/vlog"
 )
 
 type AliDNSResponseConvert struct {
@@ -29,6 +30,7 @@ func (_this *AliDNSResponseConvert) DescribeResponseCtxConvert(_ context.Context
 		if err != nil {
 			return nil, errs.NewVdnsFromError(err)
 		}
+		vlog.Debugf("[AliDNSResponseConvert] json body: %v", string(bytes))
 		source := new(alidns_model.DescribeDomainRecordsResponse)
 		err = vjson.ByteArrayConvert(bytes, source)
 		if err != nil {
@@ -152,6 +154,7 @@ func (_this *AliDNSResponseConvert) badBodyHandler(read io.ReadCloser) error {
 	if err != nil {
 		return errs.NewVdnsFromError(err)
 	}
+	vlog.Debugf("[AliDNSResponseConvert] bad body: %v", string(bytes))
 	sdkError := new(errs.AlidnsSDKError)
 	err = vjson.ByteArrayConvert(bytes, sdkError)
 	if err != nil {

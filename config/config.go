@@ -1,10 +1,13 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"github.com/liushuochen/gotable"
 	"os"
 	"strings"
+	"vdns/lib/api"
+	"vdns/lib/auth"
 	"vdns/lib/homedir"
 	"vdns/lib/util/convert"
 	"vdns/lib/util/file"
@@ -60,11 +63,26 @@ func (v VdnsProviderConfigMap) Has(key string) bool {
 }
 
 type VdnsConfig struct {
-	LogDir        string
-	LogCompress   bool
-	LogReserveDay int
-	LogFilePrefix string
-	ProviderMap   VdnsProviderConfigMap
+	LogDir        string                `json:"logDir,omitempty"`
+	LogCompress   bool                  `json:"logCompress,omitempty"`
+	LogReserveDay int                   `json:"logReserveDay,omitempty"`
+	LogFilePrefix string                `json:"logFilePrefix,omitempty"`
+	ProviderMap   VdnsProviderConfigMap `json:"providerMap,omitempty"`
+}
+
+func NewVdnsConfig() *VdnsConfig {
+	config := VdnsConfig{
+		LogDir:        defaultLogDir,
+		LogCompress:   true,
+		LogFilePrefix: "vdns",
+		LogReserveDay: 30,
+		ProviderMap:   VdnsProviderConfigMap{},
+	}
+	config.ProviderMap.Add(AlidnsProvider, NewProviderConfig(AlidnsProvider))
+	config.ProviderMap.Add(DnspodProvider, NewProviderConfig(DnspodProvider))
+	config.ProviderMap.Add(HuaweiDnsProvider, NewProviderConfig(HuaweiDnsProvider))
+	config.ProviderMap.Add(CloudflareProvider, NewProviderConfig(CloudflareProvider))
+	return &config
 }
 
 func (_this *VdnsConfig) SetLogDir(dir *string) {
@@ -90,6 +108,14 @@ func (_this *VdnsConfig) ToVlogTimeWriter() *timewriter.TimeWriter {
 		ReserveDay:    _this.LogReserveDay,
 		LogFilePrefix: _this.LogFilePrefix,
 	}
+}
+
+func (_this VdnsConfig) GetProviderConfigList() []*VdnsProviderConfig {
+	l := make([]*VdnsProviderConfig, 0)
+	for _, p := range _this.ProviderMap {
+		l = append(l, p)
+	}
+	return l
 }
 
 func (_this *VdnsConfig) PrintTable() error {
@@ -140,19 +166,13 @@ func (_this *VdnsConfig) PrintTable() error {
 	return nil
 }
 
-func NewVdnsConfig() *VdnsConfig {
-	config := VdnsConfig{
-		LogDir:        defaultLogDir,
-		LogCompress:   true,
-		LogFilePrefix: "vdns",
-		LogReserveDay: 30,
-		ProviderMap:   VdnsProviderConfigMap{},
-	}
-	config.ProviderMap.Add(AlidnsProvider, NewProviderConfig(AlidnsProvider))
-	config.ProviderMap.Add(DnspodProvider, NewProviderConfig(DnspodProvider))
-	config.ProviderMap.Add(HuaweiDnsProvider, NewProviderConfig(HuaweiDnsProvider))
-	config.ProviderMap.Add(CloudflareProvider, NewProviderConfig(CloudflareProvider))
-	return &config
+type IP struct {
+	Type       string   `json:"type,omitempty"`
+	Enabled    bool     `json:"enabled,omitempty"`
+	Card       string   `json:"card,omitempty"`
+	OnCard     bool     `json:"onCard,omitempty"`
+	Api        string   `json:"api,omitempty"`
+	DomainList []string `json:"domainList,omitempty"`
 }
 
 type VdnsProviderConfig struct {
@@ -162,6 +182,29 @@ type VdnsProviderConfig struct {
 	Token    string `json:"token,omitempty"`
 	V4       IP     `json:"v4,omitempty"`
 	V6       IP     `json:"v6,omitempty"`
+}
+
+func NewProviderConfig(name string) *VdnsProviderConfig {
+	return &VdnsProviderConfig{
+		Provider: name,
+		Ak:       "",
+		Sk:       "",
+		Token:    "",
+		V4: IP{
+			Type:       "ipv4",
+			Enabled:    false,
+			OnCard:     true,
+			Api:        "",
+			DomainList: []string{},
+		},
+		V6: IP{
+			Type:       "ipv6",
+			Enabled:    false,
+			OnCard:     true,
+			Api:        "",
+			DomainList: []string{},
+		},
+	}
 }
 
 func (_this *VdnsProviderConfig) SetAk(ak *string) {
@@ -204,36 +247,21 @@ func (_this *VdnsProviderConfig) PrintTable() error {
 	return nil
 }
 
-func NewProviderConfig(name string) *VdnsProviderConfig {
-	return &VdnsProviderConfig{
-		Provider: name,
-		Ak:       "",
-		Sk:       "",
-		Token:    "",
-		V4: IP{
-			Type:       "ipv4",
-			Enabled:    false,
-			OnCard:     true,
-			Api:        "",
-			DomainList: []string{},
-		},
-		V6: IP{
-			Type:       "ipv6",
-			Enabled:    false,
-			OnCard:     true,
-			Api:        "",
-			DomainList: []string{},
-		},
+func (_this VdnsProviderConfig) ToVdnsProvider() (api.VdnsProvider, error) {
+	credential := auth.NewUnifyCredential(_this.Ak, _this.Sk, _this.Token)
+	if _this.Provider == AlidnsProvider {
+		return api.NewAliDNSProvider(credential), nil
 	}
-}
-
-type IP struct {
-	Type       string
-	Enabled    bool
-	Card       string
-	OnCard     bool
-	Api        string
-	DomainList []string
+	if _this.Provider == DnspodProvider {
+		return api.NewDNSPodProvider(credential), nil
+	}
+	if _this.Provider == CloudflareProvider {
+		return api.NewCloudflareProvider(credential), nil
+	}
+	if _this.Provider == HuaweiDnsProvider {
+		return api.NewHuaweiProvider(credential), nil
+	}
+	return nil, errors.New("provider not found")
 }
 
 func init() {

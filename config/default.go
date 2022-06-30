@@ -100,12 +100,7 @@ func ReadVdnsProvider(providerKey string) (api.VdnsProvider, error) {
 	defer rw.RUnlock()
 	for key, c := range c.ProviderMap {
 		if key == providerKey {
-			var credential auth.Credential
-			if c.Provider != CloudflareProvider {
-				credential = auth.NewBasicCredential(c.Ak, c.Sk)
-			} else {
-				credential = auth.NewTokenCredential(c.Token)
-			}
+			credential := auth.NewUnifyCredential(c.Ak, c.Sk, c.Token)
 
 			if providerKey == AlidnsProvider {
 				return api.NewAliDNSProvider(credential), nil
