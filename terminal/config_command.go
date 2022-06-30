@@ -115,53 +115,54 @@ func setIpConfigCommand() *cli.Command {
 			&cli.StringFlag{
 				Name:        "type",
 				Aliases:     []string{"t"},
-				Usage:       "Ip type",
+				Usage:       "ip type",
 				Destination: &ipType,
 				Required:    true,
 			},
 			&cli.BoolFlag{
 				Name:        "enable",
 				Aliases:     []string{"e"},
-				Usage:       "Enable configuration",
+				Usage:       "enable configuration",
 				Destination: &enable,
 			},
 			&cli.BoolFlag{
 				Name:        "on-card",
-				Usage:       "Get IP from network card",
+				Usage:       "get ip from network card",
 				Destination: &oncard,
 			},
 			&cli.StringFlag{
 				Name:        "card",
-				Usage:       "Set the network card to obtain IP",
+				Usage:       "set the network card to obtain IP",
 				Destination: &card,
 			},
 			&cli.StringFlag{
 				Name:        "api",
-				Usage:       "Set up the API to get the egress IP from the network",
+				Usage:       "set up the API to get the egress IP from the network",
 				Destination: &api,
 			},
 			&cli.StringSliceFlag{
 				Name:        "domain-list",
-				Usage:       "Set the domain name resolution list",
+				Usage:       "set the domain name resolution list",
 				Destination: &domainList,
 			},
 		},
 		Action: func(ctx *cli.Context) error {
-			vdnsProviderConfig, err := config.ReadVdnsProviderConfig(provider)
-			if err != nil {
-				return err
-			}
 
 			if (ipType != "ipv4") && (ipType != "ipv6") {
 				return errors.New("ip type must be: ipv4 or ipv6.\nfor example: --type=ipv4 or --type=ipv6")
 			}
 
+			conf, err := config.ReadVdnsProviderConfig(provider)
+			if err != nil {
+				return err
+			}
+
 			if ipType == "ipv4" {
-				vdnsProviderConfig.V4.Type = ipType
-				vdnsProviderConfig.V4.Enabled = enable
-				vdnsProviderConfig.V4.OnCard = oncard
+				conf.V4.Type = ipType
+				conf.V4.Enabled = enable
+				conf.V4.OnCard = oncard
 				if !strs.IsEmpty(card) {
-					vdnsProviderConfig.V4.Card = card
+					conf.V4.Card = card
 				}
 
 				if !strs.IsEmpty(api) {
@@ -169,7 +170,7 @@ func setIpConfigCommand() *cli.Command {
 					if err != nil {
 						return err
 					}
-					vdnsProviderConfig.V4.Api = api
+					conf.V4.Api = api
 				}
 
 				if len(domainList.Value()) > 0 {
@@ -180,16 +181,16 @@ func setIpConfigCommand() *cli.Command {
 							return err
 						}
 					}
-					vdnsProviderConfig.V4.DomainList = l
+					conf.V4.DomainList = l
 				}
 			}
 
 			if ipType == "ipv6" {
-				vdnsProviderConfig.V6.Type = ipType
-				vdnsProviderConfig.V6.Enabled = enable
-				vdnsProviderConfig.V6.OnCard = oncard
+				conf.V6.Type = ipType
+				conf.V6.Enabled = enable
+				conf.V6.OnCard = oncard
 				if !strs.IsEmpty(card) {
-					vdnsProviderConfig.V6.Card = card
+					conf.V6.Card = card
 				}
 
 				if !strs.IsEmpty(api) {
@@ -197,7 +198,7 @@ func setIpConfigCommand() *cli.Command {
 					if err != nil {
 						return err
 					}
-					vdnsProviderConfig.V6.Api = api
+					conf.V6.Api = api
 				}
 
 				if len(domainList.Value()) > 0 {
@@ -208,15 +209,15 @@ func setIpConfigCommand() *cli.Command {
 							return err
 						}
 					}
-					vdnsProviderConfig.V6.DomainList = l
+					conf.V6.DomainList = l
 				}
 			}
 
-			err = config.WriteVdnsProviderConfig(vdnsProviderConfig)
+			err = config.WriteVdnsProviderConfig(conf)
 			if err != nil {
 				return err
 			}
-			return vdnsProviderConfig.PrintTable()
+			return conf.PrintTable()
 		},
 	}
 }
@@ -231,13 +232,13 @@ func setLogConfigCommand() *cli.Command {
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:        "dir",
-				Usage:       "Log storage directory",
+				Usage:       "log storage directory",
 				Destination: &dir,
 			},
 			&cli.BoolFlag{
 				Name:    "comporess",
 				Aliases: []string{"c"},
-				Usage:   "Comporess Log file",
+				Usage:   "comporess Log file",
 			},
 			&cli.IntFlag{
 				Name:        "reserve-day",
@@ -246,7 +247,7 @@ func setLogConfigCommand() *cli.Command {
 			},
 			&cli.StringFlag{
 				Name:        "file-prefix",
-				Usage:       "Log file prefix",
+				Usage:       "log file prefix",
 				Destination: &filePrefix,
 			},
 		},
