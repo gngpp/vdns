@@ -94,7 +94,10 @@ func describeDNSRecord() *cli.Command {
 				return err
 			}
 			describeRecords, err := provider.DescribeRecords(request)
-			if *describeRecords.ListCount > 0 {
+			if err != nil {
+				return err
+			}
+			if (describeRecords != nil) && (*describeRecords.ListCount > 0) {
 				t, err := gotable.CreateByStruct(describeRecords.Records[0])
 				if err != nil {
 					return err
