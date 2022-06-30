@@ -1,18 +1,21 @@
 package server
 
 import (
-	"fmt"
-	"time"
-	"vdns/lib/vlog"
-
 	"github.com/kardianos/service"
+	"io"
+	"os"
+	"time"
+	"vdns/config"
+	"vdns/lib/vlog"
 )
 
 type Vdns struct {
 	interval int
+	debug    bool
+	ddns     *DDNS
 }
 
-func NewVdns(interval int) Vdns {
+func NewVdns(interval int, debug bool) Vdns {
 	if interval <= 0 {
 		return Vdns{
 			interval: 5,
@@ -20,33 +23,50 @@ func NewVdns(interval int) Vdns {
 	}
 	return Vdns{
 		interval: interval,
+		debug:    debug,
+		ddns:     new(DDNS),
 	}
-}
-
-func (p *Vdns) initConfig() {
-
 }
 
 func (p *Vdns) Start(s service.Service) error {
 	// Start should not block. Do the actual work async.
-	vlog.Debug(s)
-	go p.run()
+	c, err := config.ReadVdnsConfig()
+	if err != nil {
+		return s.Stop()
+	}
+
+	multiWriter := io.MultiWriter(os.Stdout, c.ToVlogTimeWriter())
+	vlog.SetOutput(multiWriter)
+	vlog.SetSyncOutput(true)
+	if p.debug {
+		vlog.SetLevel(vlog.Level.DEBUG)
+	}
+	vlog.Debugf("running args: %v", os.Args)
+	vlog.Infof("running platform: %v", s.Platform())
+	go p.run(s)
 	return nil
 }
-func (p *Vdns) run() {
+
+func (p *Vdns) run(s service.Service) {
 	// Do work here
-	vlog.Info("vdns start to execute the service")
-	vlog.Infof("interval execution time: %v minute", p.interval)
+	vlog.Infof("vdns start to execute the service - [interval execution time: %v minute]", p.interval)
 	timer := time.NewTicker(time.Minute * time.Duration(p.interval))
+	p.resolveHandler()
 	for {
-		select {
-		case <-timer.C:
-			fmt.Println("do..")
-		}
+		t := <-timer.C
+		vlog.Infof("now resovle time: %v, do...\n", t)
+		p.resolveHandler()
 	}
 }
 func (p *Vdns) Stop(s service.Service) error {
 	// Stop should not block. Return with a few seconds.
 	vlog.Info("vdns stop service")
 	return nil
+}
+
+func (p *Vdns) resolveHandler() {
+	err := p.ddns.Resolve()
+	if err != nil {
+		vlog.Errorf("resovle error: %v", err)
+	}
 }
