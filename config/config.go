@@ -160,8 +160,8 @@ type VdnsProviderConfig struct {
 	Ak       string `json:"ak,omitempty"`
 	Sk       string `json:"sk,omitempty"`
 	Token    string `json:"token,omitempty"`
-	V4       IP
-	V6       IP
+	V4       IP     `json:"v4,omitempty"`
+	V6       IP     `json:"v6,omitempty"`
 }
 
 func (_this *VdnsProviderConfig) SetAk(ak *string) {
@@ -181,11 +181,11 @@ func (_this *VdnsProviderConfig) PrintTable() error {
 	if err != nil {
 		return err
 	}
-
 	t2, err := gotable.Create("Provider", "Type", "Enabled", "OnCard", "Card", "Api", "DomainList")
 	if err != nil {
 		return err
 	}
+
 	err = t1.AddRow([]string{_this.Provider, _this.Ak, _this.Sk, _this.Token})
 	if err != nil {
 		return err
@@ -198,9 +198,7 @@ func (_this *VdnsProviderConfig) PrintTable() error {
 	if err != nil {
 		return err
 	}
-	if err != nil {
-		return err
-	}
+
 	fmt.Printf("---Provider Config---\n%v", t1)
 	fmt.Printf("---Get Ip Config---\n%v", t2)
 	return nil
@@ -227,6 +225,15 @@ func NewProviderConfig(name string) *VdnsProviderConfig {
 			DomainList: []string{},
 		},
 	}
+}
+
+type IP struct {
+	Type       string
+	Enabled    bool
+	Card       string
+	OnCard     bool
+	Api        string
+	DomainList []string
 }
 
 func init() {

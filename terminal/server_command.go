@@ -144,9 +144,6 @@ func ServerCommand() *cli.Command {
 }
 
 func handleServer(interval int, debug bool) error {
-	if debug {
-		vlog.SetLevel(vlog.Level.DEBUG)
-	}
 	cfg := &service.Config{
 		Name:        "vdns",
 		DisplayName: "vdns server",
@@ -154,12 +151,11 @@ func handleServer(interval int, debug bool) error {
 		Arguments:   []string{"server", "exec", "-i", convert.AsStringValue(interval), "-d", convert.AsStringValue(debug)},
 	}
 
-	vdns := server.NewVdns(interval)
+	vdns := server.NewVdns(interval, debug)
 	vdnsService, err := service.New(&vdns, cfg)
 	if err != nil {
 		return err
 	}
-	vlog.Debugf("running args: %v", os.Args)
 	if len(os.Args) >= 3 && os.Args[2] != "exec" {
 		err = service.Control(vdnsService, os.Args[2])
 		if err != nil {

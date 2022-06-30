@@ -28,6 +28,10 @@ const (
 	V6Api4 = "https://www.taobao.com/help/getip.php"
 )
 
+func GetProviderKeyList() []string {
+	return []string{AlidnsProvider, DnspodProvider, CloudflareProvider, HuaweiDnsProvider}
+}
+
 func GetIpv4ApiList() []string {
 	return []string{V4Api1, V4Api2, V4Api3, V4Api4, V4Api5}
 }

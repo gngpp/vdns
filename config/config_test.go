@@ -13,7 +13,7 @@ func TestCreate(t *testing.T) {
 }
 
 func TestReadConfig(t *testing.T) {
-	config, err := LoadVdnsConfig()
+	config, err := ReadVdnsConfig()
 	if err != nil {
 		t.Error(err)
 	}

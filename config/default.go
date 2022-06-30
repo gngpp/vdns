@@ -12,20 +12,11 @@ import (
 	"vdns/lib/vlog"
 )
 
-var vdnsConfig *VdnsConfig
+var conf *VdnsConfig
 var rw sync.RWMutex
 
 type Table interface {
 	PrintTable() error
-}
-
-type IP struct {
-	Type       string
-	Enabled    bool
-	Card       string
-	OnCard     bool
-	Api        string
-	DomainList []string
 }
 
 func WriteVdnsConfig(config *VdnsConfig) error {
@@ -45,6 +36,7 @@ func WriteVdnsConfig(config *VdnsConfig) error {
 	if err != nil {
 		return err
 	}
+	conf = config
 	return nil
 }
 
@@ -53,20 +45,20 @@ func WriteVdnsProviderConfig(config *VdnsProviderConfig) error {
 	if strs.IsEmpty(config.Provider) {
 		return fmt.Errorf("provider key cnanot been empty: %v", config.Provider)
 	}
-	vdnsConfig.ProviderMap.Set(config.Provider, config)
+	conf.ProviderMap.Set(config.Provider, config)
 	rw.Unlock()
-	err := WriteVdnsConfig(vdnsConfig)
+	err := WriteVdnsConfig(conf)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func LoadVdnsConfig() (*VdnsConfig, error) {
+func ReadVdnsConfig() (*VdnsConfig, error) {
 	rw.Lock()
 	defer rw.Unlock()
-	if vdnsConfig != nil {
-		return vdnsConfig, nil
+	if conf != nil {
+		return conf, nil
 	}
 
 	read, err := file.Read(configPath)
@@ -81,32 +73,32 @@ func LoadVdnsConfig() (*VdnsConfig, error) {
 	if err != nil {
 		vlog.Fatalf("read config error: %v", err)
 	}
-	vdnsConfig = &newConfig
-	return vdnsConfig, err
+	conf = &newConfig
+	return conf, err
 }
 
-func LoadVdnsProviderConfig(providerKey string) (*VdnsProviderConfig, error) {
-	_, err := LoadVdnsConfig()
+func ReadVdnsProviderConfig(providerKey string) (*VdnsProviderConfig, error) {
+	c, err := ReadVdnsConfig()
 	if err != nil {
 		return nil, err
 	}
 	rw.RLock()
 	defer rw.RUnlock()
-	vdnsConfigProvider := vdnsConfig.ProviderMap.Get(providerKey)
+	vdnsConfigProvider := c.ProviderMap.Get(providerKey)
 	if vdnsConfigProvider == nil {
 		return nil, fmt.Errorf("vdns provider configuration not found: %v", providerKey)
 	}
 	return vdnsConfigProvider, nil
 }
 
-func LoadVdnsProvider(providerKey string) (api.VdnsProvider, error) {
-	_, err := LoadVdnsConfig()
+func ReadVdnsProvider(providerKey string) (api.VdnsProvider, error) {
+	c, err := ReadVdnsConfig()
 	if err != nil {
 		return nil, err
 	}
 	rw.RLock()
 	defer rw.RUnlock()
-	for key, c := range vdnsConfig.ProviderMap {
+	for key, c := range c.ProviderMap {
 		if key == providerKey {
 			var credential auth.Credential
 			if c.Provider != CloudflareProvider {
@@ -114,9 +106,7 @@ func LoadVdnsProvider(providerKey string) (api.VdnsProvider, error) {
 			} else {
 				credential = auth.NewTokenCredential(c.Token)
 			}
-			if err != nil {
-				return nil, err
-			}
+
 			if providerKey == AlidnsProvider {
 				return api.NewAliDNSProvider(credential), nil
 			}

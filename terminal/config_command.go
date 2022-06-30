@@ -62,7 +62,7 @@ func setConfigCommand() *cli.Command {
 			},
 		},
 		Action: func(ctx *cli.Context) error {
-			vdnsConfig, err := config.LoadVdnsConfig()
+			vdnsConfig, err := config.ReadVdnsConfig()
 			if err != nil {
 				return err
 			}
@@ -147,7 +147,7 @@ func setIpConfigCommand() *cli.Command {
 			},
 		},
 		Action: func(ctx *cli.Context) error {
-			vdnsProviderConfig, err := config.LoadVdnsProviderConfig(provider)
+			vdnsProviderConfig, err := config.ReadVdnsProviderConfig(provider)
 			if err != nil {
 				return err
 			}
@@ -251,7 +251,7 @@ func setLogConfigCommand() *cli.Command {
 			},
 		},
 		Action: func(context *cli.Context) error {
-			vdnsConfig, err := config.LoadVdnsConfig()
+			vdnsConfig, err := config.ReadVdnsConfig()
 			if err != nil {
 				return err
 			}
@@ -288,7 +288,7 @@ func catConfigCommand() *cli.Command {
 		Name:  "cat",
 		Usage: "Print all DNS configuration",
 		Action: func(ctx *cli.Context) error {
-			loadConfig, err := config.LoadVdnsConfig()
+			loadConfig, err := config.ReadVdnsConfig()
 			if err != nil {
 				return err
 			}
@@ -307,7 +307,7 @@ func resetConfigCommand() *cli.Command {
 			if err != nil {
 				return err
 			}
-			loadVdnsConfig, err := config.LoadVdnsConfig()
+			loadVdnsConfig, err := config.ReadVdnsConfig()
 			if err != nil {
 				return err
 			}

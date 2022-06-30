@@ -77,7 +77,7 @@ func describeDNSRecord() *cli.Command {
 			},
 		},
 		Action: func(_ *cli.Context) error {
-			provider, err := config.LoadVdnsProvider(provider)
+			provider, err := config.ReadVdnsProvider(provider)
 			if err != nil {
 				return err
 			}
@@ -153,7 +153,7 @@ func createDNSRecord() *cli.Command {
 			},
 		},
 		Action: func(_ *cli.Context) error {
-			provider, err := config.LoadVdnsProvider(provider)
+			provider, err := config.ReadVdnsProvider(provider)
 			if err != nil {
 				return err
 			}
@@ -221,7 +221,7 @@ func updateDNSRecord() *cli.Command {
 			},
 		},
 		Action: func(_ *cli.Context) error {
-			provider, err := config.LoadVdnsProvider(provider)
+			provider, err := config.ReadVdnsProvider(provider)
 			if err != nil {
 				return err
 			}
@@ -278,7 +278,7 @@ func deleteDNSRecord() *cli.Command {
 			},
 		},
 		Action: func(_ *cli.Context) error {
-			provider, err := config.LoadVdnsProvider(provider)
+			provider, err := config.ReadVdnsProvider(provider)
 			if err != nil {
 				return err
 			}
