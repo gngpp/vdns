@@ -1,16 +1,19 @@
 <p align="center">
 	<a target="_blank" href="https://github.com/gngpp/vdns/blob/main/LICENSE">
-		<img src="https://img.shields.io/badge/license-MIT-blue.svg"/>
+		<img src="https://img.shields.io/badge/license-WTFPL-blue.svg"/>
 	</a>
 	<a target="_blank" href="https://go.dev/">
 		<img src="https://img.shields.io/github/go-mod/go-version/gngpp/vdns"/>
 	</a>
-	<a target="_blank" href="https://github.com/gngpp/vdns/actions">
+	<a target="_blank" href="https://github.com/gngpp/vdns/actions/workflows/sync.yaml">
 		<img src="https://github.com/gngpp/vdns/actions/workflows/sync.yaml/badge.svg"/>
 	</a>
-<!-- 	<a target="_blank" href="https://github.com/gngpp/vdns/releases/latest">
+	<a target="_blank" href="https://github.com/gngpp/vdns/actions/workflows/release.yml">
+		<img src="https://github.com/gngpp/vdns/actions/workflows/release.yml/badge.svg"/>
+	</a>
+	<a target="_blank" href="https://github.com/gngpp/vdns/releases/latest">
 		<img alt="GitHub Release" src="https://img.shields.io/github/v/release/gngpp/vdns.svg?logo=github">
-	</a> -->
+	</a>
 </p>
 
 # vdns
