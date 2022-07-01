@@ -189,7 +189,6 @@ func printCardAction() cli.ActionFunc {
 		}
 		for _, v := range v4Card {
 			for i, address := range v.Address {
-				fmt.Println(vnet.IsPrivateAddr(address))
 				if vnet.IsPrivateAddr(address) {
 					v.Address[i] = strs.Concat(address, " (private)")
 				}
