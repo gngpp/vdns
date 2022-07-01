@@ -43,11 +43,12 @@ func (d *DDNS) Resolve() error {
 }
 
 func (d DDNS) handler(ipv config.IP, provider api.VdnsProvider, providerName string) {
-	vlog.Infof("[%v][%v] running...", providerName, ipv.Type)
+	vlog.Infof("[%v][%v] start processing...", providerName, ipv.Type)
 	err := d.resolveDnsRecordHandler(ipv, provider, providerName)
 	if err != nil {
 		vlog.Errorf("[%v][%v] parsing dns record error: %v", providerName, ipv.Type, err)
 	}
+	vlog.Infof("[%v][%v] processing ends...", providerName, ipv.Type)
 }
 
 func (d *DDNS) resolveDnsRecordHandler(ipv config.IP, provider api.VdnsProvider, providerName string) error {
