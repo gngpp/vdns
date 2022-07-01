@@ -232,7 +232,7 @@ func testIpApiAction() cli.ActionFunc {
 			}
 			go spinner()
 			for _, api := range config.GetIpv4ApiList() {
-				_ = t.AddRow([]string{api, vnet.GetIpv4AddrForUrl(api)})
+				_ = t.AddRow([]string{api, vnet.GetPubIpv4AddrForUrl(api)})
 			}
 		}
 		if ipType == "ipv6" {
@@ -242,7 +242,7 @@ func testIpApiAction() cli.ActionFunc {
 			}
 			go spinner()
 			for _, api := range config.GetIpv6ApiList() {
-				_ = t.AddRow([]string{api, vnet.GetIpv6AddrForUrl(api)})
+				_ = t.AddRow([]string{api, vnet.GetPubIpv6AddrForUrl(api)})
 			}
 		}
 		fmt.Printf("\r%v", t)

@@ -2,6 +2,7 @@ package model
 
 import (
 	"vdns/lib/standard/record"
+	"vdns/lib/util/strs"
 	"vdns/lib/util/vjson"
 )
 
@@ -34,6 +35,10 @@ type Record struct {
 
 func (_this *Record) String() string {
 	return vjson.PrettifyString(_this)
+}
+
+func (_this *Record) FullDomain() string {
+	return strs.Concat(strs.StringValue(_this.RR), ".", strs.StringValue(_this.Domain))
 }
 
 type DomainRecordStatusResponse struct {
