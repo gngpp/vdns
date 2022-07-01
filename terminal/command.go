@@ -12,6 +12,7 @@ import (
 	"strings"
 	"vdns/config"
 	"vdns/lib/util/convert"
+	"vdns/lib/util/strs"
 	"vdns/lib/util/vhttp"
 	"vdns/lib/util/vnet"
 	"vdns/lib/vlog"
@@ -187,12 +188,23 @@ func printCardAction() cli.ActionFunc {
 			return err
 		}
 		for _, v := range v4Card {
+			for i, address := range v.Address {
+				fmt.Println(vnet.IsPrivateAddr(address))
+				if vnet.IsPrivateAddr(address) {
+					v.Address[i] = strs.Concat(address, " (private)")
+				}
+			}
 			err := t.AddRow([]string{v.Name, strings.Join(v.Address, ","), convert.AsStringValue(v.Ipv4()), convert.AsStringValue(v.Ipv6())})
 			if err != nil {
 				return err
 			}
 		}
 		for _, v := range v6Card {
+			for i, address := range v.Address {
+				if vnet.IsPrivateAddr(address) {
+					v.Address[i] = strs.Concat(address, " (private)")
+				}
+			}
 			err := t.AddRow([]string{v.Name, strings.Join(v.Address, ","), convert.AsStringValue(v.Ipv4()), convert.AsStringValue(v.Ipv6())})
 			if err != nil {
 				return err
