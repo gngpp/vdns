@@ -50,6 +50,25 @@ GLOBAL OPTIONS:
    --help, -h     show help (default: false)
 ```
 
+- 使用DDNS
+> 下载二进制包
+```shell
+$ wget https://github.com/gngpp/vdns/releases/download/v1.0/linux_amd64_vdns.tar.gz && tar -xzvf linux_amd64_vdns.tar.gz
+```
+> 直接运行
+```shell
+$ ./vdns server exec
+```
+> 后台daemon运行，支持 `Windows XP+`, `Linux/(systemd | Upstart | SysV)`, `OSX/Launchd`
+```shell
+# 安装运行
+./vdns server install
+./vdns server start
+
+# 卸载
+./vdns server stop
+./vdns server uninstall
+```
 ### License
 
 - [MIT License](https://raw.githubusercontent.com/gngpp/vdns/main/LICENSE)
