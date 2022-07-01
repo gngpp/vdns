@@ -18,7 +18,7 @@ jobs:
 
       - name: Check out code into the Go module directory
 #        uses: actions/checkout@v2
-        run: git clone https://github.com.gngpp/vdns
+        run: git clone https://github.com/gngpp/vdns
 
       - name: ls
         run:  ls -alh
