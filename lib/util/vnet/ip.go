@@ -19,13 +19,19 @@ func GetIpv4AddrForName(card string) []string {
 		return []string{}
 	}
 	if v4List != nil {
+		ipAddr := make([]string, 0)
 		for _, i := range v4List {
 			if i.Name == card && i.Ipv4() {
-				if len(i.Address) > 0 {
-					return i.Address
+				for _, address := range i.Address {
+					if IsPrivateAddr(address) {
+						vlog.Debugf("ip %v is private address", address)
+					} else {
+						ipAddr = append(ipAddr, address)
+					}
 				}
 			}
 		}
+		return ipAddr
 	}
 	return []string{}
 }
@@ -36,13 +42,19 @@ func GetIpv6AddrForName(card string) []string {
 		return []string{}
 	}
 	if v6List != nil {
+		ipAddr := make([]string, 0)
 		for _, i := range v6List {
 			if i.Name == card && i.Ipv6() {
-				if len(i.Address) > 0 {
-					return i.Address
+				for _, address := range i.Address {
+					if IsPrivateAddr(address) {
+						vlog.Debugf("ip %v is private address", address)
+					} else {
+						ipAddr = append(ipAddr, address)
+					}
 				}
 			}
 		}
+		return ipAddr
 	}
 	return []string{}
 }
@@ -73,7 +85,7 @@ func getIpAddr(reg string, url string) (result string) {
 	body := resp.Body
 	defer iotool.ReadCloser(body)
 	bytes, err := ioutil.ReadAll(body)
-	vlog.Debugf("request: %s\nbody: %v", url, string(bytes))
+	vlog.Debugf("request: %s body: %v", url, string(bytes))
 	if err != nil {
 		vlog.Error("Failed to read ip result! Query URL: ", url)
 		return

@@ -8,6 +8,7 @@ import (
 
 func Test(t *testing.T) {
 	data := map[string]bool{
+		"192.168.1.178":             true,
 		"127.0.0.1:9876":            true,
 		"[::1]:9876":                true,
 		"192.168.1.18:9876":         true,
@@ -21,6 +22,7 @@ func Test(t *testing.T) {
 	}
 
 	for key, value := range data {
+		fmt.Printf("%v - %v\n", key, IsPrivateAddr(key))
 		if IsPrivateAddr(key) != value {
 			t.Errorf("%s verification failed\n", key)
 		}

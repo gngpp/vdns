@@ -84,11 +84,9 @@ func GetCardInterface() (ipv4NetInterfaces []Interface, ipv6NetInterfaces []Inte
 
 func IsPrivateAddr(remoteAddr string) bool {
 	lastIndex := strings.LastIndex(remoteAddr, ":")
-	if lastIndex < 1 {
-		return false
+	if lastIndex > 1 {
+		remoteAddr = remoteAddr[:lastIndex]
 	}
-
-	remoteAddr = remoteAddr[:lastIndex]
 
 	// ipv6
 	if strings.HasPrefix(remoteAddr, "[") && strings.HasSuffix(remoteAddr, "]") {
