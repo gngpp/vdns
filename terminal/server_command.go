@@ -144,11 +144,15 @@ func ServerCommand() *cli.Command {
 }
 
 func handleServer(interval int, debug bool) error {
+	args := []string{"server", "exec", "-i", convert.AsStringValue(interval)}
+	if debug {
+		args = append(args, "-d")
+	}
 	cfg := &service.Config{
 		Name:        "vdns",
 		DisplayName: "vdns server",
 		Description: "This is an vdns Go service.",
-		Arguments:   []string{"server", "exec", "-i", convert.AsStringValue(interval), "-d", convert.AsStringValue(debug)},
+		Arguments:   args,
 	}
 
 	vdns := server.NewVdns(interval, debug)
