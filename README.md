@@ -9,7 +9,7 @@
 		<img src="https://github.com/gngpp/vdns/actions/workflows/sync.yaml/badge.svg"/>
 	</a>
 	<a target="_blank" href="https://github.com/gngpp/vdns/actions/workflows/release.yml">
-		<img src="https://github.com/gngpp/vdns/actions/workflows/release.yml/badge.svg"/>
+		<img src="https://github.com/gngpp/vdns/actions/workflows/release.yml/badge.svg?branch=v1.0"/>
 	</a>
 	<a target="_blank" href="https://github.com/gngpp/vdns/releases/latest">
 		<img alt="GitHub Release" src="https://img.shields.io/github/v/release/gngpp/vdns.svg?logo=github">
