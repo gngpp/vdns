@@ -175,6 +175,14 @@ type IP struct {
 	DomainList []string `json:"domainList,omitempty"`
 }
 
+func (i *IP) Ipv4() bool {
+	return i.Type == "ipv4"
+}
+
+func (i *IP) Ipv6() bool {
+	return i.Type == "ipv6"
+}
+
 type VdnsProviderConfig struct {
 	Provider string `json:"provider"`
 	Ak       string `json:"ak,omitempty"`

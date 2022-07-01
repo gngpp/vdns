@@ -43,18 +43,18 @@ func (p *Vdns) Start(s service.Service) error {
 	}
 	vlog.Debugf("running args: %v", os.Args)
 	vlog.Infof("running platform: %v", s.Platform())
-	go p.run(s)
+	go p.run()
 	return nil
 }
 
-func (p *Vdns) run(s service.Service) {
+func (p *Vdns) run() {
 	// Do work here
 	vlog.Infof("vdns start to execute the service - [interval execution time: %v minute]", p.interval)
 	timer := time.NewTicker(time.Minute * time.Duration(p.interval))
 	p.resolveHandler()
 	for {
 		t := <-timer.C
-		vlog.Infof("now resovle time: %v, do...\n", t)
+		vlog.Debugf("now resovle time: %v, do...\n", t)
 		p.resolveHandler()
 	}
 }
