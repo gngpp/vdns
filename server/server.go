@@ -61,7 +61,7 @@ func (p *Vdns) run() {
 		p.resolveHandler()
 	}
 }
-func (p *Vdns) Stop(s service.Service) error {
+func (p *Vdns) Stop(service.Service) error {
 	// Stop should not block. Return with a few seconds.
 	vlog.Info("vdns stop service")
 	return nil
