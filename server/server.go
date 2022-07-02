@@ -4,6 +4,7 @@ import (
 	"github.com/kardianos/service"
 	"io"
 	"os"
+	"runtime"
 	"time"
 	"vdns/config"
 	"vdns/lib/vlog"
@@ -43,6 +44,8 @@ func (p *Vdns) Start(s service.Service) error {
 	}
 	vlog.Debugf("running args: %v", os.Args)
 	vlog.Infof("running platform: %v", s.Platform())
+	// Minimal use of resources
+	runtime.GOMAXPROCS(1)
 	go p.run()
 	return nil
 }
