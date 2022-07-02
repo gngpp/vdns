@@ -96,7 +96,7 @@ func ServerCommand() *cli.Command {
 
 				stdout, err := cmd.StdoutPipe()
 				if err != nil {
-					fmt.Println(err)
+					return err
 				}
 				if err := cmd.Start(); err != nil {
 					return err
