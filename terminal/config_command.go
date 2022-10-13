@@ -180,8 +180,9 @@ func setIpConfigCommand() *cli.Command {
 						if err != nil {
 							return err
 						}
+						conf.V4.DomainList = l
 					}
-					conf.V4.DomainList = l
+
 				}
 			}
 

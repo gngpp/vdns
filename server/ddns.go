@@ -9,6 +9,7 @@ import (
 	"vdns/lib/standard/record"
 	"vdns/lib/util/strs"
 	"vdns/lib/util/vhttp"
+	"vdns/lib/util/vjson"
 	"vdns/lib/util/vnet"
 	"vdns/lib/vlog"
 )
@@ -43,15 +44,16 @@ func (d *DDNS) Resolve() error {
 }
 
 func (d DDNS) handler(ipv config.IP, provider api.VdnsProvider, providerName string) {
-	vlog.Infof("[%v][%v] start processing...", providerName, ipv.Type)
 	err := d.resolveDnsRecordHandler(ipv, provider, providerName)
 	if err != nil {
 		vlog.Errorf("[%v][%v] parsing dns record error: %v", providerName, ipv.Type, err)
+	} else {
+		vlog.Infof("[%v][%v] processing ends...", providerName, ipv.Type)
 	}
-	vlog.Infof("[%v][%v] processing ends...", providerName, ipv.Type)
 }
 
 func (d *DDNS) resolveDnsRecordHandler(ipv config.IP, provider api.VdnsProvider, providerName string) error {
+	vlog.Infof("[%v][%v] start processing...", providerName, ipv.Type)
 	vlog.Debugf("[%v] ip config: %v", providerName, ipv)
 	if ipv.Enabled {
 		var ip string
@@ -66,12 +68,14 @@ func (d *DDNS) resolveDnsRecordHandler(ipv config.IP, provider api.VdnsProvider,
 			return errors.New(fmt.Sprintf("[%v] unknown ip type", providerName))
 		}
 		if strs.NotEmpty(ip) {
+
 			err := provider.Support(r)
 			if err != nil {
 				vlog.Debugf("[%v] provider support error: %v", providerName, err)
 				return err
 			}
 			for _, domain := range ipv.DomainList {
+				vlog.Debugf("[%v] record domain: %v", providerName, domain)
 				request := model.NewDescribeDomainRecordsRequest().
 					SetDomain(domain).
 					SetRecordType(r)
@@ -90,6 +94,7 @@ func (d *DDNS) resolveDnsRecordHandler(ipv config.IP, provider api.VdnsProvider,
 							return err
 						}
 						if res.RecordType == r && fullDomain == domain && ip != strs.StringValue(res.Value) {
+							vlog.Debugf("[%v] request body: %v", providerName, vjson.PrettifyString(request))
 							request := model.NewUpdateDomainRecordRequest().
 								SetID(strs.StringValue(res.ID)).
 								SetRecordType(r).
@@ -111,6 +116,7 @@ func (d *DDNS) resolveDnsRecordHandler(ipv config.IP, provider api.VdnsProvider,
 						SetDomain(domain).
 						SetRecordType(r).
 						SetValue(ip)
+					vlog.Debugf("[%v] request body: %v", providerName, vjson.PrettifyString(request))
 					response, err := provider.CreateRecord(request)
 					if err != nil {
 						vlog.Errorf("[%v] failed to create record: %v", providerName, err)
@@ -161,7 +167,7 @@ func (d *DDNS) getPubIpv6Addr(v6 config.IP) string {
 		ipArr = []string{ip}
 	}
 	for _, addr := range ipArr {
-		if vnet.IsPrivateAddr(addr) {
+		if !vnet.IsPrivateAddr(addr) {
 			return addr
 		}
 	}
