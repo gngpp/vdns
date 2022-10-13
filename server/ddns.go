@@ -52,7 +52,7 @@ func (d DDNS) handler(ipv config.IP, provider api.VdnsProvider, providerName str
 }
 
 func (d *DDNS) resolveDnsRecordHandler(ipv config.IP, provider api.VdnsProvider, providerName string) error {
-	vlog.Debugf("ip config: %v", ipv)
+	vlog.Debugf("[%v] ip config: %v", providerName, ipv)
 	if ipv.Enabled {
 		var ip string
 		var r record.Type
